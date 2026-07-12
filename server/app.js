@@ -5,6 +5,7 @@ import morgan from "morgan";
 
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import profileRoutes from "./routes/profile.routes.js";
 
 import errorHandler from "./middleware/error.middleware.js";
 
@@ -25,6 +26,7 @@ app.use(morgan("dev"));
 
 app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/profile", profileRoutes);
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);

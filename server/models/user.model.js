@@ -73,8 +73,22 @@ const userSchema = new mongoose.Schema(
             default: ""
         },
 
+        riotVerified: {
+            type: Boolean,
+            default: false
+        },
+
         region: {
             type: String,
+            enum: [
+                "",
+                "AP",
+                "NA",
+                "EU",
+                "KR",
+                "LATAM",
+                "BR"
+            ],
             default: ""
         },
 
@@ -93,7 +107,53 @@ const userSchema = new mongoose.Schema(
 
         currentRank: {
             type: String,
+            enum: [
+                "",
+                "IRON 1",
+                "IRON 2",
+                "IRON 3",
+
+                "BRONZE 1",
+                "BRONZE 2",
+                "BRONZE 3",
+
+                "SILVER 1",
+                "SILVER 2",
+                "SILVER 3",
+
+                "GOLD 1",
+                "GOLD 2",
+                "GOLD 3",
+
+                "PLATINUM 1",
+                "PLATINUM 2",
+                "PLATINUM 3",
+
+                "DIAMOND 1",
+                "DIAMOND 2",
+                "DIAMOND 3",
+
+                "ASCENDANT 1",
+                "ASCENDANT 2",
+                "ASCENDANT 3",
+
+                "IMMORTAL 1",
+                "IMMORTAL 2",
+                "IMMORTAL 3",
+
+                "RADIANT"
+            ],
             default: ""
+        },
+
+        lastSyncedAt: {
+            type: Date,
+            default: null
+        },
+
+        accountLevel: {
+            type: Number,
+            default: 0
         },
 
         team: {
@@ -102,7 +162,7 @@ const userSchema = new mongoose.Schema(
             default: null
         },
 
-        isVerified: {
+        emailVerified: {
             type: Boolean,
             default: false
         },
