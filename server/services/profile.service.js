@@ -54,3 +54,72 @@ export const updateProfileService = async (userId, updateData) => {
 
     return updatedUser;
 };
+
+export const getPublicProfileService = async (username) => {
+
+    const user = await User.findOne({ username })
+        .select(`
+            -_id
+            username
+            displayName
+            avatar
+            bio
+            riotGameName
+            riotTagLine
+            region
+            preferredRole
+            currentRank
+            team
+            `)
+
+    if (!user) {
+        throw new ApiError(
+            404,
+            "User not found"
+        );
+    }
+
+    return user;
+};
+
+export const searchPlayersService = async (query, currentUserId) => {
+
+    const searchQuery = query?.trim();
+
+    if (!searchQuery) {
+        throw new ApiError(
+            400,
+            "Search query is required"
+        );
+    }
+
+    const players = await User.find({
+        _id: {
+            $ne: currentUserId
+        },
+        role: "PLAYER",
+        $or: [
+            {
+                username: {
+                    $regex: `^${searchQuery}`,
+                    $options: "i"
+                }
+            },
+            {
+                displayName: {
+                    $regex: searchQuery,
+                    $options: "i"
+                }
+            }
+        ]
+    })
+        .select(
+            "-_id username displayName avatar preferredRole currentRank"
+        )
+        .sort({
+            username: 1
+        })
+        .limit(10);
+
+    return players;
+};
