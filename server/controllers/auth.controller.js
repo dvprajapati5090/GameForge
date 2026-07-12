@@ -1,6 +1,7 @@
 import {
     registerUserService,
-    loginUserService
+    loginUserService,
+    logoutUserService
 } from "../services/auth.service.js";
 
 import ApiResponse from "../utils/apiResponse.js";
@@ -68,5 +69,23 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
             req.user
         )
     );
+
+});
+
+export const logoutUser = asyncHandler(async (req, res) => {
+
+    await logoutUserService(req.user._id);
+
+    return res
+        .status(200)
+        .clearCookie(
+            "refreshToken",
+            cookieOptions
+        )
+        .json(
+            new ApiResponse(
+                "Logged out successfully"
+            )
+        );
 
 });

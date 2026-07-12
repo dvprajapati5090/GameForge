@@ -96,3 +96,19 @@ export const loginUserService = async ({ email, password }) => {
         refreshToken
     };
 };
+
+export const logoutUserService = async (userId) => {
+
+    await User.findByIdAndUpdate(
+        userId,
+        {
+            $set: {
+                refreshToken: ""
+            }
+        },
+        {
+            new: true
+        }
+    );
+
+};

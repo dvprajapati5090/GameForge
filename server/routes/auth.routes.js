@@ -11,7 +11,8 @@ import {
 import {
     registerUser,
     loginUser,
-    getCurrentUser
+    getCurrentUser,
+    logoutUser
 } from "../controllers/auth.controller.js";
 
 const router = express.Router();
@@ -32,6 +33,12 @@ router.get(
     "/me",
     verifyJWT,
     getCurrentUser
+);
+
+router.post(
+    "/logout",
+    verifyJWT,
+    logoutUser
 );
 
 export default router;
