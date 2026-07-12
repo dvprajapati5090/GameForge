@@ -2,6 +2,8 @@ import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import generateAccessAndRefreshTokens from "../utils/generateTokens.js";
 
+import jwt from "jsonwebtoken";
+
 export const registerUserService = async (userData) => {
 
     const {
@@ -111,4 +113,43 @@ export const logoutUserService = async (userId) => {
         }
     );
 
+};
+
+export const refreshAccessTokenService = async (refreshToken) => {
+
+    if (!refreshToken) {
+        throw new ApiError(401, "Refresh token missing");
+    }
+
+    let decoded;
+
+    try {
+        decoded = jwt.verify(
+            refreshToken,
+            process.env.JWT_REFRESH_SECRET
+        );
+    } catch {
+        throw new ApiError(401, "Invalid or expired refresh token");
+    }
+
+    const user = await User.findById(decoded._id);
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    if (user.refreshToken !== refreshToken) {
+        throw new ApiError(401, "Refresh token is invalid");
+    }
+
+    const accessToken = user.generateAccessToken();
+    const newRefreshToken = user.generateRefreshToken();
+
+    user.refreshToken = newRefreshToken;
+    await user.save({ validateBeforeSave: false });
+
+    return {
+        accessToken,
+        refreshToken: newRefreshToken
+    };
 };

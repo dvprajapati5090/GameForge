@@ -12,7 +12,8 @@ import {
     registerUser,
     loginUser,
     getCurrentUser,
-    logoutUser
+    logoutUser,
+    refreshAccessToken
 } from "../controllers/auth.controller.js";
 
 const router = express.Router();
@@ -39,6 +40,11 @@ router.post(
     "/logout",
     verifyJWT,
     logoutUser
+);
+
+router.post(
+    "/refresh-token",
+    refreshAccessToken
 );
 
 export default router;
