@@ -78,16 +78,31 @@ const userSchema = new mongoose.Schema(
             default: false
         },
 
+        puuid: {
+            type: String,
+            default: ""
+        },
+
+        riotTitle: {
+            type: String,
+            default: ""
+        },
+
+        riotCard: {
+            type: String,
+            default: ""
+        },
+
         region: {
             type: String,
             enum: [
                 "",
-                "AP",
-                "NA",
-                "EU",
-                "KR",
-                "LATAM",
-                "BR"
+                "ap",
+                "na",
+                "eu",
+                "kr",
+                "latam",
+                "br"
             ],
             default: ""
         },
@@ -146,9 +161,34 @@ const userSchema = new mongoose.Schema(
             default: ""
         },
 
-        lastSyncedAt: {
+        rankRating: {
+            type: Number,
+            default: 0
+        },
+
+        highestRank: {
+            type: String,
+            default: ""
+        },
+
+        elo: {
+            type: Number,
+            default: 0
+        },
+
+        riotLastSyncedAt: {
             type: Date,
             default: null
+        },
+
+        syncStatus: {
+            type: String,
+            enum: [
+                "NOT_SYNCED",
+                "SYNCED",
+                "FAILED"
+            ],
+            default: "NOT_SYNCED"
         },
 
         accountLevel: {

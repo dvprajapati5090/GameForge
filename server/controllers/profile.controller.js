@@ -5,7 +5,8 @@ import {
     getProfileService,
     updateProfileService,
     getPublicProfileService,
-    searchPlayersService
+    searchPlayersService,
+    syncRiotProfileService,
 } from "../services/profile.service.js";
 
 export const getProfile = asyncHandler(async (req, res) => {
@@ -65,5 +66,33 @@ export const searchPlayers = asyncHandler(async (req, res) => {
             players
         )
     );
+
+});
+
+export const syncRiotProfile = asyncHandler(async (req, res) => {
+
+    const updatedUser = await syncRiotProfileService(
+        req.user._id
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            updatedUser,
+            "Riot profile synced successfully"
+        )
+    );
+
+});
+
+export const testRiotRank = asyncHandler(async (req, res) => {
+
+    const data = await getMMRDetails(
+        "ap",
+        "jvdjvdjvd",
+        "jvd"
+    );
+
+    return res.status(200).json(data);
 
 });

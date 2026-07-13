@@ -1,6 +1,11 @@
 import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 
+import { 
+    getAccountDetails,
+    getMMRDetails
+} from "./thirdParty/henrik.service.js";
+
 export const getProfileService = async (userId) => {
 
     const user = await User.findById(userId)
@@ -122,4 +127,67 @@ export const searchPlayersService = async (query, currentUserId) => {
         .limit(10);
 
     return players;
+};
+
+export const syncRiotProfileService = async (userId) => {
+
+    // Find User
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new ApiError(
+            404,
+            "User not found"
+        );
+    }
+
+    // Check Riot ID
+    if (!user.riotGameName || !user.riotTagLine) {
+        throw new ApiError(
+            400,
+            "Please add your Riot Game Name and Tag Line first."
+        );
+    }
+
+    // Fetch data from Henrik API
+    const riotAccount = await getAccountDetails(
+        user.riotGameName,
+        user.riotTagLine
+    );
+
+    const mmr = await getMMRDetails(
+        riotAccount.region,
+        user.riotGameName,
+        user.riotTagLine
+    );
+
+    // Update user
+    user.puuid = riotAccount.puuid;
+    user.region = riotAccount.region;
+    user.accountLevel = riotAccount.account_level;
+
+    user.currentRank =
+        mmr.current_data?.currenttierpatched?.toUpperCase() || "";
+
+    user.rankRating =
+        mmr.current_data?.ranking_in_tier || 0;
+
+    user.elo =
+        mmr.current_data?.elo || 0;
+
+    user.highestRank =
+        mmr.highest_rank?.patched_tier.toUpperCase() || "";
+
+    user.riotCard = riotAccount.card;
+    user.riotTitle = riotAccount.title;
+    user.riotVerified = true;
+    user.syncStatus = "SYNCED";
+    user.riotLastSyncedAt = new Date();
+
+    await user.save();
+
+    const updatedUser = await User.findById(user._id)
+        .select("-password -refreshToken");
+
+    return updatedUser;
 };
