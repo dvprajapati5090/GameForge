@@ -43,4 +43,23 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
 
 });
 
+export const authorizeRoles = (...allowedRoles) => {
+
+    return (req, res, next) => {
+
+        if (!allowedRoles.includes(req.user.role)) {
+            return next(
+                new ApiError(
+                    403,
+                    "You are not allowed to perform this action"
+                )
+            );
+        }
+
+        next();
+
+    };
+
+};
+
 export default verifyJWT;
