@@ -7,7 +7,11 @@ import {
     updateTeamService,
     invitePlayerService,
     getMyInvitationsService,
-    acceptInvitationService
+    acceptInvitationService,
+    rejectInvitationService,
+    leaveTeamService,
+    removeMemberService,
+    transferCaptainService
 } from "../services/team.service.js";
 
 export const createTeam = asyncHandler(async (req, res) => {
@@ -98,6 +102,71 @@ export const acceptInvitation = asyncHandler(async (req, res) => {
     return res.status(200).json(
         new ApiResponse(
             "Invitation accepted successfully",
+            team
+        )
+    );
+
+});
+
+export const rejectInvitation = asyncHandler(async (req, res) => {
+
+    await rejectInvitationService(
+        req.params.id,
+        req.user._id
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            "Invitation rejected successfully",
+            null
+        )
+    );
+
+});
+
+export const leaveTeam = asyncHandler(async (req, res) => {
+
+    const result = await leaveTeamService(
+        req.user._id
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            result.deleted
+                ? "Team deleted successfully"
+                : "Left team successfully",
+            null
+        )
+    );
+
+});
+
+export const removeMember = asyncHandler(async (req, res) => {
+
+    const team = await removeMemberService(
+        req.user._id,
+        req.params.memberId
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            "Member removed successfully",
+            team
+        )
+    );
+
+});
+
+export const transferCaptain = asyncHandler(async (req, res) => {
+
+    const team = await transferCaptainService(
+        req.user._id,
+        req.params.memberId
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            "Captain transferred successfully",
             team
         )
     );

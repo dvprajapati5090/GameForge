@@ -16,7 +16,11 @@ import {
     updateTeam,
     invitePlayer,
     getMyInvitations,
-    acceptInvitation
+    acceptInvitation,
+    rejectInvitation,
+    leaveTeam,
+    removeMember,
+    transferCaptain
 } from "../controllers/team.controller.js";
 
 const router = express.Router();
@@ -64,6 +68,34 @@ router.post(
     verifyJWT,
     authorizeRoles("PLAYER"),
     acceptInvitation
+);
+
+router.post(
+    "/invitations/:id/reject",
+    verifyJWT,
+    authorizeRoles("PLAYER"),
+    rejectInvitation
+);
+
+router.post(
+    "/leave",
+    verifyJWT,
+    authorizeRoles("PLAYER"),
+    leaveTeam
+);
+
+router.delete(
+    "/members/:memberId",
+    verifyJWT,
+    authorizeRoles("PLAYER"),
+    removeMember
+);
+
+router.patch(
+    "/captain/:memberId",
+    verifyJWT,
+    authorizeRoles("PLAYER"),
+    transferCaptain
 );
 
 export default router;

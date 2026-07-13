@@ -363,3 +363,253 @@ export const acceptInvitationService = async (
     );
 
 };
+
+export const rejectInvitationService = async (
+    invitationId,
+    userId
+) => {
+
+    const invitation = await Invitation.findById(invitationId);
+
+    if (!invitation) {
+        throw new ApiError(
+            404,
+            "Invitation not found"
+        );
+    }
+
+    if (invitation.receiver.toString() !== userId.toString()) {
+        throw new ApiError(
+            403,
+            "You are not allowed to reject this invitation"
+        );
+    }
+
+    if (invitation.status !== "PENDING") {
+        throw new ApiError(
+            400,
+            "Invitation is no longer pending"
+        );
+    }
+
+    if (invitation.expiresAt < new Date()) {
+        throw new ApiError(
+            400,
+            "Invitation has expired"
+        );
+    }
+
+    invitation.status = "REJECTED";
+
+    await invitation.save();
+
+    return invitation;
+
+};
+
+export const leaveTeamService = async (userId) => {
+
+    const user = await User.findById(userId)
+        .select("+team");
+
+    if (!user.team) {
+        throw new ApiError(
+            400,
+            "You are not part of any team"
+        );
+    }
+
+    const team = await Team.findById(user.team);
+
+    if (!team) {
+        throw new ApiError(
+            404,
+            "Team not found"
+        );
+    }
+
+    const isCaptain =
+        team.captain.toString() === user._id.toString();
+
+    // Captain
+    if (isCaptain) {
+
+        // Captain is alone
+        if (team.members.length === 1) {
+
+            await Team.findByIdAndDelete(team._id);
+
+            user.team = null;
+            await user.save();
+
+            return {
+                deleted: true
+            };
+        }
+
+        // Captain has members
+        throw new ApiError(
+            400,
+            "Transfer captaincy before leaving the team"
+        );
+    }
+
+    // Normal member
+
+    team.members = team.members.filter(
+        member =>
+            member.toString() !== user._id.toString()
+    );
+
+    await team.save();
+
+    user.team = null;
+    await user.save();
+
+    return {
+        deleted: false
+    };
+};
+
+export const removeMemberService = async (
+    captainId,
+    memberId
+) => {
+
+    const captain = await User.findById(captainId)
+        .select("+team");
+
+    if (!captain.team) {
+        throw new ApiError(
+            400,
+            "You are not part of any team"
+        );
+    }
+
+    const team = await Team.findById(captain.team);
+
+    if (!team) {
+        throw new ApiError(
+            404,
+            "Team not found"
+        );
+    }
+
+    // Only captain
+    if (team.captain.toString() !== captain._id.toString()) {
+        throw new ApiError(
+            403,
+            "Only the captain can remove members"
+        );
+    }
+
+    // Captain can't remove himself
+    if (captain._id.toString() === memberId) {
+        throw new ApiError(
+            400,
+            "Captain cannot remove themselves"
+        );
+    }
+
+    const member = await User.findById(memberId)
+        .select("+team");
+
+    if (!member) {
+        throw new ApiError(
+            404,
+            "Member not found"
+        );
+    }
+
+    if (
+        !team.members.some(
+            id => id.toString() === member._id.toString()
+        )
+    ) {
+        throw new ApiError(
+            400,
+            "Player is not a member of your team"
+        );
+    }
+
+    team.members = team.members.filter(
+        id => id.toString() !== member._id.toString()
+    );
+
+    await team.save();
+
+    member.team = null;
+    await member.save();
+
+    return await teamDetailsQuery(
+        Team.findById(team._id)
+    );
+};
+
+export const transferCaptainService = async (
+    captainId,
+    newCaptainId
+) => {
+
+    const captain = await User.findById(captainId)
+        .select("+team");
+
+    if (!captain.team) {
+        throw new ApiError(
+            400,
+            "You are not part of any team"
+        );
+    }
+
+    const team = await Team.findById(captain.team);
+
+    if (!team) {
+        throw new ApiError(
+            404,
+            "Team not found"
+        );
+    }
+
+    if (team.captain.toString() !== captain._id.toString()) {
+        throw new ApiError(
+            403,
+            "Only the captain can transfer captaincy"
+        );
+    }
+
+    if (captain._id.toString() === newCaptainId) {
+        throw new ApiError(
+            400,
+            "You are already the captain"
+        );
+    }
+
+    const newCaptain = await User.findById(newCaptainId);
+
+    if (!newCaptain) {
+        throw new ApiError(
+            404,
+            "Player not found"
+        );
+    }
+
+    const isMember = team.members.some(
+        member => member.toString() === newCaptain._id.toString()
+    );
+
+    if (!isMember) {
+        throw new ApiError(
+            400,
+            "Player is not a member of your team"
+        );
+    }
+
+    team.captain = newCaptain._id;
+
+    await team.save();
+
+    return await teamDetailsQuery(
+        Team.findById(team._id)
+    );
+
+};
