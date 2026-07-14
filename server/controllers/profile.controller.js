@@ -15,8 +15,9 @@ export const getProfile = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(
-            "Profile fetched successfully",
-            profile
+            200,
+            profile,
+            "Profile fetched successfully"
         )
     );
 
@@ -31,8 +32,9 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(
-            "Profile updated successfully",
-            updatedProfile
+            200,
+            updatedProfile,
+            "Profile updated successfully"
         )
     );
 
@@ -46,8 +48,9 @@ export const getPublicProfile = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(
-            "Public profile fetched successfully",
-            profile
+            200,
+            profile,
+            "Public Profile fetched successfully"
         )
     );
 
@@ -62,8 +65,9 @@ export const searchPlayers = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(
-            "Players fetched successfully",
-            players
+            200,
+            profile,
+            "Players fetched successfully"
         )
     );
 

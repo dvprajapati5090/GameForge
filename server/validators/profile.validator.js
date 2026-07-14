@@ -15,6 +15,10 @@ export const updateProfileSchema = z.object({
         .max(250)
         .optional(),
 
+    favoriteGames: z
+        .array(z.string())
+        .optional(),
+
     riotGameName: z
         .string()
         .trim()
@@ -33,6 +37,10 @@ export const updateProfileSchema = z.object({
         "CONTROLLER",
         "SENTINEL",
         "FLEX"
-    ]).optional()
+    ]).optional(),
+
+    favoriteGames: z
+        .array(z.string())
+        .optional()
 
 });

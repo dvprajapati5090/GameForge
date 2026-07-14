@@ -61,6 +61,12 @@ const userSchema = new mongoose.Schema(
             default: ""
         },
 
+        favoriteGames: [
+            {
+                type: String
+            }
+        ],
+
         riotGameName: {
             type: String,
             trim: true,
@@ -124,6 +130,8 @@ const userSchema = new mongoose.Schema(
             type: String,
             enum: [
                 "",
+                "UNRATED",
+                
                 "IRON 1",
                 "IRON 2",
                 "IRON 3",

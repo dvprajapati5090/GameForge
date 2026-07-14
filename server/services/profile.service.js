@@ -27,6 +27,7 @@ export const updateProfileService = async (userId, updateData) => {
     const allowedUpdates = {
         displayName: updateData.displayName,
         bio: updateData.bio,
+        favoriteGames: updateData.favoriteGames,
         riotGameName: updateData.riotGameName,
         riotTagLine: updateData.riotTagLine,
         preferredRole: updateData.preferredRole
