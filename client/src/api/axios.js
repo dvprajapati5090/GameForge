@@ -27,56 +27,14 @@ api.interceptors.response.use(
 
     (response) => response,
 
-    async (error) => {
+    (error) => {
 
-        const originalRequest = error.config;
-
-        if (
-
-            console.log("AXIOS ERROR:", error.response);
-
-            return Promise.reject(error);
-
-        ) {
-
-            originalRequest._retry = true;
-
-            try {
-
-                const response = await axios.post(
-
-                    `${API_URL}/auth/refresh-token`,
-
-                    {},
-
-                    {
-                        withCredentials: true
-                    }
-
-                );
-
-                const accessToken = response.data.data.accessToken;
-
-                useAuthStore
-                    .getState()
-                    .setAccessToken(accessToken);
-
-                originalRequest.headers.Authorization =
-                    `Bearer ${accessToken}`;
-
-                return api(originalRequest);
-
-            }
-
-            catch {
-
-                useAuthStore.getState().logout();
-
-                window.location.href = "/login";
-
-            }
-
-        }
+        console.log("========== AXIOS ERROR ==========");
+        console.log("Status:", error.response?.status);
+        console.log("URL:", error.config?.url);
+        console.log("Response:", error.response?.data);
+        console.log(error);
+        console.log("=================================");
 
         return Promise.reject(error);
 
