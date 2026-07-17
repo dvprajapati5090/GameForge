@@ -1,7 +1,10 @@
 const cookieOptions = {
     httpOnly: true,
-    secure: false,      // Change to true when deployed with HTTPS
-    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    sameSite:
+        process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax",
 };
 
 export default cookieOptions;
