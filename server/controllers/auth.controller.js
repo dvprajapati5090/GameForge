@@ -6,7 +6,8 @@ import {
     verifyRiotAccountService,
     checkEmailAvailabilityService,
     checkUsernameAvailabilityService,
-    changePasswordService
+    changePasswordService,
+    deleteAccountService
 } from "../services/auth.service.js";
 
 import ApiResponse from "../utils/apiResponse.js";
@@ -196,6 +197,46 @@ export const changePassword = asyncHandler(async (req, res) => {
             null,
 
             "Password updated successfully"
+
+        )
+
+    );
+
+});
+
+export const deleteAccount = asyncHandler(async (req, res) => {
+
+    await deleteAccountService(
+
+        req.user._id,
+
+        req.body.password
+
+    );
+
+    res
+
+        .clearCookie(
+
+            "accessToken"
+
+        )
+
+        .clearCookie(
+
+            "refreshToken"
+
+        );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+
+            200,
+
+            null,
+
+            "Account deleted successfully."
 
         )
 

@@ -2,6 +2,8 @@ import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import generateAccessAndRefreshTokens from "../utils/generateTokens.js";
 
+import Team from "../models/team.model.js";
+
 import jwt from "jsonwebtoken";
 
 import {
@@ -342,5 +344,135 @@ export const changePasswordService = async (
     user.password = newPassword;
 
     await user.save();
+
+};
+
+export const deleteAccountService = async (
+
+    userId,
+
+    password
+
+) => {
+
+    const user = await User.findById(userId)
+
+        .select("+password");
+
+    if (!user) {
+
+        throw new ApiError(
+
+            404,
+
+            "User not found."
+
+        );
+
+    }
+
+    const valid = await user.isPasswordCorrect(password);
+
+    if (!valid) {
+
+        throw new ApiError(
+
+            400,
+
+            "Incorrect password."
+
+        );
+
+    }
+
+    if (user.team) {
+
+        const team = await Team.findById(user.team);
+
+        if (team) {
+
+            if (
+
+                team.captain.toString() ===
+
+                user._id.toString()
+
+            ) {
+
+                await User.updateMany(
+
+                    {
+
+                        _id: {
+
+                            $in: team.members
+
+                        }
+
+                    },
+
+                    {
+
+                        $set: {
+
+                            team: null
+
+                        }
+
+                    }
+
+                );
+
+                await Team.findByIdAndDelete(
+
+                    team._id
+
+                );
+
+            }
+
+            else {
+
+                team.members = team.members.filter(
+
+                    (member) =>
+
+                        member.toString() !==
+
+                        user._id.toString()
+
+                );
+
+                await team.save();
+
+            }
+
+        }
+
+    }
+
+    await User.findByIdAndUpdate(
+
+        user._id,
+
+        {
+
+            $set: {
+
+                team: null,
+
+                refreshToken: ""
+
+            }
+
+        }
+
+    );
+
+    await User.findByIdAndDelete(
+
+        user._id
+
+    );
 
 };

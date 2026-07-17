@@ -65,3 +65,17 @@ export const changePassword = (data) =>
         data
 
     );
+
+export const deleteAccount = (data) =>
+
+    api.delete(
+
+        "/auth/delete-account",
+
+        {
+
+            data
+
+        }
+
+    );    

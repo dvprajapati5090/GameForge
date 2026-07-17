@@ -28,9 +28,57 @@ export default function ChangePasswordModal({
 
     function handleSubmit() {
 
-        if (!currentPassword || !newPassword || !confirmPassword) {
+        if (!currentPassword.trim()) {
 
-            toast.error("Please fill all fields.");
+            toast.error("Current password is required.");
+
+            return;
+
+        }
+
+        if (!newPassword.trim()) {
+
+            toast.error("New password is required.");
+
+            return;
+
+        }
+
+        if (newPassword.length < 8) {
+
+            toast.error("Password must be at least 8 characters.");
+
+            return;
+
+        }
+
+        if (!/[A-Z]/.test(newPassword)) {
+
+            toast.error("Password must contain an uppercase letter.");
+
+            return;
+
+        }
+
+        if (!/[a-z]/.test(newPassword)) {
+
+            toast.error("Password must contain a lowercase letter.");
+
+            return;
+
+        }
+
+        if (!/\d/.test(newPassword)) {
+
+            toast.error("Password must contain a number.");
+
+            return;
+
+        }
+
+        if (!confirmPassword.trim()) {
+
+            toast.error("Please confirm your password.");
 
             return;
 
@@ -39,6 +87,14 @@ export default function ChangePasswordModal({
         if (newPassword !== confirmPassword) {
 
             toast.error("Passwords do not match.");
+
+            return;
+
+        }
+
+        if (currentPassword === newPassword) {
+
+            toast.error("New password cannot be the same as the current password.");
 
             return;
 
@@ -58,7 +114,7 @@ export default function ChangePasswordModal({
 
                 onSuccess: () => {
 
-                    toast.success("Password updated successfully!");
+                    toast.success("Password updated successfully.");
 
                     setCurrentPassword("");
 

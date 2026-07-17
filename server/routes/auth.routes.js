@@ -6,8 +6,10 @@ import verifyJWT from "../middleware/auth.middleware.js";
 import {
     registerSchema,
     loginSchema,
-    verifyRiotSchema
+    verifyRiotSchema,
 } from "../validators/auth.validator.js";
+
+import { deleteAccountSchema } from "../validators/deleteAccount.validator.js";
 
 import {
     registerUser,
@@ -18,7 +20,8 @@ import {
     verifyRiotAccount,
     checkEmailAvailability,
     checkUsernameAvailability,
-    changePassword
+    changePassword,
+    deleteAccount
 } from "../controllers/auth.controller.js";
 
 const router = express.Router();
@@ -82,6 +85,18 @@ router.patch(
     "/change-password",
     verifyJWT,
     changePassword
+);
+
+router.delete(
+
+    "/delete-account",
+
+    verifyJWT,
+
+    validate(deleteAccountSchema),
+
+    deleteAccount
+
 );
 
 export default router;

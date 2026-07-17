@@ -14,6 +14,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+
 export default function Login() {
 
     const {
@@ -38,6 +41,22 @@ export default function Login() {
             }
         });
     };
+
+    const location = useLocation();
+
+    useEffect(() => {
+
+        if (location.state?.success) {
+
+            toast.success(
+
+                location.state.success
+
+            );
+
+        }
+
+    }, [location]);
 
     return (
         <>
