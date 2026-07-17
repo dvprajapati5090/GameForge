@@ -7,7 +7,7 @@ import HeroInfo from "./HeroInfo";
 import HeroStats from "./HeroStats";
 import HeroActions from "./HeroActions";
 
-export default function PlayerHero() {
+export default function PlayerHero({ player }) {
 
     return (
 
@@ -29,7 +29,7 @@ export default function PlayerHero() {
 
         >
 
-            <ProfileAvatar />
+            <ProfileAvatar player={player} />
 
             <GlassCard
                 className="
@@ -68,9 +68,13 @@ export default function PlayerHero() {
                 />
 
                 <div className="relative z-10">
-                    <HeroInfo />
-                    <HeroStats />
-                    <HeroActions />
+
+                    <HeroInfo player={player} />
+
+                    <HeroStats player={player} />
+
+                    <HeroActions player={player} />
+
                 </div>
 
             </GlassCard>

@@ -1,5 +1,3 @@
-import MainLayout from "../components/layout/MainLayout";
-
 import PlayerHero from "../components/profile/PlayerHero";
 import AccountCard from "../components/profile/AccountCard";
 import AboutCard from "../components/profile/AboutCard";
@@ -9,25 +7,21 @@ export default function Profile() {
 
     return (
 
-        <MainLayout>
+        <div className="space-y-8">
 
-            <div className="space-y-8">
+            <PlayerHero />
 
-                <PlayerHero />
+            <div className="grid lg:grid-cols-2 gap-8">
 
-                <div className="grid lg:grid-cols-2 gap-8">
+                <AccountCard />
 
-                    <AccountCard />
-
-                    <AboutCard />
-
-                </div>
-
-                <FavouriteGamesCard />
+                <AboutCard />
 
             </div>
 
-        </MainLayout>
+            <FavouriteGamesCard />
+
+        </div>
 
     );
 

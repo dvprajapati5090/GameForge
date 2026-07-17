@@ -12,6 +12,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function Login() {
 
@@ -454,6 +455,28 @@ export default function Login() {
                                 </span>
 
                             </button>
+
+                            <p className="text-center text-gray-400 mt-6">
+
+                                Don't have an account?{" "}
+
+                                <Link
+
+                                    to="/register"
+
+                                    className="
+                                        text-cyan-400
+                                        hover:text-cyan-300
+                                        font-semibold
+                                    "
+
+                                >
+
+                                    Register
+
+                                </Link>
+
+                            </p>
 
                         </form>
 

@@ -14,6 +14,8 @@ export default function useAuth() {
     const setUser = useAuthStore((state) => state.setUser);
     const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
+    const logout = useAuthStore((state) => state.logout);
+
     useEffect(() => {
 
         async function restoreSession() {
@@ -35,6 +37,8 @@ export default function useAuth() {
             }
 
             catch (err) {
+
+                logout();
 
                 console.log("No active session");
 

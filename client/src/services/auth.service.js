@@ -1,12 +1,12 @@
 import api from "../api/axios";
 
-export const registerUser = async (data) => {
-    const res = await api.post("/auth/register", data);
+export const loginUser = async (data) => {
+    const res = await api.post("/auth/login", data);
     return res.data;
 };
 
-export const loginUser = async (data) => {
-    const res = await api.post("/auth/login", data);
+export const register = async (data) => {
+    const res = await api.post("/auth/register",data);
     return res.data;
 };
 
@@ -24,3 +24,44 @@ export const refreshToken = async () => {
     const res = await api.post("/auth/refresh-token");
     return res.data;
 };
+
+export const checkUsernameAvailability = async (username) => {
+
+    const res = await api.get(
+        `/auth/check-username?username=${username}`
+    );
+
+    return res.data;
+
+};
+
+export const checkEmailAvailability = async (email) => {
+
+    const res = await api.get(
+        `/auth/check-email?email=${email}`
+    );
+
+    return res.data;
+
+};
+
+export const verifyRiot = async (data) => {
+
+    const res = await api.post(
+        "/auth/verify-riot",
+        data
+    );
+
+    return res.data;
+
+};
+
+export const changePassword = (data) =>
+
+    api.patch(
+
+        "/auth/change-password",
+
+        data
+
+    );

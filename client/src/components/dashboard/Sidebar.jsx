@@ -8,6 +8,10 @@ import {
     LogOut
 } from "lucide-react";
 
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../../services/auth.service";
+import useAuthStore from "../../store/authStore";
+
 const menuItems = [
     {
         icon: LayoutDashboard,
@@ -27,7 +31,7 @@ const menuItems = [
     {
         icon: Shield,
         label: "Teams",
-        path: "/teams"
+        path: "/team"
     },
     {
         icon: Trophy,
@@ -44,6 +48,35 @@ const menuItems = [
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
+
+    const navigate = useNavigate();
+
+    const logout = useAuthStore((state) => state.logout);
+
+    async function handleLogout() {
+
+        try {
+
+            await logoutUser();
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+        finally {
+
+            logout();
+
+            navigate("/login");
+
+        }
+
+    }
+
     return (
         <aside
             className="
@@ -105,20 +138,30 @@ export default function Sidebar() {
                 </nav>
             </div>
 
-            <div className="p-5">
-                <button
-                    className="
-                        flex
-                        items-center
-                        gap-4
-                        text-red-400
-                        hover:text-red-300
-                    "
-                >
-                    <LogOut size={20} />
-                    Logout
-                </button>
-            </div>
+            <button
+                onClick={handleLogout}
+                className="
+                    w-full
+                    flex
+                    items-center
+                    justify-center
+                    gap-3
+                    px-4
+                    py-3
+                    rounded-xl
+                    border
+                    border-red-500/20
+                    bg-red-500/10
+                    text-red-400
+                    hover:bg-red-500/20
+                    hover:border-red-400
+                    transition-all
+                "
+            >
+                <LogOut size={20}/>
+                Logout
+            </button>
+
         </aside>
     );
 }

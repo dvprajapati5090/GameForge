@@ -1,8 +1,12 @@
+import { Outlet } from "react-router-dom";
+
 import Sidebar from "../dashboard/Sidebar";
 import Navbar from "../dashboard/Navbar";
 
-export default function MainLayout({ children }) {
+export default function MainLayout() {
+
     return (
+
         <div className="h-screen bg-[#0F172A] text-white">
 
             <Sidebar />
@@ -18,11 +22,15 @@ export default function MainLayout({ children }) {
                         p-8
                     "
                 >
-                    {children}
+
+                    <Outlet />
+
                 </main>
 
             </div>
 
         </div>
+
     );
+
 }

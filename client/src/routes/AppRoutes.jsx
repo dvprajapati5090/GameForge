@@ -1,13 +1,20 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
-
 import ProtectedRoute from "./ProtectedRoute";
 
-import useAuthStore from "../store/authStore";
+import MainLayout from "../components/layout/MainLayout";
 
+import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
+import TeamPage from "../pages/TeamPage";
+import CreateTeamPage from "../pages/CreateTeamPage";
+import Login from "../pages/Login";
+import RegisterPage from "../pages/RegisterPage";
+import PlayersPage from "../pages/PlayersPage";
+import PlayerProfilePage from "../pages/PlayerProfilePage";
+import SettingsPage from "../pages/SettingsPage";
+
+import useAuthStore from "../store/authStore";
 
 export default function AppRoutes() {
 
@@ -27,22 +34,59 @@ export default function AppRoutes() {
             />
 
             <Route
-                path="/profile"
-                element={
-                    user
-                        ? <Profile />
-                        : <Navigate to="/login" replace />
-                }
+
+                path="/register"
+
+                element={<RegisterPage />}
+
             />
-            
+
             <Route
-                path="/"
                 element={
                     <ProtectedRoute>
-                        <Dashboard />
+
+                        <MainLayout />
+
                     </ProtectedRoute>
                 }
-            />
+            >
+
+                <Route
+                    index
+                    element={<Dashboard />}
+                />
+
+                <Route
+                    path="profile"
+                    element={<Profile />}
+                />
+
+                <Route
+                    path="team"
+                    element={<TeamPage />}
+                />
+
+                <Route
+                    path="team/create"
+                    element={<CreateTeamPage />}
+                />
+
+                <Route 
+                    path="players" 
+                    element={<PlayersPage />} 
+                />
+
+                <Route
+                    path="players/:username"
+                    element={<PlayerProfilePage />}
+                />
+
+                <Route 
+                    path="settings" 
+                    element={<SettingsPage />} 
+                />
+
+            </Route>
 
             <Route
                 path="*"

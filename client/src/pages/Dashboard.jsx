@@ -1,5 +1,3 @@
-import MainLayout from "../components/layout/MainLayout";
-
 import HeroBanner from "../components/dashboard/HeroBanner";
 import StatsSection from "../components/dashboard/StatsSection";
 import DashboardGrid from "../components/dashboard/DashboardGrid";
@@ -8,7 +6,7 @@ export default function Dashboard() {
 
     return (
 
-        <MainLayout>
+        <>
 
             <HeroBanner />
 
@@ -20,7 +18,7 @@ export default function Dashboard() {
 
             <DashboardGrid />
 
-        </MainLayout>
+        </>
 
     );
 

@@ -49,9 +49,11 @@ const stats = (user) => [
 
 ];
 
-export default function HeroStats() {
+export default function HeroStats({player}) {
 
     const user = useAuthStore((state) => state.user);
+
+    const profile = player || user;
 
     return (
 
@@ -59,7 +61,7 @@ export default function HeroStats() {
 
             {
 
-                stats(user).map((card) => {
+                stats(profile).map((card) => {
 
                     const Icon = card.icon;
 

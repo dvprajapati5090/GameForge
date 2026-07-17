@@ -8,11 +8,36 @@ import useSyncRiot from "../../hooks/useSyncRiot";
 
 import GradientButton from "../ui/GradientButton";
 
-export default function HeroActions() {
+import useAuthStore from "../../store/authStore";
+
+export default function HeroActions({player}) {
 
     const [open, setOpen] = useState(false);
 
     const syncMutation = useSyncRiot();
+
+    const user = useAuthStore((state) => state.user);
+
+    const isOwnProfile =
+        !player || player.username === user?.username;
+
+    if (!isOwnProfile) {
+
+        return (
+
+            <div className="flex justify-center mt-10">
+
+                <GradientButton>
+
+                    Invite to Team
+
+                </GradientButton>
+
+            </div>
+
+        );
+
+    }
 
     return (
 

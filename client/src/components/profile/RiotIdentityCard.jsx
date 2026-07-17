@@ -1,9 +1,11 @@
 import { BadgeCheck } from "lucide-react";
 import useAuthStore from "../../store/authStore";
 
-export default function RiotIdentityCard() {
+export default function RiotIdentityCard({player}) {
 
     const user = useAuthStore((state) => state.user);
+
+    const profile = player || user;
 
     if (!user?.riotGameName)
         return null;
