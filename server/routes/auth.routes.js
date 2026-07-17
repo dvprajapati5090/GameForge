@@ -5,7 +5,8 @@ import verifyJWT from "../middleware/auth.middleware.js";
 
 import {
     registerSchema,
-    loginSchema
+    loginSchema,
+    verifyRiotSchema
 } from "../validators/auth.validator.js";
 
 import {
@@ -13,7 +14,11 @@ import {
     loginUser,
     getCurrentUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    verifyRiotAccount,
+    checkEmailAvailability,
+    checkUsernameAvailability,
+    changePassword
 } from "../controllers/auth.controller.js";
 
 const router = express.Router();
@@ -45,6 +50,38 @@ router.post(
 router.post(
     "/refresh-token",
     refreshAccessToken
+);
+
+router.post(
+
+    "/verify-riot",
+
+    validate(verifyRiotSchema),
+
+    verifyRiotAccount
+
+);
+
+router.get(
+
+    "/check-username",
+
+    checkUsernameAvailability
+
+);
+
+router.get(
+
+    "/check-email",
+
+    checkEmailAvailability
+
+);
+
+router.patch(
+    "/change-password",
+    verifyJWT,
+    changePassword
 );
 
 export default router;

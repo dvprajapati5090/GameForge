@@ -2,7 +2,11 @@ import {
     registerUserService,
     loginUserService,
     logoutUserService,
-    refreshAccessTokenService
+    refreshAccessTokenService,
+    verifyRiotAccountService,
+    checkEmailAvailabilityService,
+    checkUsernameAvailabilityService,
+    changePasswordService
 } from "../services/auth.service.js";
 
 import ApiResponse from "../utils/apiResponse.js";
@@ -115,5 +119,86 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
                 }
             )
         );
+
+});
+
+export const verifyRiotAccount = asyncHandler(async (req, res) => {
+
+    const riotData = await verifyRiotAccountService(req.body);
+
+    return res.status(200).json(
+
+        new ApiResponse(
+
+            "Riot account verified successfully",
+
+            riotData
+
+        )
+
+    );
+
+});
+
+export const checkUsernameAvailability = asyncHandler(async (req, res) => {
+
+    const { username } = req.query;
+
+    const result = await checkUsernameAvailabilityService(username);
+
+    return res.status(200).json(
+
+        new ApiResponse(
+
+            "Username availability checked",
+
+            result
+
+        )
+
+    );
+
+});
+
+export const checkEmailAvailability = asyncHandler(async (req, res) => {
+
+    const { email } = req.query;
+
+    const result = await checkEmailAvailabilityService(email);
+
+    return res.status(200).json(
+
+        new ApiResponse(
+
+            "Email availability checked",
+
+            result
+
+        )
+
+    );
+
+});
+
+export const changePassword = asyncHandler(async (req, res) => {
+
+    await changePasswordService(
+        req.user._id,
+        req.body
+    );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+
+            200,
+
+            null,
+
+            "Password updated successfully"
+
+        )
+
+    );
 
 });

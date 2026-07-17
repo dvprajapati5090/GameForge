@@ -4,14 +4,93 @@ import generateAccessAndRefreshTokens from "../utils/generateTokens.js";
 
 import jwt from "jsonwebtoken";
 
+import {
+    getAccountDetails,
+    getMMRDetails
+} from "./thirdParty/henrik.service.js";
+
+export const verifyRiotAccountService = async ({
+
+    gameName,
+
+    tagLine,
+
+    region
+
+}) => {
+
+    const account = await getAccountDetails(
+
+        gameName,
+
+        tagLine
+
+    );
+
+    const mmr = await getMMRDetails(
+
+        region,
+
+        gameName,
+
+        tagLine
+
+    );
+
+    return {
+
+        verified: true,
+
+        gameName,
+
+        tagLine,
+
+        region,
+
+        puuid: account.puuid,
+
+        level: account.account_level,
+
+        playerCard: account.card,
+
+        playerTitle: account.title,
+
+        currentRank:
+            mmr.current_data?.currenttierpatched?.toUpperCase() || "",
+
+        rankRating:
+            mmr.current_data?.ranking_in_tier || 0,
+
+        elo:
+            mmr.current_data?.elo || 0,
+
+        highestRank:
+            mmr.highest_rank?.patched_tier?.toUpperCase() || ""
+
+    };
+
+};
+
 export const registerUserService = async (userData) => {
 
     const {
+
         username,
+
         displayName,
+
         email,
+
         password,
-        role
+
+        role,
+
+        gameName,
+
+        tagLine,
+
+        region
+
     } = userData;
 
     // Check if username already exists
@@ -38,13 +117,65 @@ export const registerUserService = async (userData) => {
         );
     }
 
+    let riotData = {};
+
+    if (role === "PLAYER") {
+
+        riotData = await verifyRiotAccountService({
+
+            gameName,
+
+            tagLine,
+
+            region
+
+        });
+
+    }
+
     // Create new user
     const user = await User.create({
+
         username,
+
         displayName,
+
         email,
+
         password,
-        role
+
+        role,
+
+        ...(role === "PLAYER" && {
+
+            riotGameName: riotData.gameName,
+
+            riotTagLine: riotData.tagLine,
+
+            region: riotData.region,
+
+            puuid: riotData.puuid,
+
+            riotVerified: riotData.verified,
+
+            accountLevel: riotData.level,
+
+            currentRank: riotData.currentRank,
+
+            rankRating: riotData.rankRating,
+
+            highestRank: riotData.highestRank,
+
+            riotCard: riotData.playerCard,
+
+            riotTitle: riotData.playerTitle,
+
+            syncStatus: "SYNCED",
+
+            riotLastSyncedAt: new Date()
+
+        })
+
     });
 
     // Generate Access & Refresh Tokens
@@ -152,4 +283,64 @@ export const refreshAccessTokenService = async (refreshToken) => {
         accessToken,
         refreshToken: newRefreshToken
     };
+};
+
+export const checkUsernameAvailabilityService = async (username) => {
+
+    const existingUser = await User.findOne({
+        username
+    });
+
+    return {
+        available: !existingUser
+    };
+
+};
+
+export const checkEmailAvailabilityService = async (email) => {
+
+    const existingUser = await User.findOne({
+        email: email.toLowerCase()
+    });
+
+    return {
+        available: !existingUser
+    };
+
+};
+
+export const changePasswordService = async (
+
+    userId,
+
+    {
+
+        currentPassword,
+
+        newPassword
+
+    }
+
+) => {
+
+    const user = await User.findById(userId).select("+password");
+
+    const valid = await user.isPasswordCorrect(currentPassword);
+
+    if (!valid) {
+
+        throw new ApiError(
+
+            400,
+
+            "Current password is incorrect"
+
+        );
+
+    }
+
+    user.password = newPassword;
+
+    await user.save();
+
 };

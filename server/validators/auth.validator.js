@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const registerSchema = z.object({
+
     username: z
         .string()
         .trim()
@@ -33,15 +34,102 @@ export const registerSchema = z.object({
             "Password must contain at least one special character"
         ),
 
-    role: z.enum(["PLAYER", "HOST"])
+    role: z.enum([
+        "PLAYER",
+        "HOST"
+    ]),
+
+    gameName: z
+        .string()
+        .trim()
+        .optional(),
+
+    tagLine: z
+        .string()
+        .trim()
+        .optional(),
+
+    region: z
+        .enum([
+            "ap",
+            "na",
+            "eu",
+            "kr",
+            "latam",
+            "br"
+        ])
+        .optional()
+
+}).superRefine((data, ctx) => {
+
+    if (data.role === "PLAYER") {
+
+        if (!data.gameName) {
+
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["gameName"],
+                message: "Game Name is required"
+            });
+
+        }
+
+        if (!data.tagLine) {
+
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["tagLine"],
+                message: "Tagline is required"
+            });
+
+        }
+
+        if (!data.region) {
+
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["region"],
+                message: "Region is required"
+            });
+
+        }
+
+    }
+
 });
 
 export const loginSchema = z.object({
+
     email: z
+        .string()
         .email("Invalid email address")
         .transform((email) => email.toLowerCase()),
 
     password: z
         .string()
         .min(1, "Password is required")
+
+});
+
+export const verifyRiotSchema = z.object({
+
+    gameName: z
+        .string()
+        .trim()
+        .min(3, "Game Name is required"),
+
+    tagLine: z
+        .string()
+        .trim()
+        .min(2, "Tagline is required"),
+
+    region: z.enum([
+        "ap",
+        "na",
+        "eu",
+        "kr",
+        "latam",
+        "br"
+    ])
+
 });

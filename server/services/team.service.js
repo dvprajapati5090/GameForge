@@ -252,25 +252,37 @@ export const getMyInvitationsService = async (userId) => {
 
     const invitations = await Invitation.find({
         receiver: userId,
-        status: "PENDING",
-        expiresAt: {
-            $gt: new Date()
-        }
+        status: "PENDING"
     })
-    .populate(
-        "team",
-        "name logo description"
-    )
-    .populate(
-        "sender",
-        "username displayName avatar"
-    )
-    .sort({
-        createdAt: -1
-    })
-    .select("-receiver -__v");
+        .populate(
+            "team",
+            "name logo description"
+        )
+        .populate(
+            "sender",
+            "username displayName avatar"
+        );
 
-    return invitations;
+    const validInvitations = [];
+
+    for (const invitation of invitations) {
+
+        if (!invitation.team) {
+
+            await Invitation.findByIdAndDelete(
+                invitation._id
+            );
+
+            continue;
+
+        }
+
+        validInvitations.push(invitation);
+
+    }
+
+    return validInvitations;
+
 };
 
 export const acceptInvitationService = async (
