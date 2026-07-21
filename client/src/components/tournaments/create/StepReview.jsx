@@ -37,8 +37,30 @@ export default function StepReview({
                 </Button>
 
                 <Button
+                    
                     loading={mutation.isPending}
-                    onClick={() => mutation.mutate(form)}
+                    
+                    onClick={() => {
+
+                        mutation.mutate({
+                    
+                            ...form,
+                    
+                            registrationStart: new Date(
+                                form.registrationStart
+                            ).toISOString(),
+                    
+                            registrationEnd: new Date(
+                                form.registrationEnd
+                            ).toISOString(),
+                    
+                            tournamentStart: new Date(
+                                form.tournamentStart
+                            ).toISOString()
+                    
+                        });
+                    
+                    }}
                 >
                     Create Tournament
                 </Button>
