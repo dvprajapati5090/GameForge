@@ -23,19 +23,7 @@ export default function HeroActions({player}) {
 
     if (!isOwnProfile) {
 
-        return (
-
-            <div className="flex justify-center mt-10">
-
-                <GradientButton>
-
-                    Invite to Team
-
-                </GradientButton>
-
-            </div>
-
-        );
+        return null;
 
     }
 

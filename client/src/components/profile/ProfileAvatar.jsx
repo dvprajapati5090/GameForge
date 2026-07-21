@@ -1,14 +1,13 @@
 import useAuthStore from "../../store/authStore";
 import { motion } from "framer-motion";
 
+export default function ProfileAvatar({ player }) {
 
-export default function ProfileAvatar() {
-
-    const user = useAuthStore((state) => state.user);
+    const profile = player;
 
     const banner =
-        user?.riotCard
-            ? `https://media.valorant-api.com/playercards/${user.riotCard}/largeart.png`
+        profile?.riotCard
+            ? `https://media.valorant-api.com/playercards/${profile.riotCard}/largeart.png`
             : null;
 
     return (
@@ -179,7 +178,7 @@ export default function ProfileAvatar() {
                     >
 
                         {
-                            user?.riotCard ? (
+                            profile?.riotCard ? (
 
                                 <motion.img
                                     initial={{
@@ -193,7 +192,7 @@ export default function ProfileAvatar() {
                                     transition={{
                                         duration:8
                                     }}
-                                    src={`https://media.valorant-api.com/playercards/${user.riotCard}/displayicon.png`}
+                                    src={`https://media.valorant-api.com/playercards/${profile.riotCard}/displayicon.png`}
                                     alt="Player Card"
                                     className="
                                         w-full
@@ -215,7 +214,7 @@ export default function ProfileAvatar() {
                                         font-black
                                     "
                                 >
-                                    {user?.displayName?.charAt(0)?.toUpperCase()}
+                                    {profile?.displayName?.charAt(0)?.toUpperCase()}
                                 </div>
 
                             )
@@ -242,7 +241,7 @@ export default function ProfileAvatar() {
                             "
                         >
 
-                            LV {user?.accountLevel ?? 1}
+                            LV {profile?.accountLevel ?? 1}
 
                         </div>
 

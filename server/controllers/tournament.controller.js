@@ -9,7 +9,11 @@ import {
     deleteTournamentService,
     registerTeamService,
     withdrawTeamService,
-    completeTournamentService
+    completeTournamentService,
+    getBracketService,
+    generateBracketService,
+    getMyTournamentsService,
+    checkTournamentEligibilityService
 } from "../services/tournament.service.js";
 
 export const createTournament =
@@ -144,3 +148,97 @@ export const completeTournament = asyncHandler(async (req, res) => {
     );
 
 });
+
+export const generateBracket = asyncHandler(async (
+
+    req,
+    res
+
+) => {
+
+    const tournament =
+        await generateBracketService(
+
+            req.params.id,
+
+            req.user._id
+
+        );
+
+    res.status(200).json(
+
+        new ApiResponse(
+
+            "Bracket generated",
+
+            tournament
+
+        )
+
+    );
+
+});
+
+export const getBracket = asyncHandler(async (req, res) => {
+
+    const bracket = await getBracketService(
+        req.params.id
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            "Bracket fetched successfully",
+            bracket
+        )
+    );
+
+});
+
+export const getMyTournaments = asyncHandler(async (req, res) => {
+
+    const tournaments =
+        await getMyTournamentsService(req.user._id);
+
+    res.status(200).json(
+
+        new ApiResponse(
+
+            "Host tournaments fetched",
+            {
+                tournaments
+            }
+        )
+
+    );
+
+});
+
+export const checkTournamentEligibility = asyncHandler(
+
+    async (req, res) => {
+
+        const data =
+
+            await checkTournamentEligibilityService(
+
+                req.params.id,
+
+                req.user._id
+
+            );
+
+        res.status(200).json(
+
+            new ApiResponse(
+
+                "Eligibility fetched",
+
+                data
+
+            )
+
+        );
+
+    }
+
+);

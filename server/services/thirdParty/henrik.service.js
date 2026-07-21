@@ -1,9 +1,6 @@
 import axios from "axios";
 import ApiError from "../../utils/ApiError.js";
 
-console.log("BASE URL:", process.env.HENRIK_BASE_URL);
-console.log("API KEY:", process.env.HENRIK_API_KEY);
-
 const henrikClient = axios.create({
     baseURL: process.env.HENRIK_BASE_URL,
     headers: {

@@ -4,7 +4,11 @@ import useAuthStore from "../store/authStore";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
+<<<<<<< HEAD
     baseURL: API_URL,
+=======
+    baseURL: import.meta.env.VITE_API_URL,
+>>>>>>> 4748e9d (feat: implement complete tournament bracket and match progression system)
     withCredentials: true,
     headers: {
         "Content-Type": "application/json",
@@ -25,16 +29,78 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
 
-    (response) => response,
+    response => response,
 
     (error) => {
 
+<<<<<<< HEAD
         console.log("========== AXIOS ERROR ==========");
         console.log("Status:", error.response?.status);
         console.log("URL:", error.config?.url);
         console.log("Response:", error.response?.data);
         console.log(error);
         console.log("=================================");
+=======
+        const originalRequest = error.config;
+
+        const publicRoutes = [
+            "/auth/login",
+            "/auth/register",
+            "/auth/check-email",
+            "/auth/check-username",
+            "/auth/refresh-token"
+        ];
+
+        const shouldSkipRefresh =
+            publicRoutes.some(route =>
+                originalRequest.url.includes(route)
+            );
+
+        if (
+
+            error.response?.status === 401 &&
+            !originalRequest._retry &&
+            !shouldSkipRefresh
+
+        ) {
+
+            originalRequest._retry = true;
+
+            try {
+
+                const response = await axios.post(
+
+                    `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
+
+                    {},
+
+                    {
+                        withCredentials: true
+                    }
+
+                );
+
+                const accessToken = response.data.data.accessToken;
+
+                useAuthStore.getState().setAccessToken(accessToken);
+
+                originalRequest.headers.Authorization =
+                    `Bearer ${accessToken}`;
+
+                return api(originalRequest);
+
+            }
+
+            catch {
+
+                useAuthStore.getState().logout();
+
+                window.location.href = "/login";
+
+            }
+
+        }
+>>>>>>> 4748e9d (feat: implement complete tournament bracket and match progression system)
 
         return Promise.reject(error);
 

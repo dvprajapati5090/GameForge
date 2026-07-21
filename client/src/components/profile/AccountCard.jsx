@@ -9,13 +9,17 @@ import {
 } from "lucide-react";
 
 import useAuthStore from "../../store/authStore";
+
 import useSyncRiot from "../../hooks/useSyncRiot";
 
-export default function AccountCard() {
-
-    const user = useAuthStore((state) => state.user);
+export default function AccountCard({ player }) {
 
     const syncMutation = useSyncRiot();
+
+    const loggedInUser = useAuthStore((state) => state.user);
+
+    const isOwnProfile =
+        loggedInUser?.username === player?.username;
 
     return (
 
@@ -54,7 +58,7 @@ export default function AccountCard() {
 
             {
 
-                user?.riotVerified ? (
+                player?.riotVerified ? (
 
                     <>
 
@@ -85,13 +89,13 @@ export default function AccountCard() {
 
                                 <span>
 
-                                    {user.riotGameName}
+                                    {player.riotGameName}
 
                                 </span>
 
                                 <span className="text-red-400">
 
-                                    #{user.riotTagLine}
+                                    #{player.riotTagLine}
 
                                 </span>
 
@@ -107,7 +111,7 @@ export default function AccountCard() {
 
                                 label="Current Rank"
 
-                                value={user.currentRank || "UNRANKED"}
+                                value={player.currentRank || "UNRANKED"}
 
                             />
 
@@ -117,7 +121,7 @@ export default function AccountCard() {
 
                                 label="Peak Rank"
 
-                                value={user.highestRank || "N/A"}
+                                value={player.highestRank || "N/A"}
 
                             />
 
@@ -127,7 +131,7 @@ export default function AccountCard() {
 
                                 label="Level"
 
-                                value={user.accountLevel}
+                                value={player.accountLevel}
 
                             />
 
@@ -137,42 +141,28 @@ export default function AccountCard() {
 
                                 label="RR"
 
-                                value={user.rankRating}
+                                value={player.rankRating}
 
                             />
 
                         </div>
 
-                        <button
+                        {
+                            isOwnProfile && (
 
-                            onClick={() => syncMutation.mutate()}
+                                <button
+                                    onClick={() => syncMutation.mutate()}
+                                    className="..."
+                                >
+                                    {
+                                        syncMutation.isPending
+                                            ? "Syncing..."
+                                            : "Sync Riot Profile"
+                                    }
+                                </button>
 
-                            className="
-                                w-full
-                                mt-8
-                                rounded-xl
-                                py-3
-                                bg-gradient-to-r
-                                from-cyan-500
-                                to-purple-600
-                                font-semibold
-                                hover:scale-[1.02]
-                                transition
-                            "
-
-                        >
-
-                            {
-
-                                syncMutation.isPending
-
-                                    ? "Syncing..."
-
-                                    : "Sync Riot Profile"
-
-                            }
-
-                        </button>
+                            )
+                        }
 
                     </>
 

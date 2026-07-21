@@ -1,11 +1,8 @@
 import { Quote, User } from "lucide-react";
-import useAuthStore from "../../store/authStore";
 
 import GlowCard from "../ui/GlowCard";
 
-export default function AboutMe() {
-
-    const user = useAuthStore((state) => state.user);
+export default function AboutMe({player}) {
 
     return (
 
@@ -64,7 +61,7 @@ export default function AboutMe() {
 
                     {
 
-                        user?.bio ||
+                        player?.bio ||
 
                         "No bio added yet. Tell the community about yourself."
 

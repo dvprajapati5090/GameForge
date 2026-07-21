@@ -16,12 +16,17 @@ const menuItems = [
     {
         icon: LayoutDashboard,
         label: "Dashboard",
-        path: "/"
+        path: "/host"
     },
     {
-        icon: User,
-        label: "Profile",
-        path: "/profile"
+        icon: Trophy,
+        label: "My Tournaments",
+        path: "/host/tournaments"
+    },
+    {
+        icon: Trophy,
+        label: "Create Tournament",
+        path: "/host/create-tournament"
     },
     {
         icon: Users,
@@ -29,14 +34,9 @@ const menuItems = [
         path: "/players"
     },
     {
-        icon: Shield,
-        label: "Teams",
-        path: "/team"
-    },
-    {
         icon: Trophy,
-        label: "Tournaments",
-        path: "/tournaments"
+        label: "Leaderboard",
+        path: "/leaderboard"
     },
     {
         icon: Settings,

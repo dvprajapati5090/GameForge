@@ -10,9 +10,7 @@ const gameIcons = {
     "League of Legends": "⚔️"
 };
 
-export default function FavoriteGamesCard() {
-
-    const user = useAuthStore((state) => state.user);
+export default function FavoriteGamesCard({player}) {
 
     return (
 
@@ -37,9 +35,9 @@ export default function FavoriteGamesCard() {
 
                 {
 
-                    user?.favoriteGames?.length ? (
+                    player?.favoriteGames?.length ? (
 
-                        user.favoriteGames.map((game, index) => (
+                        player.favoriteGames.map((game, index) => (
 
                             <motion.div
 

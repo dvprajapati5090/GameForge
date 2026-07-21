@@ -59,6 +59,46 @@ export default function StepBasicInfo({
 
         <GlassCard className="p-8">
 
+            <div>
+                
+                <label className="font-semibold">
+                    Account Type
+                </label>
+
+                <div className="grid grid-cols-2 gap-4 mt-3">
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            update("role", "PLAYER")
+                        }
+                        className={
+                            form.role === "PLAYER"
+                                ? "rounded-xl border border-cyan-500 bg-cyan-500/20 p-4"
+                                : "rounded-xl border border-white/10 p-4"
+                        }
+                    >
+                        🎮 Player
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            update("role", "HOST")
+                        }
+                        className={
+                            form.role === "HOST"
+                                ? "rounded-xl border border-purple-500 bg-purple-500/20 p-4"
+                                : "rounded-xl border border-white/10 p-4"
+                        }
+                    >
+                        🏆 Host
+                    </button>
+
+                </div>
+
+            </div>
+
             <div className="space-y-8">
 
                 <FieldTitle

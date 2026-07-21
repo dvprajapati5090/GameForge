@@ -66,7 +66,7 @@ export const searchPlayers = asyncHandler(async (req, res) => {
     return res.status(200).json(
         new ApiResponse(
             200,
-            profile,
+            players,
             "Players fetched successfully"
         )
     );

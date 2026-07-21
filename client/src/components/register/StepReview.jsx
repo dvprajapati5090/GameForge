@@ -43,11 +43,15 @@ export default function StepReview({
 
                 role: form.role,
 
-                gameName: form.riotGameName,
+                ...(form.role === "PLAYER" && {
 
-                tagLine: form.riotTagLine,
+                    gameName: form.riotGameName,
 
-                region: form.region
+                    tagLine: form.riotTagLine,
+
+                    region: form.region
+
+                })
 
             });
 
@@ -130,39 +134,35 @@ export default function StepReview({
 
                 />
 
-                <ReviewRow
+                {
+                    form.role === "PLAYER" && riotProfile && (
 
-                    icon={<ShieldCheck size={18}/>}
+                        <>
 
-                    label="Riot ID"
+                            <ReviewRow
+                                label="Riot ID"
+                                value={`${riotProfile.gameName}#${riotProfile.tagLine}`}
+                            />
 
-                    value={`${riotProfile.gameName}#${riotProfile.tagLine}`}
+                            <ReviewRow
+                                label="Current Rank"
+                                value={riotProfile.currentRank}
+                            />
 
-                />
+                            <ReviewRow
+                                label="Highest Rank"
+                                value={riotProfile.highestRank}
+                            />
 
-                <ReviewRow
+                            <ReviewRow
+                                label="Account Level"
+                                value={riotProfile.level}
+                            />
 
-                    label="Current Rank"
+                        </>
 
-                    value={riotProfile.currentRank}
-
-                />
-
-                <ReviewRow
-
-                    label="Highest Rank"
-
-                    value={riotProfile.highestRank}
-
-                />
-
-                <ReviewRow
-
-                    label="Account Level"
-
-                    value={riotProfile.level}
-
-                />
+                    )
+                }
 
             </GlowCard>
 

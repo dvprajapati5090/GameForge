@@ -14,6 +14,19 @@ import PlayersPage from "../pages/PlayersPage";
 import PlayerProfilePage from "../pages/PlayerProfilePage";
 import SettingsPage from "../pages/SettingsPage";
 
+import TournamentPage from "../pages/TournamentPage";
+import CreateTournamentPage from "../pages/CreateTournamentPage";
+import TournamentDetailsPage from "../pages/TournamentDetailsPage";
+import HostTournamentsPage from "../pages/HostTournamentsPage";
+import HostTournamentDetailsPage from "../pages/HostTournamentDetailsPage";
+
+import HostLayout from "../components/layout/HostLayout";
+import HostDashboard from "../pages/HostDashboard";
+import LeaderboardPage from "../pages/LeaderboardPage";
+import HostBracketPage from "../pages/HostBracketPage";
+
+import HostRoute from "./HostRoute";
+
 import useAuthStore from "../store/authStore";
 
 export default function AppRoutes() {
@@ -53,7 +66,11 @@ export default function AppRoutes() {
 
                 <Route
                     index
-                    element={<Dashboard />}
+                    element={
+                        user?.role === "HOST"
+                            ? <HostDashboard />
+                            : <Dashboard />
+                    }
                 />
 
                 <Route
@@ -84,6 +101,90 @@ export default function AppRoutes() {
                 <Route 
                     path="settings" 
                     element={<SettingsPage />} 
+                />
+
+                <Route
+
+                    path="leaderboard"
+
+                    element={<LeaderboardPage />}
+
+                />
+
+                {/* <Route
+                    path="/tournaments"
+                    element={<TournamentListPage />}
+                />
+
+                <Route
+                    path="/tournaments/:id"
+                    element={<TournamentDetailsPage />}
+                />
+
+                <Route
+                    path="/host/create-tournament"
+                    element={<CreateTournamentPage />}
+                /> */}
+
+                <Route
+
+                    path="tournaments"
+
+                    element={<TournamentPage />}
+
+                />
+
+                <Route
+                    path="tournaments/:id"
+                    element={<TournamentDetailsPage />}
+                />
+
+            </Route>
+
+            <Route
+                element={
+                    <ProtectedRoute>
+
+                        <HostRoute>
+
+                            <HostLayout />
+
+                        </HostRoute>
+
+                    </ProtectedRoute>
+                }
+            >
+
+                <Route
+                    path="host"
+                    element={<HostDashboard />}
+                />
+
+                <Route
+                    path="host/tournaments"
+                    element={
+                        <HostRoute>
+                            <HostTournamentsPage />
+                        </HostRoute>
+                    }
+                />
+
+                <Route
+                    path="host/tournaments/:id"
+                    element={<HostTournamentDetailsPage />}
+                />
+
+                <Route
+
+                    path="/host/tournaments/:id/bracket"
+
+                    element={<HostBracketPage />}
+
+                />
+
+                <Route
+                    path="host/create-tournament"
+                    element={<CreateTournamentPage />}
                 />
 
             </Route>

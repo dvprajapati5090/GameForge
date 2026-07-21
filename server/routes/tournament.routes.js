@@ -20,7 +20,11 @@ import {
     deleteTournament,
     registerTeam,
     withdrawTeam,
-    completeTournament
+    completeTournament,
+    getBracket,
+    generateBracket,
+    getMyTournaments,
+    checkTournamentEligibility
 } from "../controllers/tournament.controller.js";
 
 const router = express.Router();
@@ -36,6 +40,21 @@ router.post(
 router.get(
     "/",
     getAllTournaments
+);
+
+router.get(
+
+    "/:id/bracket",
+
+    getBracket
+
+);
+
+router.get(
+    "/host/my",
+    verifyJWT,
+    authorizeRoles("HOST"),
+    getMyTournaments
 );
 
 router.get(
@@ -72,12 +91,43 @@ router.delete(
     withdrawTeam
 );
 
+router.post(
+    "/:id/generate-bracket",
+    verifyJWT,
+    authorizeRoles("HOST"),
+    generateBracket
+);
+
 router.patch(
     "/:id/complete",
     verifyJWT,
     authorizeRoles("HOST"),
     validate(completeTournamentSchema),
     completeTournament
+);
+
+router.patch(
+
+    "/:id/withdraw",
+
+    verifyJWT,
+
+    authorizeRoles("PLAYER"),
+
+    withdrawTeam
+
+);
+
+router.get(
+
+    "/:id/eligibility",
+
+    verifyJWT,
+
+    authorizeRoles("PLAYER"),
+
+    checkTournamentEligibility
+
 );
 
 export default router;

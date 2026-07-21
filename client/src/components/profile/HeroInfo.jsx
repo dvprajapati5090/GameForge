@@ -6,9 +6,7 @@ import RiotIdentityCard from "./RiotIdentityCard";
 
 export default function HeroInfo({ player }) {
 
-    const user = useAuthStore((state) => state.user);
-
-    const profile = player || user;
+    const profile = player;
 
     const getRankColor = () => {
 

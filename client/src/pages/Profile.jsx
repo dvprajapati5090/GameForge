@@ -1,3 +1,5 @@
+import useAuthStore from "../store/authStore";
+
 import PlayerHero from "../components/profile/PlayerHero";
 import AccountCard from "../components/profile/AccountCard";
 import AboutCard from "../components/profile/AboutCard";
@@ -5,21 +7,23 @@ import FavouriteGamesCard from "../components/profile/FavouriteGamesCard";
 
 export default function Profile() {
 
+    const user = useAuthStore((state) => state.user);
+
     return (
 
         <div className="space-y-8">
 
-            <PlayerHero />
+            <PlayerHero player={user} />
 
             <div className="grid lg:grid-cols-2 gap-8">
 
-                <AccountCard />
+                <AccountCard player={user} />
 
-                <AboutCard />
+                <AboutCard player={user} />
 
             </div>
 
-            <FavouriteGamesCard />
+            <FavouriteGamesCard player={user} />
 
         </div>
 

@@ -13,12 +13,6 @@ import {
 
 import { updateProfileSchema } from "../validators/profile.validator.js";
 
-import asyncHandler from "../utils/asyncHandler.js";
-
-import { 
-    getAccountDetails,
-    getMMRDetails 
-} from "../services/thirdParty/henrik.service.js";
 
 const router = express.Router();
 
@@ -41,36 +35,10 @@ router.get(
     searchPlayers
 );
 
-router.get("/test-riot", async (req, res) => {
-
-    const data = await getAccountDetails(
-        "DushyantZZZ",
-        "2007"
-    );
-
-    res.json(data);
-
-});
-
 router.post(
     "/sync-riot",
     verifyJWT,
     syncRiotProfile
-);
-
-router.get(
-    "/test-riot-rank",
-    asyncHandler(async (req, res) => {
-
-        const data = await getMMRDetails(
-            "ap",
-            "jvdjvdjvd",
-            "jvd"
-        );
-
-        return res.status(200).json(data);
-
-    })
 );
 
 router.get(

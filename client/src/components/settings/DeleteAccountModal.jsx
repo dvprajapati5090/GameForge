@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
 
 import Input from "../ui/Input";
-import GradientButton from "../ui/GradientButton";
 
 import useDeleteAccount from "../../hooks/useDeleteAccount";
 
@@ -20,8 +19,6 @@ export default function DeleteAccountModal({
 
 }) {
 
-    if (!open) return null;
-
     const [password, setPassword] = useState("");
 
     const [confirmation, setConfirmation] = useState("");
@@ -31,6 +28,8 @@ export default function DeleteAccountModal({
     const navigate = useNavigate();
 
     const logout = useAuthStore((state) => state.logout);
+
+    if (!open) return null;
 
     function handleDelete() {
 

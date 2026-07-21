@@ -3,8 +3,49 @@ import ApiError from "../utils/ApiError.js";
 
 import Team from "../models/team.model.js";
 import User from "../models/user.model.js";
+import Match from "../models/match.model.js";
 
 import updateTournamentStatus from "../utils/updateTournamentStatus.js";
+
+import { generateBracket } from "../utils/bracketGenerator.js";
+
+const createSingleEliminationBracket = async (tournament, teams) => {
+    const bracketSize = 2 ** Math.ceil(Math.log2(teams.length));
+    const roundCount = Math.log2(bracketSize);
+    const rounds = [];
+
+    for (let round = 1; round <= roundCount; round++) {
+        const matches = await Match.insertMany(
+            Array.from({ length: bracketSize / (2 ** round) }, (_, index) => ({
+                tournament: tournament._id,
+                round,
+                matchNumber: index + 1
+            }))
+        );
+        rounds.push(matches);
+    }
+
+    for (let round = 0; round < rounds.length - 1; round++) {
+        for (let index = 0; index < rounds[round].length; index++) {
+            const match = rounds[round][index];
+            match.nextMatch = rounds[round + 1][Math.floor(index / 2)]._id;
+            match.nextMatchSlot = index % 2 === 0 ? "teamA" : "teamB";
+            await match.save();
+        }
+    }
+
+    for (let index = 0; index < rounds[0].length; index++) {
+        const match = rounds[0][index];
+        match.teamA = teams[index * 2] || null;
+        match.teamB = teams[index * 2 + 1] || null;
+        match.status = match.teamA && match.teamB ? "LIVE" : "PENDING";
+        await match.save();
+    }
+
+    tournament.bracketGenerated = true;
+    await tournament.save();
+    return rounds.flat();
+};
 
 export const createTournamentService = async (
     tournamentData,
@@ -93,7 +134,14 @@ export const getTournamentByIdService = async (tournamentId) => {
 
     const tournament = await Tournament.findById(tournamentId)
         .populate("organizer", "username displayName avatar")
-        .populate("winner", "name logo");
+        .populate("winner", "name logo")
+        .populate({
+            path: "registeredTeams",
+            populate: {
+                path: "captain",
+                select: "username displayName avatar"
+            }
+        });
 
     if (!tournament) {
         throw new ApiError(
@@ -243,7 +291,8 @@ export const updateTournamentService = async (
 
     // Don't allow changing maxTeams after registration has started
     if (
-        updateData.maxTeams &&
+        updateData.maxTeams !== undefined &&
+        updateData.maxTeams !== tournament.maxTeams &&
         new Date() >= tournament.registrationStart
     ) {
         throw new ApiError(
@@ -306,6 +355,7 @@ export const deleteTournamentService = async (
         );
     }
 
+    await Match.deleteMany({ tournament: tournament._id });
     await tournament.deleteOne();
 
     return;
@@ -402,13 +452,26 @@ export const registerTeamService = async (
         );
     }
 
-    tournament.registeredTeams.push(team._id);
-    tournament.registrationCount++;
+    const updatedTournament = await Tournament.findOneAndUpdate(
+        {
+            _id: tournament._id,
+            status: "REGISTRATION_OPEN",
+            registrationCount: { $lt: tournament.maxTeams },
+            registeredTeams: { $ne: team._id }
+        },
+        {
+            $addToSet: { registeredTeams: team._id },
+            $inc: { registrationCount: 1 }
+        },
+        { new: true }
+    );
 
-    await tournament.save();
+    if (!updatedTournament) {
+        throw new ApiError(409, "Tournament registration changed; please try again");
+    }
 
     return await Tournament.findById(
-        tournament._id
+        updatedTournament._id
     )
         .populate(
             "registeredTeams",
@@ -607,4 +670,426 @@ export const completeTournamentService = async (
             "winner",
             "name logo"
         );
+};
+
+export const generateBracketService = async (
+
+    tournamentId,
+    userId
+
+) => {
+
+    const tournament = await Tournament.findById(tournamentId);
+
+    if (!tournament)
+
+        throw new ApiError(404, "Tournament not found");
+
+    if (tournament.organizer.toString() !== userId.toString())
+
+        throw new ApiError(
+            403,
+            "Only organizer can generate bracket"
+        );
+
+    await updateTournamentStatus(tournament);
+
+    if (tournament.bracketGenerated)
+
+        throw new ApiError(
+            400,
+            "Bracket already generated"
+        );
+
+    if (
+
+        tournament.registrationCount < 2
+
+    )
+
+        throw new ApiError(
+            400,
+            "Not enough teams"
+        );
+
+    if (tournament.format !== "SINGLE_ELIMINATION") {
+        throw new ApiError(
+            400,
+            "Only single-elimination brackets are supported"
+        );
+    }
+
+    if (tournament.registrationCount !== tournament.maxTeams) {
+        throw new ApiError(
+            400,
+            "Tournament must be full before generating its bracket"
+        );
+    }
+
+    const teams = [...tournament.registeredTeams];
+
+        for (
+
+        let i = teams.length - 1;
+
+        i > 0;
+
+        i--
+
+    ) {
+
+        const j = Math.floor(
+            Math.random() * (i + 1)
+        );
+
+        [teams[i], teams[j]] =
+            [teams[j], teams[i]];
+
+    }
+
+    const matches = generateBracket(
+
+        teams,
+
+        tournament._id
+
+    );
+
+    await Match.insertMany(matches);
+
+    // ----------------------------
+    // Auto advance BYEs
+    // ----------------------------
+
+    for (const match of matches) {
+
+        if (match.teamA && !match.teamB) {
+
+            const next = matches.find(
+
+                m =>
+
+                    m._id.toString() ===
+
+                    match.nextMatch?.toString()
+
+            );
+
+            if (next) {
+
+                next[match.nextMatchSlot] = match.teamA;
+
+                if (next.teamA && next.teamB) {
+
+                    next.status = "READY";
+
+                }
+
+            }
+
+        }
+
+        if (!match.teamA && match.teamB) {
+
+            const next = matches.find(
+
+                m =>
+
+                    m._id.toString() ===
+
+                    match.nextMatch?.toString()
+
+            );
+
+            if (next) {
+
+                next[match.nextMatchSlot] = match.teamB;
+
+                if (next.teamA && next.teamB) {
+
+                    next.status = "READY";
+
+                }
+
+            }
+
+        }
+
+    }
+
+    await Match.deleteMany({
+
+        tournament: tournament._id
+
+    });
+
+    await Match.insertMany(matches);
+
+    tournament.bracketGenerated = true;
+
+    tournament.status = "LIVE";
+
+    await tournament.save();
+
+    return await Match.find({
+
+        tournament: tournament._id
+
+    })
+
+    .populate("teamA","name logo")
+
+    .populate("teamB","name logo")
+
+    .populate("winner","name logo")
+
+    .sort({
+
+        round:1,
+
+        matchNumber:1
+
+    });
+
+};
+
+export const getBracketService = async (tournamentId) => {
+
+    const tournament = await Tournament.findById(tournamentId);
+
+    if (!tournament) {
+
+        throw new ApiError(
+            404,
+            "Tournament not found"
+        );
+
+    }
+
+    const matches = await Match.find({
+
+        tournament: tournamentId
+
+    })
+    .populate("teamA", "name logo")
+    .populate("teamB", "name logo")
+    .populate("winner", "name logo")
+    .sort({
+
+        round: 1,
+
+        matchNumber: 1
+
+    });
+
+    const grouped = {};
+
+    for (const match of matches) {
+
+        if (!grouped[match.round]) {
+
+            grouped[match.round] = [];
+
+        }
+
+        grouped[match.round].push(match);
+
+    }
+
+    const rounds = Object.keys(grouped).map(round => {
+
+        const totalRounds = Object.keys(grouped).length;
+
+        let title = `Round ${round}`;
+
+        if (totalRounds === 1)
+
+            title = "Final";
+
+        else if (round == totalRounds)
+
+            title = "Grand Final";
+
+        else if (round == totalRounds - 1)
+
+            title = "Semi Finals";
+
+        else if (round == totalRounds - 2)
+
+            title = "Quarter Finals";
+
+        return {
+
+            round: Number(round),
+
+            title,
+
+            matches: grouped[round]
+
+        };
+
+    });
+
+    return {
+
+        tournament: {
+
+            id: tournament._id,
+
+            status: tournament.status,
+
+            champion: tournament.winner
+
+        },
+
+        rounds
+
+    };
+
+};
+
+export const getMyTournamentsService = async (userId) => {
+
+    return await Tournament.find({
+
+        organizer: userId
+
+    })
+
+    .populate(
+
+        "organizer",
+
+        "username displayName avatar"
+
+    )
+
+    .populate(
+
+        "winner",
+
+        "name logo"
+
+    )
+
+    .sort({
+
+        createdAt: -1
+
+    });
+
+};
+
+export const checkTournamentEligibilityService = async (
+
+    tournamentId,
+    userId
+
+) => {
+
+    const tournament = await Tournament
+        .findById(tournamentId);
+
+    if (!tournament) {
+
+        throw new ApiError(
+            404,
+            "Tournament not found"
+        );
+
+    }
+
+    const user = await User
+        .findById(userId)
+        .populate({
+            path: "team",
+            populate: {
+                path: "members"
+            }
+        });
+
+    const team = user.team;
+
+    const hasEnoughSlots =
+        tournament.registrationCount <
+        tournament.maxTeams;
+
+    const requiredPlayers = {
+
+        SOLO: 1,
+
+        DUO: 2,
+
+        SQUAD: 4,
+
+        "5V5": 5
+
+    }[tournament.mode];
+
+    const checks = {
+
+        hasTeam: !!team,
+
+        isCaptain: team
+            ? team.captain.toString() === userId.toString()
+            : false,
+
+        teamSize:
+            team
+                ? (
+                    team.members.length === requiredPlayers &&
+                    team.maxMembers >= requiredPlayers
+                )
+                : false,
+
+        alreadyRegistered: team
+            ? tournament.registeredTeams.some(
+
+                t => t.toString() === team._id.toString()
+
+            )
+            : false,
+
+        registrationOpen:
+
+            new Date() >= tournament.registrationStart &&
+
+            new Date() <= tournament.registrationEnd,
+
+        tournamentFull:
+            !hasEnoughSlots,
+
+        sameGame: true
+
+    };
+
+    const eligible =
+
+        checks.hasTeam &&
+
+        checks.isCaptain &&
+
+        checks.teamSize &&
+
+        !checks.alreadyRegistered &&
+
+        checks.registrationOpen &&
+
+        !checks.tournamentFull &&
+
+        checks.sameGame;
+
+    return {
+
+        eligible,
+
+        checks: {
+
+            ...checks,
+
+            requiredPlayers
+        }
+
+    };
+
 };

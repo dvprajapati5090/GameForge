@@ -18,6 +18,8 @@ export default function useLogin() {
 
         onSuccess: (response) => {
 
+            console.log(response); // optional
+
             const { user, accessToken } = response.data;
 
             setUser(user);
@@ -25,14 +27,27 @@ export default function useLogin() {
 
             toast.success("Login successful!");
 
-            navigate("/");
+            if (user.role === "HOST") {
+
+                navigate("/host");
+
+            }
+            else {
+
+                navigate("/");
+
+            }
+
         },
 
         onError: (error) => {
 
+            console.error(error);
+
             toast.error(
                 error.response?.data?.message || "Login failed"
             );
+
         }
 
     });

@@ -51,9 +51,7 @@ const stats = (user) => [
 
 export default function HeroStats({player}) {
 
-    const user = useAuthStore((state) => state.user);
-
-    const profile = player || user;
+    const profile = player;
 
     return (
 

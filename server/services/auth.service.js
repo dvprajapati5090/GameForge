@@ -3,6 +3,8 @@ import ApiError from "../utils/ApiError.js";
 import generateAccessAndRefreshTokens from "../utils/generateTokens.js";
 
 import Team from "../models/team.model.js";
+import Tournament from "../models/tournament.model.js";
+import Match from "../models/match.model.js";
 
 import jwt from "jsonwebtoken";
 
@@ -468,6 +470,42 @@ export const deleteAccountService = async (
         }
 
     );
+
+    // If the deleted user is a HOST, remove everything created by them
+
+    const tournaments = await Tournament.find({
+        organizer: user._id
+    });
+
+    const tournamentIds = tournaments.map(
+        tournament => tournament._id
+    );
+
+    // Remove tournament registrations from teams
+    await Team.updateMany(
+        {},
+        {
+            $pull: {
+                tournaments: {
+                    $in: tournamentIds
+                }
+            }
+        }
+    );
+
+    // Delete all matches of those tournaments
+    await Match.deleteMany({
+        tournament: {
+            $in: tournamentIds
+        }
+    });
+
+    // Delete the tournaments themselves
+    await Tournament.deleteMany({
+        _id: {
+            $in: tournamentIds
+        }
+    });
 
     await User.findByIdAndDelete(
 

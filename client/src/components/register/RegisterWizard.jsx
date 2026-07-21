@@ -144,32 +144,49 @@ export default function RegisterWizard() {
                     }
 
                     {
-
                         step === 3 && (
 
-                            <StepRiotVerification
+                            form.role === "PLAYER"
 
-                                form={form}
+                                ? (
 
-                                setForm={setForm}
+                                    <StepRiotVerification
 
-                                riotProfile={riotProfile}
+                                        form={form}
+                                        setForm={setForm}
 
-                                setRiotProfile={setRiotProfile}
+                                        riotProfile={riotProfile}
+                                        setRiotProfile={setRiotProfile}
 
-                                next={() => setStep(4)}
+                                        next={() => setStep(4)}
 
-                                back={() => setStep(2)}
+                                        back={() => setStep(2)}
 
-                            />
+                                    />
+
+                                )
+
+                                : (
+
+                                    <StepReview
+
+                                        form={form}
+
+                                        riotProfile={null}
+
+                                        back={() => setStep(2)}
+
+                                    />
+
+                                )
 
                         )
-
                     }
 
                     {
+                        step === 4 &&
 
-                        step === 4 && (
+                        form.role === "PLAYER" && (
 
                             <StepReview
 
@@ -182,7 +199,6 @@ export default function RegisterWizard() {
                             />
 
                         )
-
                     }
 
                 </div>

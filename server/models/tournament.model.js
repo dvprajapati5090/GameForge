@@ -120,6 +120,11 @@ const tournamentSchema = new mongoose.Schema(
             default: "DRAFT"
         },
 
+        bracketGenerated: {
+            type: Boolean,
+            default: false
+        },
+
         winner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Team",

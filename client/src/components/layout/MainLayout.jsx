@@ -1,9 +1,19 @@
 import { Outlet } from "react-router-dom";
 
-import Sidebar from "../dashboard/Sidebar";
+import PlayerSidebar from "../dashboard/PlayerSidebar";
+import HostSidebar from "../host/HostSidebar";
 import Navbar from "../dashboard/Navbar";
 
+import useAuthStore from "../../store/authStore";
+
 export default function MainLayout() {
+
+    const user = useAuthStore((state) => state.user);
+
+    const Sidebar =
+        user?.role === "HOST"
+            ? HostSidebar
+            : PlayerSidebar;
 
     return (
 
@@ -15,13 +25,7 @@ export default function MainLayout() {
 
                 <Navbar />
 
-                <main
-                    className="
-                        flex-1
-                        overflow-y-auto
-                        p-8
-                    "
-                >
+                <main className="flex-1 overflow-y-auto p-8">
 
                     <Outlet />
 

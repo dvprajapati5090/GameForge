@@ -9,6 +9,7 @@ import profileRoutes from "./routes/profile.routes.js";
 import teamRoutes from "./routes/team.routes.js";
 import tournamentRoutes from "./routes/tournament.routes.js";
 import playerRoutes from "./routes/player.routes.js";
+import matchRoutes from "./routes/match.routes.js";
 
 import errorHandler from "./middleware/error.middleware.js";
 
@@ -33,6 +34,7 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/team",teamRoutes);
 app.use("/api/tournaments",tournamentRoutes);
 app.use("/api/players",playerRoutes);
+app.use("/api/matches",matchRoutes);
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);
