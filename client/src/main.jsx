@@ -27,12 +27,20 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 
                     <Toaster
                         position="top-right"
+                        reverseOrder={false}
+                        gutter={12}
+                        containerStyle={{
+                            top: 20,
+                            right: 20,
+                            zIndex: 999999
+                        }}
                         toastOptions={{
                             duration: 4000,
                             style: {
                                 background: "#111827",
                                 color: "#fff",
-                                border: "1px solid #06b6d4"
+                                border: "1px solid #06b6d4",
+                                zIndex: 999999
                             }
                         }}
                     />

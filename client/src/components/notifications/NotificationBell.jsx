@@ -123,13 +123,19 @@ export default function NotificationBell() {
                             mt-3
                             w-[380px]
                             max-w-[95vw]
-                            bg-[#0B1220]
+
+                            bg-[#0B1220]/95
+                            backdrop-blur-xl
+
                             border
                             border-white/10
                             rounded-3xl
-                            shadow-2xl
+
+                            shadow-[0_20px_80px_rgba(0,0,0,0.7)]
+
                             p-5
-                            z-50
+
+                            z-[9999]
                         "
                     >
 

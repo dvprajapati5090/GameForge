@@ -31,3 +31,11 @@ input:focus {
     box-shadow: 0 0 20px rgba(139,92,246,.35);
 
 }
+
+[data-hot-toast]{
+    z-index:999999 !important;
+}
+
+.react-hot-toast{
+    z-index:999999 !important;
+}
