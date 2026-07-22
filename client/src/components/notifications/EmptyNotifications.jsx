@@ -1,62 +1,19 @@
-import { BellOff } from "lucide-react";
+import { Bell } from "lucide-react";
 
 export default function EmptyNotifications() {
-
     return (
-
-        <div
-            className="
-                py-12
-                flex
-                flex-col
-                items-center
-                text-center
-            "
-        >
-
-            <div
-                className="
-                    w-20
-                    h-20
-                    rounded-full
-                    bg-cyan-500/10
-                    flex
-                    items-center
-                    justify-center
-                    mb-5
-                "
-            >
-
-                <BellOff
-
-                    size={36}
-
-                    className="text-cyan-400"
-
-                />
-
+        <div className="text-center py-12 px-4">
+            <div className="w-16 h-16 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-4">
+                <Bell className="text-gray-400" size={32} />
             </div>
 
-            <h3 className="text-lg font-bold">
-
-                You're all caught up
-
+            <h3 className="text-white font-semibold text-lg">
+                No notifications
             </h3>
 
-            <p
-                className="
-                    text-gray-400
-                    mt-2
-                    max-w-[240px]
-                "
-            >
-
-                No pending invitations or notifications.
-
+            <p className="text-gray-400 text-sm mt-2">
+                You're all caught up. New updates will appear here.
             </p>
-
         </div>
-
     );
-
 }

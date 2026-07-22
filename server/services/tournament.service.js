@@ -5,9 +5,20 @@ import Team from "../models/team.model.js";
 import User from "../models/user.model.js";
 import Match from "../models/match.model.js";
 
+import Notification from "../models/notification.model.js";
+
 import updateTournamentStatus from "../utils/updateTournamentStatus.js";
 
+import { createNotification } from "./notification.service.js";
+
 import { generateBracket } from "../utils/bracketGenerator.js";
+
+import {
+    emitTournamentUpdated,
+    emitBracketUpdated
+} from "../socket/socketManager.js";
+
+import { getIO } from "../socket/socketManager.js";
 
 const createSingleEliminationBracket = async (tournament, teams) => {
     const bracketSize = 2 ** Math.ceil(Math.log2(teams.length));
@@ -125,6 +136,8 @@ export const createTournamentService = async (
             status: "DRAFT"
 
         });
+
+    emitTournamentUpdated();
 
     return tournament;
 
@@ -470,6 +483,22 @@ export const registerTeamService = async (
         throw new ApiError(409, "Tournament registration changed; please try again");
     }
 
+    await createNotification(
+
+        tournament.organizer,
+
+        "New Tournament Registration",
+
+        `${team.name} has registered for ${tournament.name}.`,
+
+        "TOURNAMENT",
+
+        `/host/tournaments/${tournament._id}`
+
+    );
+
+    emitTournamentUpdated();
+
     return await Tournament.findById(
         updatedTournament._id
     )
@@ -655,6 +684,23 @@ export const completeTournamentService = async (
 
     await tournament.save();
 
+    const players = await User.find({
+        team: winnerTeamId
+    });
+
+
+    for (const player of players) {
+
+        await createNotification(
+            player._id,
+            "Tournament Champion 🏆",
+            `Your team won ${tournament.name}`,
+            "ACHIEVEMENT",
+            "/profile"
+        );
+
+    }
+
     return await Tournament.findById(
         tournament._id
     )
@@ -830,6 +876,31 @@ export const generateBracketService = async (
     tournament.status = "LIVE";
 
     await tournament.save();
+
+    emitBracketUpdated(tournament._id);
+    emitTournamentUpdated();
+
+    for (const team of tournament.registeredTeams) {
+
+        const members = await User.find({
+            team: team
+        });
+
+        for (const member of members) {
+
+            await createNotification(
+                member._id,
+                "Bracket Generated",
+                `${tournament.name} bracket is ready.`,
+                "TOURNAMENT",
+                `/tournaments/${tournament._id}/bracket`
+            );
+
+        }
+
+    }
+
+    emitTournamentUpdated();
 
     return await Match.find({
 

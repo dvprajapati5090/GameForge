@@ -2,6 +2,27 @@ import Match from "../models/match.model.js";
 import Tournament from "../models/tournament.model.js";
 import ApiError from "../utils/ApiError.js";
 
+import User from "../models/user.model.js";
+
+import {
+
+    updatePlayerMatchStats,
+
+    updateChampionStats,
+
+    updateTournamentPlayedStats,
+
+    createTournamentHistory
+
+} from "./statistics.service.js";
+
+import { createNotification } from "./notification.service.js";
+
+import {
+    emitTournamentUpdated,
+    emitBracketUpdated
+} from "../socket/socketManager.js";
+
 export const updateMatchWinnerService = async (
 
     matchId,
@@ -58,37 +79,45 @@ export const updateMatchWinnerService = async (
         scoreA == null ||
         scoreB == null
     ) {
+
         throw new ApiError(
             400,
             "Scores are required."
         );
+
     }
 
     if (scoreA === scoreB) {
+
         throw new ApiError(
             400,
             "Scores cannot be equal."
         );
+
     }
 
     if (
         winnerId === match.teamA.toString() &&
         scoreA < scoreB
     ) {
+
         throw new ApiError(
             400,
             "Winner score must be higher."
         );
+
     }
 
     if (
         winnerId === match.teamB.toString() &&
         scoreB < scoreA
     ) {
+
         throw new ApiError(
             400,
             "Winner score must be higher."
         );
+
     }
 
     match.scoreA = scoreA;
@@ -96,6 +125,58 @@ export const updateMatchWinnerService = async (
     match.scoreB = scoreB;
 
     match.winner = winnerId;
+
+    const winnerPlayers = await User.find({
+        team: winnerId
+    });
+
+    for (const player of winnerPlayers) {
+
+        await createNotification(
+
+            player._id,
+
+            "Victory!",
+
+            "Your team won the match.",
+
+            "ACHIEVEMENT",
+
+            `/matches/${match._id}`
+
+        );
+
+    }
+
+    const loserId =
+
+        match.teamA.toString() === winnerId.toString()
+
+            ? match.teamB
+
+            : match.teamA;
+
+    const loserPlayers = await User.find({
+        team: loserId
+    });
+
+    for (const player of loserPlayers) {
+
+        await createNotification(
+
+            player._id,
+
+            "Match Lost",
+
+            "Better luck in the next tournament.",
+
+            "MATCH_READY",
+
+            `/matches/${match._id}`
+
+        );
+
+    }
 
     match.status = "COMPLETED";
 
@@ -107,10 +188,11 @@ export const updateMatchWinnerService = async (
     // Advance winner
     // -----------------------------------
 
+    let nextMatch = null;
+
     if (match.nextMatch) {
 
-        const nextMatch =
-            await Match.findById(match.nextMatch);
+        nextMatch = await Match.findById(match.nextMatch);
 
         nextMatch[match.nextMatchSlot] = winnerId;
 
@@ -119,14 +201,63 @@ export const updateMatchWinnerService = async (
             nextMatch.teamB &&
             nextMatch.status === "PENDING"
         ) {
-
             nextMatch.status = "READY";
-
         }
 
         await nextMatch.save();
 
+        emitBracketUpdated(match.tournament);
+        emitTournamentUpdated();
     }
+
+    if (
+        nextMatch &&
+        nextMatch.teamA &&
+        nextMatch.teamB
+    ) {
+
+        const teams = [
+            nextMatch.teamA,
+            nextMatch.teamB
+        ];
+
+        for (const teamId of teams) {
+
+            const players = await User.find({
+                team: teamId
+            });
+
+            for (const player of players) {
+
+                await createNotification(
+                    player._id,
+                    "Match Ready",
+                    "Your next tournament match is ready.",
+                    "MATCH_READY",
+                    `/matches/${nextMatch._id}`
+                );
+
+            }
+
+        }
+
+        emitBracketUpdated(match.tournament);
+
+        emitTournamentUpdated();
+
+    }
+
+    // -----------------------------------
+    // Update player statistics
+    // -----------------------------------
+
+    await updatePlayerMatchStats(
+
+        winnerId,
+
+        loserId
+
+    );
 
     // -----------------------------------
     // Check tournament completion
@@ -137,7 +268,9 @@ export const updateMatchWinnerService = async (
         tournament: tournament._id,
 
         status: {
+
             $ne: "COMPLETED"
+
         }
 
     });
@@ -149,6 +282,61 @@ export const updateMatchWinnerService = async (
         tournament.winner = winnerId;
 
         await tournament.save();
+
+        await updateChampionStats(winnerId);
+
+        await updateTournamentPlayedStats(
+            tournament.registeredTeams
+        );
+
+        await createTournamentHistory(
+            tournament,
+            winnerId
+        );
+
+        const champions = await User.find({
+
+            team: winnerId
+
+        });
+
+        for (const player of champions) {
+
+            await createNotification(
+
+                player._id,
+
+                "🏆 Tournament Champion",
+
+                `Congratulations! You won ${tournament.name}.`,
+
+                "ACHIEVEMENT",
+
+                `/tournaments/${tournament._id}`
+
+            );
+
+        }
+
+        for (const teamId of tournament.registeredTeams) {
+
+            const players = await User.find({
+                team: teamId
+            });
+
+            for (const player of players) {
+
+                await createNotification(
+                    player._id,
+                    "Tournament Completed",
+                    `${tournament.name} has ended.`,
+                    "TOURNAMENT",
+                    `/tournaments/${tournament._id}`
+                );
+
+            }
+
+        }
 
     }
 

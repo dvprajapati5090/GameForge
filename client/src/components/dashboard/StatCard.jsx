@@ -7,47 +7,134 @@ export default function StatCard({
     color
 }) {
     return (
+
         <motion.div
             whileHover={{
                 y: -6,
-                scale: 1.03
+                scale: 1.02
             }}
             transition={{
                 duration: 0.25
             }}
             className="
-                rounded-2xl
+                group
+                relative
+                overflow-hidden
+
+                rounded-3xl
+
                 border
                 border-white/10
-                bg-white/5
-                backdrop-blur-xl
+
+                bg-gradient-to-br
+                from-white/8
+                via-white/5
+                to-white/[0.03]
+
+                backdrop-blur-2xl
+
                 p-6
-                shadow-lg
-                hover:shadow-cyan-500/20
+
                 transition-all
+                duration-300
+
+                hover:border-violet-400/20
+                hover:shadow-[0_10px_35px_rgba(139,92,246,0.15)]
             "
         >
-            <div className="flex justify-between items-center">
+
+            {/* Glow */}
+
+            <div
+                className="
+                    absolute
+                    -top-10
+                    -right-10
+
+                    h-32
+                    w-32
+
+                    rounded-full
+
+                    bg-violet-500/10
+
+                    blur-3xl
+
+                    opacity-0
+
+                    transition-all
+                    duration-500
+
+                    group-hover:opacity-100
+                "
+            />
+
+            <div className="relative z-10 flex items-center justify-between">
 
                 <div>
 
-                    <p className="text-gray-400 text-sm">
+                    <p
+                        className="
+                            text-sm
+                            font-medium
+                            tracking-wide
+                            text-slate-400
+                        "
+                    >
                         {title}
                     </p>
 
-                    <h2 className="text-3xl font-bold mt-2 text-white">
+                    <h2
+                        className="
+                            mt-3
+
+                            text-3xl
+                            font-black
+
+                            text-white
+                        "
+                    >
                         {value}
                     </h2>
 
                 </div>
 
                 <div
-                    className={`text-4xl ${color}`}
+                    className="
+                        flex
+                        h-14
+                        w-14
+                        items-center
+                        justify-center
+
+                        rounded-2xl
+
+                        border
+                        border-white/10
+
+                        bg-white/5
+
+                        backdrop-blur-xl
+
+                        transition-all
+                        duration-300
+
+                        group-hover:scale-110
+                        group-hover:bg-violet-500/10
+                    "
                 >
-                    {icon}
+
+                    <div className={`text-2xl ${color}`}>
+
+                        {icon}
+
+                    </div>
+
                 </div>
 
             </div>
+
         </motion.div>
+
     );
 }

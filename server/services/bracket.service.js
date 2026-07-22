@@ -2,6 +2,10 @@ import Match from "../models/match.model.js";
 import Tournament from "../models/tournament.model.js";
 import ApiError from "../utils/ApiError.js";
 
+import User from "../models/user.model.js";
+import { createNotification } from "./notification.service.js";
+import { emitTournamentUpdated } from "../socket/socketManager.js";
+
 export const generateBracketService = async (
 
     tournamentId,
@@ -152,6 +156,28 @@ export const generateBracketService = async (
     tournament.bracketGenerated = true;
 
     await tournament.save();
+
+    for (const teamId of tournament.registeredTeams) {
+
+        const players = await User.find({
+            team: teamId
+        });
+
+        for (const player of players) {
+
+            await createNotification(
+                player._id,
+                "Tournament Started",
+                `${tournament.name} bracket has been generated.`,
+                "TOURNAMENT",
+                `/tournaments/${tournament._id}/bracket`
+            );
+
+        }
+
+    }
+
+    emitTournamentUpdated(tournament._id);
 
     return tournament;
 

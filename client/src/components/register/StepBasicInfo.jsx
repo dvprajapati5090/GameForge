@@ -1,4 +1,11 @@
-import { User, Mail, Lock } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+    User,
+    Mail,
+    Lock,
+    Shield,
+    Trophy
+} from "lucide-react";
 
 import GlassCard from "../ui/GlassCard";
 import Input from "../ui/Input";
@@ -57,249 +64,423 @@ export default function StepBasicInfo({
 
     return (
 
-        <GlassCard className="p-8">
+        <GlassCard className="relative overflow-hidden p-8 md:p-10">
 
-            <div>
-                
-                <label className="font-semibold">
-                    Account Type
-                </label>
+            {/* Glow */}
+            <div className="absolute -top-24 right-0 h-48 w-48 rounded-full bg-violet-600/20 blur-3xl" />
+            <div className="absolute -bottom-20 -left-10 h-40 w-40 rounded-full bg-fuchsia-500/10 blur-3xl" />
 
-                <div className="grid grid-cols-2 gap-4 mt-3">
+            <div className="relative z-10 space-y-10">
 
-                    <button
-                        type="button"
-                        onClick={() =>
-                            update("role", "PLAYER")
+                {/* Header */}
+
+                <motion.div
+                    initial={{ opacity: 0, y: -15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                >
+
+                    <div className="flex items-center gap-4">
+
+                        <div
+                            className="
+                                flex
+                                h-14
+                                w-14
+                                items-center
+                                justify-center
+                                rounded-2xl
+                                border
+                                border-violet-500/30
+                                bg-violet-500/10
+                                text-violet-300
+                                shadow-lg
+                                shadow-violet-500/20
+                            "
+                        >
+                            <Shield size={26} />
+                        </div>
+
+                        <div>
+
+                            <h2 className="text-3xl font-bold text-white">
+
+                                Basic Information
+
+                            </h2>
+
+                            <p className="mt-1 text-sm text-gray-400">
+
+                                Create your GameForge account to begin your
+                                competitive journey.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </motion.div>
+
+                {/* Account Type */}
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 }}
+                >
+
+                    <label className="mb-4 block text-sm font-semibold uppercase tracking-wider text-gray-300">
+
+                        Account Type
+
+                    </label>
+
+                    <div className="grid grid-cols-2 gap-5">
+
+                        <motion.button
+                            whileHover={{ y: -3 }}
+                            whileTap={{ scale: 0.98 }}
+                            type="button"
+                            onClick={() =>
+                                update("role", "PLAYER")
+                            }
+                            className={`group rounded-2xl border p-5 text-left transition-all duration-300 ${
+                                form.role === "PLAYER"
+                                    ? "border-violet-500/60 bg-violet-500/15 shadow-lg shadow-violet-500/20"
+                                    : "border-white/10 bg-white/5 hover:border-violet-500/30 hover:bg-white/10"
+                            }`}
+                        >
+
+                            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-violet-500/10 text-violet-300">
+
+                                <User size={24} />
+
+                            </div>
+
+                            <h3 className="text-lg font-semibold text-white">
+
+                                Player
+
+                            </h3>
+
+                            <p className="mt-2 text-sm leading-6 text-gray-400">
+
+                                Join tournaments, build teams, improve rankings
+                                and compete against players worldwide.
+
+                            </p>
+
+                        </motion.button>
+
+                        <motion.button
+                            whileHover={{ y: -3 }}
+                            whileTap={{ scale: 0.98 }}
+                            type="button"
+                            onClick={() =>
+                                update("role", "HOST")
+                            }
+                            className={`group rounded-2xl border p-5 text-left transition-all duration-300 ${
+                                form.role === "HOST"
+                                    ? "border-violet-500/60 bg-violet-500/15 shadow-lg shadow-violet-500/20"
+                                    : "border-white/10 bg-white/5 hover:border-violet-500/30 hover:bg-white/10"
+                            }`}
+                        >
+
+                            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-violet-500/10 text-violet-300">
+
+                                <Trophy size={24} />
+
+                            </div>
+
+                            <h3 className="text-lg font-semibold text-white">
+
+                                Tournament Host
+
+                            </h3>
+
+                            <p className="mt-2 text-sm leading-6 text-gray-400">
+
+                                Organize tournaments, manage participants,
+                                create brackets and host professional events.
+
+                            </p>
+
+                        </motion.button>
+
+                    </div>
+
+                </motion.div>
+
+                {/* Username */}
+
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="space-y-4"
+                >
+
+                    <FieldTitle
+
+                        icon={<User size={20} />}
+
+                        title="Username"
+
+                        subtitle="Choose a unique GameForge username."
+
+                    />
+
+                    <Input
+
+                        placeholder="Username"
+
+                        value={form.username}
+
+                        onChange={(e) =>
+
+                            update("username", e.target.value)
+
                         }
-                        className={
-                            form.role === "PLAYER"
-                                ? "rounded-xl border border-cyan-500 bg-cyan-500/20 p-4"
-                                : "rounded-xl border border-white/10 p-4"
+
+                        loading={username.isLoading}
+
+                        success={
+
+                            username.data?.data?.available
+
+                                ? "Username available"
+
+                                : ""
+
                         }
-                    >
-                        🎮 Player
-                    </button>
 
-                    <button
-                        type="button"
-                        onClick={() =>
-                            update("role", "HOST")
-                        }
-                        className={
-                            form.role === "HOST"
-                                ? "rounded-xl border border-purple-500 bg-purple-500/20 p-4"
-                                : "rounded-xl border border-white/10 p-4"
-                        }
-                    >
-                        🏆 Host
-                    </button>
+                        error={
 
-                </div>
-
-            </div>
-
-            <div className="space-y-8">
-
-                <FieldTitle
-
-                    icon={<User size={20} />}
-
-                    title="Username"
-
-                    subtitle="Choose a unique GameForge username"
-
-                />
-
-                <Input
-
-                    placeholder="Username"
-
-                    value={form.username}
-
-                    onChange={(e) =>
-
-                        update("username", e.target.value)
-
-                    }
-
-                    loading={username.isLoading}
-
-                    success={
-
-                        username.data?.data?.available
-
-                            ? "Username available"
-
-                            : ""
-
-                    }
-
-                    error={
-
-                        username.data &&
+                            username.data &&
 
                             !username.data.data.available
 
-                            ? "Username already taken"
+                                ? "Username already taken"
 
-                            : ""
+                                : ""
 
-                    }
+                        }
 
-                />
+                    />
 
-                <FieldTitle
+                </motion.div>
 
-                    icon={<User size={20} />}
+                {/* Display Name */}
 
-                    title="Display Name"
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="space-y-4"
+                >
 
-                    subtitle="This is what players will see"
+                    <FieldTitle
 
-                />
+                        icon={<User size={20} />}
 
-                <Input
+                        title="Display Name"
 
-                    placeholder="Display Name"
+                        subtitle="This name will be visible across GameForge."
 
-                    value={form.displayName}
+                    />
 
-                    onChange={(e) =>
+                    <Input
 
-                        update("displayName", e.target.value)
+                        placeholder="Display Name"
 
-                    }
+                        value={form.displayName}
 
-                />
+                        onChange={(e) =>
 
-                <FieldTitle
+                            update("displayName", e.target.value)
 
-                    icon={<Mail size={20} />}
+                        }
 
-                    title="Email"
+                    />
+                    </motion.div>
+                                    {/* Email */}
 
-                    subtitle="We'll never share your email"
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="space-y-4"
+                >
 
-                />
+                    <FieldTitle
 
-                <Input
+                        icon={<Mail size={20} />}
 
-                    placeholder="Email"
+                        title="Email Address"
 
-                    type="email"
+                        subtitle="We'll use this email for verification and important account updates."
 
-                    value={form.email}
+                    />
 
-                    onChange={(e) =>
+                    <Input
 
-                        update("email", e.target.value)
+                        placeholder="Email"
 
-                    }
+                        type="email"
 
-                    loading={email.isLoading}
+                        value={form.email}
 
-                    success={
+                        onChange={(e) =>
 
-                        email.data?.data?.available
+                            update("email", e.target.value)
 
-                            ? "Email available"
+                        }
 
-                            : ""
+                        loading={email.isLoading}
 
-                    }
+                        success={
 
-                    error={
+                            email.data?.data?.available
 
-                        email.data &&
+                                ? "Email available"
+
+                                : ""
+
+                        }
+
+                        error={
+
+                            email.data &&
 
                             !email.data.data.available
 
-                            ? "Email already exists"
+                                ? "Email already exists"
 
-                            : ""
+                                : ""
 
-                    }
+                        }
 
-                />
+                    />
 
-                <FieldTitle
+                </motion.div>
 
-                    icon={<Lock size={20} />}
+                {/* Password */}
 
-                    title="Password"
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.25 }}
+                    className="space-y-4"
+                >
 
-                    subtitle="Minimum 8 characters"
+                    <FieldTitle
 
-                />
+                        icon={<Lock size={20} />}
 
-                <Input
+                        title="Password"
 
-                    placeholder="Password"
+                        subtitle="Create a secure password with at least 8 characters."
 
-                    type="password"
+                    />
 
-                    value={form.password}
+                    <Input
 
-                    onChange={(e) =>
+                        placeholder="Password"
 
-                        update("password", e.target.value)
+                        type="password"
 
-                    }
+                        value={form.password}
 
-                />
+                        onChange={(e) =>
 
-                <PasswordStrength
+                            update("password", e.target.value)
 
-                    strength={passwordStrength}
+                        }
 
-                />
+                    />
 
-                <Input
+                    <PasswordStrength
 
-                    placeholder="Confirm Password"
+                        strength={passwordStrength}
 
-                    type="password"
+                    />
 
-                    value={form.confirmPassword}
+                </motion.div>
 
-                    onChange={(e) =>
+                {/* Confirm Password */}
 
-                        update(
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="space-y-4"
+                >
 
-                            "confirmPassword",
+                    <FieldTitle
 
-                            e.target.value
+                        icon={<Lock size={20} />}
 
-                        )
+                        title="Confirm Password"
 
-                    }
+                        subtitle="Re-enter your password to make sure everything matches."
 
-                    success={
+                    />
 
-                        passwordsMatch
+                    <Input
 
-                            ? "Passwords match"
+                        placeholder="Confirm Password"
 
-                            : ""
+                        type="password"
 
-                    }
+                        value={form.confirmPassword}
 
-                    error={
+                        onChange={(e) =>
 
-                        form.confirmPassword.length > 0 &&
+                            update(
 
-                        !passwordsMatch
+                                "confirmPassword",
 
-                            ? "Passwords do not match"
+                                e.target.value
 
-                            : ""
+                            )
 
-                    }
+                        }
 
-                />
+                        success={
 
-                <div className="flex justify-end">
+                            passwordsMatch
+
+                                ? "Passwords match"
+
+                                : ""
+
+                        }
+
+                        error={
+
+                            form.confirmPassword.length > 0 &&
+
+                            !passwordsMatch
+
+                                ? "Passwords do not match"
+
+                                : ""
+
+                        }
+
+                    />
+
+                </motion.div>
+
+                {/* Continue */}
+
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.35 }}
+                    className="flex justify-end pt-4"
+                >
 
                     <Button
 
@@ -307,13 +488,33 @@ export default function StepBasicInfo({
 
                         disabled={!canContinue}
 
+                        className="
+                            min-w-[180px]
+                            rounded-xl
+                            bg-gradient-to-r
+                            from-violet-600
+                            to-fuchsia-600
+                            px-8
+                            py-3
+                            font-semibold
+                            text-white
+                            shadow-lg
+                            shadow-violet-600/30
+                            transition-all
+                            duration-300
+                            hover:scale-[1.02]
+                            hover:shadow-violet-500/50
+                            disabled:cursor-not-allowed
+                            disabled:opacity-50
+                        "
+
                     >
 
                         Continue →
 
                     </Button>
 
-                </div>
+                </motion.div>
 
             </div>
 
@@ -322,7 +523,6 @@ export default function StepBasicInfo({
     );
 
 }
-
 function FieldTitle({
 
     icon,
@@ -335,29 +535,48 @@ function FieldTitle({
 
     return (
 
-        <div>
+        <div className="space-y-2">
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
 
-                <div className="text-cyan-400">
+                <div
+                    className="
+                        flex
+                        h-11
+                        w-11
+                        items-center
+                        justify-center
+                        rounded-xl
+                        border
+                        border-violet-500/30
+                        bg-violet-500/10
+                        text-violet-300
+                        shadow-md
+                        shadow-violet-500/20
+                    "
+                >
 
                     {icon}
 
                 </div>
 
-                <h3 className="font-bold text-lg">
+                <div>
 
-                    {title}
+                    <h3 className="text-lg font-semibold text-white">
 
-                </h3>
+                        {title}
+
+                    </h3>
+
+                    <p className="mt-1 text-sm text-gray-400">
+
+                        {subtitle}
+
+                    </p>
+
+                </div>
 
             </div>
-
-            <p className="text-gray-400 mt-1 ml-8">
-
-                {subtitle}
-
-            </p>
 
         </div>
 
@@ -373,11 +592,11 @@ function PasswordStrength({
 
     const colors = {
 
-        Weak: "bg-red-500",
+        Weak: "from-red-500 to-red-400",
 
-        Medium: "bg-yellow-500",
+        Medium: "from-amber-500 to-yellow-400",
 
-        Strong: "bg-green-500"
+        Strong: "from-emerald-500 to-green-400"
 
     };
 
@@ -391,43 +610,71 @@ function PasswordStrength({
 
     };
 
+    const textColors = {
+
+        Weak: "text-red-400",
+
+        Medium: "text-yellow-400",
+
+        Strong: "text-green-400"
+
+    };
+
     return (
 
-        <div>
+        <div className="space-y-3">
 
             <div
                 className="
-                    h-2
+                    h-2.5
+                    overflow-hidden
                     rounded-full
                     bg-white/10
-                    overflow-hidden
+                    backdrop-blur-sm
                 "
             >
 
                 <div
-
                     className={`
                         h-full
+                        rounded-full
+                        bg-gradient-to-r
                         ${colors[strength]}
                         ${widths[strength]}
                         transition-all
+                        duration-500
                     `}
-
                 />
 
             </div>
 
-            <p className="text-sm text-gray-400 mt-2">
+            <div className="flex items-center justify-between">
 
-                Password Strength :
+                <span className="text-sm text-gray-400">
 
-                <span className="ml-2 font-bold">
+                    Password Strength
+
+                </span>
+
+                <span
+                    className={`
+                        rounded-full
+                        border
+                        border-white/10
+                        bg-white/5
+                        px-3
+                        py-1
+                        text-sm
+                        font-semibold
+                        ${textColors[strength]}
+                    `}
+                >
 
                     {strength}
 
                 </span>
 
-            </p>
+            </div>
 
         </div>
 

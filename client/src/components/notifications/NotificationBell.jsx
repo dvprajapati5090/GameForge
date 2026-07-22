@@ -1,98 +1,213 @@
-import { Bell } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { Bell } from "lucide-react";
 
-import useInvitations from "../../hooks/useInvitations";
+import useNotifications from "../../hooks/useNotifications";
+
 import NotificationPanel from "./NotificationPanel";
+
+import { markAllNotificationsRead } from "../../services/notification.service";
 
 export default function NotificationBell() {
 
     const [open, setOpen] = useState(false);
 
-    const { data } = useInvitations();
+    const {
 
-    const invitations = data?.data || [];
+        data,
+
+        refetch
+
+    } = useNotifications();
+
+    const notifications = data?.data || [];
+
+    const unreadCount = notifications.filter(
+
+        (notification) => !notification.isRead
+
+    ).length;
+
+    const handleMarkAllRead = async () => {
+
+        try {
+
+            await markAllNotificationsRead();
+
+            await refetch();
+
+        }
+
+        catch (err) {
+
+            console.error(err);
+
+        }
+
+    };
 
     return (
 
         <div className="relative">
 
-            <motion.button
-
-                whileHover={{ scale: 1.08 }}
-
-                whileTap={{ scale: 0.96 }}
+            <button
 
                 onClick={() => setOpen(!open)}
 
                 className="
                     relative
-                    rounded-xl
                     p-2
-                    hover:bg-white/5
+                    rounded-xl
+                    hover:bg-white/10
                     transition
                 "
 
             >
 
-                <Bell size={23} />
+                <Bell
+
+                    className="text-white"
+
+                    size={22}
+
+                />
 
                 {
 
-                    invitations.length > 0 && (
+                    unreadCount > 0 && (
 
-                        <motion.span
-
-                            initial={{ scale: 0 }}
-
-                            animate={{ scale: 1 }}
-
+                        <span
                             className="
                                 absolute
                                 -top-1
                                 -right-1
-                                w-5
-                                h-5
+                                min-w-[18px]
+                                h-[18px]
                                 rounded-full
                                 bg-red-500
-                                text-xs
+                                text-white
+                                text-[11px]
+                                font-bold
                                 flex
                                 items-center
                                 justify-center
-                                font-bold
+                                px-1
                             "
-
                         >
 
-                            {invitations.length}
+                            {
 
-                        </motion.span>
+                                unreadCount > 9
 
-                    )
+                                    ? "9+"
 
-                }
+                                    : unreadCount
 
-            </motion.button>
+                            }
 
-            <AnimatePresence>
-
-                {
-
-                    open && (
-
-                        <NotificationPanel
-
-                            invitations={invitations}
-
-                            onClose={() => setOpen(false)}
-
-                        />
+                        </span>
 
                     )
 
                 }
 
-            </AnimatePresence>
+            </button>
+
+            {
+
+                open && (
+
+                    <div
+                        className="
+                            absolute
+                            right-0
+                            mt-3
+                            w-[380px]
+                            max-w-[95vw]
+                            bg-[#0B1220]
+                            border
+                            border-white/10
+                            rounded-3xl
+                            shadow-2xl
+                            p-5
+                            z-50
+                        "
+                    >
+
+                        <div className="flex items-start justify-between mb-5">
+
+                            <div>
+
+                                <h2 className="text-xl font-bold text-white">
+
+                                    Notifications
+
+                                </h2>
+
+                                <p className="text-sm text-gray-400 mt-1">
+
+                                    {
+
+                                        unreadCount > 0
+
+                                            ? `${unreadCount} unread`
+
+                                            : "You're all caught up!"
+
+                                    }
+
+                                </p>
+
+                            </div>
+
+                            {
+
+                                unreadCount > 0 && (
+
+                                    <button
+
+                                        onClick={handleMarkAllRead}
+
+                                        className="
+                                            text-sm
+                                            font-medium
+                                            text-cyan-400
+                                            hover:text-cyan-300
+                                            transition
+                                        "
+
+                                    >
+
+                                        Mark all
+
+                                    </button>
+
+                                )
+
+                            }
+
+                        </div>
+
+                        <div
+                            className="
+                                max-h-[420px]
+                                overflow-y-auto
+                                pr-1
+                            "
+                        >
+
+                            <NotificationPanel
+
+                                notifications={notifications}
+
+                            />
+
+                        </div>
+
+                    </div>
+
+                )
+
+            }
 
         </div>
 

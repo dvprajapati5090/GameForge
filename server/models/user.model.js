@@ -218,6 +218,34 @@ const userSchema = new mongoose.Schema(
         refreshToken: {
             type: String,
             default: ""
+        },
+
+        stats: {
+
+            matchesPlayed: {
+                type: Number,
+                default: 0
+            },
+
+            wins: {
+                type: Number,
+                default: 0
+            },
+
+            losses: {
+                type: Number,
+                default: 0
+            },
+
+            championships: {
+                type: Number,
+                default: 0
+            },
+
+            tournamentsPlayed: {
+                type: Number,
+                default: 0
+            }
         }
     },
     {

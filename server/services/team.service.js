@@ -2,9 +2,15 @@ import Team from "../models/team.model.js";
 import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 
+import Notification from "../models/notification.model.js";
+
 import { teamDetailsQuery } from "../utils/teamQuery.js";
 
 import Invitation from "../models/invitation.model.js";
+
+import { createNotification } from "./notification.service.js";
+
+import { emitTeamUpdated } from "../socket/socketManager.js";
 
 export const createTeamService = async (teamData, userId) => {
 
@@ -232,6 +238,22 @@ export const invitePlayerService = async (
         receiver: receiver._id
     });
 
+    await createNotification(
+
+        receiver._id,
+
+        "Team Invitation",
+
+        `${captain.username} invited you to join ${team.name}.`,
+
+        "INVITATION",
+
+        "/team",
+
+        invitation._id
+
+    );
+
     return await Invitation.findById(invitation._id)
         .populate(
             "team",
@@ -345,18 +367,26 @@ export const acceptInvitationService = async (
         );
     }
 
-    // Accept invitation
     invitation.status = "ACCEPTED";
     await invitation.save();
 
-    // Add player to team
     user.team = team._id;
-    await user.save();
 
     team.members.push(user._id);
-    await team.save();
 
-    // Expire all other pending invitations
+    await Promise.all([
+        user.save(),
+        team.save()
+    ]);
+
+    const updatedTeam = await teamDetailsQuery(
+        Team.findById(team._id)
+    );
+
+    emitTeamUpdated(
+        updatedTeam.members.map(member => member._id)
+    );
+
     await Invitation.updateMany(
         {
             receiver: user._id,
@@ -370,9 +400,49 @@ export const acceptInvitationService = async (
         }
     );
 
-    return await teamDetailsQuery(
-        Team.findById(team._id)
+    await Notification.deleteMany({
+
+        user: user._id,
+
+        type: "INVITATION"
+
+    });
+
+    await createNotification(
+
+        user._id,
+
+        "Team Joined",
+
+        `You have successfully joined ${team.name}.`,
+
+        "TEAM",
+
+        "/team"
+
     );
+
+    const captain = await User.findById(team.captain);
+
+    if (captain) {
+
+        await createNotification(
+
+            captain._id,
+
+            "Invitation Accepted",
+
+            `${user.displayName} accepted your invitation to join ${team.name}.`,
+
+            "TEAM",
+
+            "/team"
+
+        );
+
+    }
+
+    return updatedTeam;
 
 };
 
@@ -414,6 +484,59 @@ export const rejectInvitationService = async (
     invitation.status = "REJECTED";
 
     await invitation.save();
+
+    const team = await Team.findById(invitation.team);
+
+        if (team) {
+
+        emitTeamUpdated([
+            team.captain,
+            invitation.receiver
+        ]);
+
+    }
+
+    const user = await User.findById(userId);
+
+    await Notification.deleteMany({
+
+        invitation: invitation._id
+
+    });
+
+    await createNotification(
+
+        user._id,
+
+        "Invitation Declined",
+
+        `You declined the invitation to join ${team.name}.`,
+
+        "TEAM",
+
+        "/team"
+
+    );
+
+    const captain = await User.findById(team.captain);
+
+    if (captain) {
+
+        await createNotification(
+
+            captain._id,
+
+            "Invitation Rejected",
+
+            `${user.displayName} declined your invitation to join ${team.name}.`,
+
+            "TEAM",
+
+            "/team"
+
+        );
+
+    }
 
     return invitation;
 
@@ -473,10 +596,20 @@ export const leaveTeamService = async (userId) => {
             member.toString() !== user._id.toString()
     );
 
-    await team.save();
-
     user.team = null;
-    await user.save();
+
+    await Promise.all([
+        team.save(),
+        user.save()
+    ]);
+
+    const updatedTeam = await teamDetailsQuery(
+        Team.findById(team._id)
+    );
+
+    emitTeamUpdated(
+        updatedTeam.members.map(member => member._id)
+    );
 
     return {
         deleted: false
@@ -548,14 +681,23 @@ export const removeMemberService = async (
         id => id.toString() !== member._id.toString()
     );
 
-    await team.save();
-
     member.team = null;
-    await member.save();
 
-    return await teamDetailsQuery(
+    await Promise.all([
+        team.save(),
+        member.save()
+    ]);
+
+    const updatedTeam = await teamDetailsQuery(
         Team.findById(team._id)
     );
+
+    emitTeamUpdated([
+        ...updatedTeam.members.map(m => m._id),
+        member._id
+    ]);
+
+    return updatedTeam;
 };
 
 export const transferCaptainService = async (
@@ -620,8 +762,14 @@ export const transferCaptainService = async (
 
     await team.save();
 
-    return await teamDetailsQuery(
+    const updatedTeam = await teamDetailsQuery(
         Team.findById(team._id)
     );
+
+    emitTeamUpdated(
+        updatedTeam.members.map(member => member._id)
+    );
+
+    return updatedTeam;
 
 };

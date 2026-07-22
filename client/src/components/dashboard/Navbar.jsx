@@ -1,88 +1,168 @@
 import useAuthStore from "../../store/authStore";
-
 import NotificationBell from "../notifications/NotificationBell";
 
 export default function Navbar() {
+  const user = useAuthStore((state) => state.user);
 
-    const user = useAuthStore((state) => state.user);
-
-    return (
-
-        <header
-            className="
-                sticky
-                top-0
-                z-40
+  return (
+    <header
+      className="
                 h-20
-                border-b
-                border-white/10
-                bg-slate-900/70
-                backdrop-blur-xl
+
                 flex
                 items-center
                 justify-between
+
                 px-8
+
+                border-b
+                border-violet-500/15
+
+                bg-gradient-to-r
+                from-[#0B1020]/90
+                via-[#10182D]/85
+                to-[#0B1020]/90
+
+                backdrop-blur-xl
+
+                shadow-[0_8px_40px_rgba(139,92,246,0.08)]
             "
+    >
+      {/* Left */}
+
+      <div className="flex flex-col justify-center">
+        <h2
+          className="
+            text-2xl
+            font-bold
+            tracking-tight
+            text-white
+        "
         >
+          Welcome back,
+          <span
+            className="
+                ml-2
+                bg-gradient-to-r
+                from-violet-300
+                to-fuchsia-300
+                bg-clip-text
+                text-transparent
+            "
+          >
+            {user?.displayName}
+          </span>
+          👋
+        </h2>
 
-            <div>
+        <p
+          className="
+            mt-1
+            text-sm
+            text-slate-400
+        "
+        >
+          Ready to dominate today's matches.
+        </p>
+      </div>
+      {/* Right */}
 
-                <h2 className="text-2xl font-bold">
+      <div className="flex items-center gap-5">
+        <div
+          className="
+                        flex
+                        h-11
+                        w-11
+                        items-center
+                        justify-center
 
-                    Welcome back 👋
+                        rounded-xl
 
-                </h2>
+                        border
+                        border-white/10
 
-                <p className="text-gray-400">
+                        bg-gradient-to-br
+                        from-white/10
+                        to-white/5
 
-                    {user?.displayName}
+                        backdrop-blur-xl
 
-                </p>
+                        transition-all
+                        duration-300
 
-            </div>
-
-            <div className="flex items-center gap-6">
-
-                <NotificationBell />
-
-                <div
-                    className="
-                        relative
-                        w-12
-                        h-12
-                        rounded-full
-                        bg-gradient-to-r
-                        from-purple-600
-                        to-cyan-500
-                        p-[2px]
-                        shadow-[0_0_20px_rgba(6,182,212,0.35)]
+                        hover:bg-violet-500/10
+                        hover:border-violet-400/30
+                        hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]
                     "
-                >
+        >
+          <NotificationBell />
+        </div>
 
-                    <div
-                        className="
-                            w-full
-                            h-full
-                            rounded-full
-                            bg-slate-900
+        <div
+          className="
+                        relative
+
+                        h-12
+                        w-12
+
+                        rounded-full
+
+                        bg-gradient-to-br
+                        from-violet-500
+                        via-fuchsia-500
+                        to-indigo-500
+
+                        p-[2px]
+
+                        shadow-[0_0_30px_rgba(139,92,246,0.35)]
+
+                        transition-all
+                        duration-300
+
+                        hover:scale-105
+                    "
+        >
+          <div
+            className="
                             flex
+                            h-full
+                            w-full
                             items-center
                             justify-center
-                            font-bold
+
+                            rounded-full
+
+                            bg-[#0B1020]
+
                             text-lg
+                            font-bold
+                            text-white
                         "
-                    >
+          >
+            {user?.displayName?.charAt(0)?.toUpperCase()}
+          </div>
 
-                        {user?.displayName?.charAt(0)?.toUpperCase()}
+          <span
+            className="
+                            absolute
+                            bottom-0
+                            right-0
 
-                    </div>
+                            h-3
+                            w-3
 
-                </div>
+                            rounded-full
 
-            </div>
+                            border-2
+                            border-[#0B1020]
 
-        </header>
+                            bg-emerald-400
 
-    );
-
+                            shadow-[0_0_10px_rgba(74,222,128,0.8)]
+                        "
+          />
+        </div>
+      </div>
+    </header>
+  );
 }

@@ -1,10 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+
+import {
+    useQuery,
+    useQueryClient
+} from "@tanstack/react-query";
 
 import { getMyTeam } from "../services/team.service";
 
+import socket from "../socket/socket";
+
 export default function useTeam() {
 
-    return useQuery({
+    const queryClient = useQueryClient();
+
+    const query = useQuery({
 
         queryKey: ["team"],
 
@@ -13,5 +22,41 @@ export default function useTeam() {
         retry: false
 
     });
+
+    useEffect(() => {
+
+        const handleTeamUpdated = () => {
+
+            queryClient.invalidateQueries({
+
+                queryKey: ["team"]
+
+            });
+
+        };
+
+        socket.on(
+
+            "teamUpdated",
+
+            handleTeamUpdated
+
+        );
+
+        return () => {
+
+            socket.off(
+
+                "teamUpdated",
+
+                handleTeamUpdated
+
+            );
+
+        };
+
+    }, [queryClient]);
+
+    return query;
 
 }

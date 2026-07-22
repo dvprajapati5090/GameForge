@@ -1,13 +1,21 @@
-import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
-import { deleteAccount } from "../services/auth.service";
+export default function useDebounce(value, delay = 400) {
 
-export default function useDeleteAccount() {
+    const [debouncedValue, setDebouncedValue] = useState(value);
 
-    return useMutation({
+    useEffect(() => {
 
-        mutationFn: deleteAccount
+        const timer = setTimeout(() => {
 
-    });
+            setDebouncedValue(value);
+
+        }, delay);
+
+        return () => clearTimeout(timer);
+
+    }, [value, delay]);
+
+    return debouncedValue;
 
 }

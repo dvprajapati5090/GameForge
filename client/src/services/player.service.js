@@ -15,3 +15,33 @@ export const getPlayer = async (username) => {
     return res.data;
 
 };
+
+export const getPlayerCareer = async (playerId) => {
+
+    const { data } = await api.get(
+
+        `/players/${playerId}/career`
+
+    );
+
+    return data.data;
+
+};
+
+export const getLeaderboard = async (params = {}) => {
+
+    const { data } = await api.get(
+
+        "/players/leaderboard",
+
+        {
+
+            params
+
+        }
+
+    );
+
+    return data;
+
+};

@@ -1,9 +1,13 @@
 import { Crown, Plus } from "lucide-react";
 import { motion } from "framer-motion";
-
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import InvitePlayerModal from "./InvitePlayerModal";
+
+import useAuthStore from "../../store/authStore";
+
+import { removeMember } from "../../services/team.service";
 
 export default function TeamMembers({ team }) {
 
@@ -63,6 +67,8 @@ export default function TeamMembers({ team }) {
 
                                 captain={member._id === team.captain._id}
 
+                                captainId={team.captain._id}
+
                             />
 
                             :
@@ -70,6 +76,7 @@ export default function TeamMembers({ team }) {
                             <InviteCard
 
                                 key={index}
+
                                 onClick={() => setOpenInvite(true)}
 
                             />
@@ -98,18 +105,82 @@ function MemberCard({
 
     member,
 
-    captain
+    captain,
+
+    captainId
 
 }) {
 
-    
+    const { user } = useAuthStore();
+
+    const handleRemove = async () => {
+
+        if (
+
+            !window.confirm(
+
+                `Remove ${member.displayName} from the team?`
+
+            )
+
+        ) {
+
+            return;
+
+        }
+
+        const loading = toast.loading(
+
+            "Removing player..."
+
+        );
+
+        try {
+
+            await removeMember(member._id);
+
+            toast.success(
+
+                "Player removed successfully.",
+
+                {
+
+                    id: loading
+
+                }
+
+            );
+
+        }
+
+        catch (err) {
+
+            toast.error(
+
+                err.response?.data?.message ||
+
+                "Failed to remove player.",
+
+                {
+
+                    id: loading
+
+                }
+
+            );
+
+        }
+
+    };
 
     return (
 
         <motion.div
 
             whileHover={{
+
                 y: -6
+
             }}
 
             className="
@@ -125,13 +196,17 @@ function MemberCard({
             "
 
         >
-            
+
             {
+
                 member.riotCard && (
 
                     <img
+
                         src={`https://media.valorant-api.com/playercards/${member.riotCard}/largeart.png`}
+
                         alt=""
+
                         className="
                             absolute
                             inset-0
@@ -140,12 +215,15 @@ function MemberCard({
                             object-cover
                             opacity-20
                         "
+
                     />
 
                 )
+
             }
 
             <div
+
                 className="
                     absolute
                     inset-0
@@ -154,9 +232,11 @@ function MemberCard({
                     via-slate-900/80
                     to-slate-950
                 "
+
             />
 
             <div
+
                 className="
                     absolute
                     -top-10
@@ -167,6 +247,7 @@ function MemberCard({
                     bg-cyan-500/10
                     blur-3xl
                 "
+
             />
 
             {
@@ -174,12 +255,14 @@ function MemberCard({
                 captain && (
 
                     <div
+
                         className="
                             absolute
                             top-4
                             right-4
                             text-yellow-400
                         "
+
                     >
 
                         <Crown size={20} />
@@ -193,6 +276,7 @@ function MemberCard({
             <div className="relative z-10">
 
                 <div
+
                     className="
                         relative
                         w-24
@@ -205,9 +289,11 @@ function MemberCard({
                         mx-auto
                         shadow-[0_0_25px_rgba(6,182,212,0.35)]
                     "
+
                 >
 
                     <div
+
                         className="
                             w-full
                             h-full
@@ -215,6 +301,7 @@ function MemberCard({
                             overflow-hidden
                             bg-slate-900
                         "
+
                     >
 
                         {
@@ -222,18 +309,23 @@ function MemberCard({
                             member.riotCard ? (
 
                                 <img
+
                                     src={`https://media.valorant-api.com/playercards/${member.riotCard}/displayicon.png`}
+
                                     alt={member.displayName}
+
                                     className="
                                         w-full
                                         h-full
                                         object-cover
                                     "
+
                                 />
 
                             ) : (
 
                                 <div
+
                                     className="
                                         w-full
                                         h-full
@@ -243,6 +335,7 @@ function MemberCard({
                                         text-3xl
                                         font-black
                                     "
+
                                 >
 
                                     {member.displayName.charAt(0).toUpperCase()}
@@ -258,12 +351,14 @@ function MemberCard({
                 </div>
 
                 <h3
+
                     className="
                         mt-5
                         text-xl
                         font-bold
                         text-center
                     "
+
                 >
 
                     {member.displayName}
@@ -271,11 +366,13 @@ function MemberCard({
                 </h3>
 
                 <p
+
                     className="
                         text-gray-400
                         text-center
                         mt-1
                     "
+
                 >
 
                     @{member.username}
@@ -283,9 +380,11 @@ function MemberCard({
                 </p>
 
                 {
+
                     member.riotVerified && (
 
                         <div
+
                             className="
                                 mt-3
                                 inline-flex
@@ -301,6 +400,7 @@ function MemberCard({
                                 font-semibold
                                 text-emerald-400
                             "
+
                         >
 
                             ● Riot Verified
@@ -308,9 +408,11 @@ function MemberCard({
                         </div>
 
                     )
+
                 }
 
                 <div
+
                     className="
                         mt-6
                         rounded-xl
@@ -320,6 +422,7 @@ function MemberCard({
                         py-3
                         text-center
                     "
+
                 >
 
                     <p className="text-gray-400 text-sm">
@@ -336,7 +439,39 @@ function MemberCard({
 
                 </div>
 
-            </div>    
+                {
+
+                    user?._id === captainId &&
+
+                    !captain && (
+
+                        <button
+
+                            onClick={handleRemove}
+
+                            className="
+                                mt-5
+                                w-full
+                                rounded-xl
+                                bg-red-600
+                                hover:bg-red-700
+                                transition
+                                py-2
+                                font-semibold
+                                text-white
+                            "
+
+                        >
+
+                            Remove Player
+
+                        </button>
+
+                    )
+
+                }
+
+            </div>
 
         </motion.div>
 
@@ -357,12 +492,17 @@ function InviteCard({
             onClick={onClick}
 
             whileHover={{
+
                 y: -6,
+
                 scale: 1.02
+
             }}
 
             whileTap={{
+
                 scale: 0.97
+
             }}
 
             className="
@@ -385,16 +525,21 @@ function InviteCard({
         >
 
             <Plus
+
                 size={40}
+
                 className="text-cyan-400"
+
             />
 
             <h3
+
                 className="
                     mt-4
                     text-lg
                     font-bold
                 "
+
             >
 
                 Invite Player
@@ -402,12 +547,14 @@ function InviteCard({
             </h3>
 
             <p
+
                 className="
                     mt-2
                     text-gray-400
                     text-center
                     px-6
                 "
+
             >
 
                 Fill this slot with your next teammate.
