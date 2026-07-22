@@ -24,7 +24,7 @@ export default function Input({
 
                 label && (
 
-                    <label className="font-semibold text-gray-300">
+                    <label className="font-medium text-slate-300">
 
                         {label}
 
@@ -40,18 +40,35 @@ export default function Input({
 
                     className={`
                         w-full
-                        h-12
-                        rounded-2xl
+                        h-14
+
+                        rounded-xl
+
                         border
                         border-white/10
-                        bg-slate-800/70
-                        px-4
+
+                        bg-[#1B2230]/95
+
+                        px-5
                         pr-12
+
+                        text-white
+                        placeholder:text-slate-500
+
                         outline-none
+
                         transition-all
-                        focus:border-cyan-400
-                        focus:ring-2
-                        focus:ring-cyan-400/20
+                        duration-300
+
+                        shadow-[0_10px_30px_rgba(0,0,0,0.35)]
+
+                        hover:border-violet-500/45
+                        hover:shadow-[0_18px_45px_rgba(139,92,246,.16)]
+
+                        focus:border-violet-500
+                        focus:shadow-[0_0_0_1px_rgba(139,92,246,.45),0_22px_55px_rgba(139,92,246,.22)]
+                        focus:-translate-y-[3px]
+
                         ${className}
                     `}
 
@@ -69,7 +86,7 @@ export default function Input({
 
                                 size={18}
 
-                                className="animate-spin text-cyan-400"
+                                className="animate-spin text-violet-400"
 
                             />
 
@@ -85,7 +102,7 @@ export default function Input({
 
                                 size={18}
 
-                                className="text-green-400"
+                                className="text-emerald-400"
 
                             />
 
@@ -131,7 +148,7 @@ export default function Input({
 
                 success && (
 
-                    <p className="text-sm text-green-400">
+                    <p className="text-sm text-emerald-400">
 
                         {success}
 
