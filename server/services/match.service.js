@@ -2,6 +2,18 @@ import Match from "../models/match.model.js";
 import Tournament from "../models/tournament.model.js";
 import ApiError from "../utils/ApiError.js";
 
+import {
+
+    updatePlayerMatchStats,
+
+    updateChampionStats,
+
+    updateTournamentPlayedStats,
+
+    createTournamentHistory
+
+} from "./statistics.service.js";
+
 export const updateMatchWinnerService = async (
 
     matchId,
@@ -58,37 +70,45 @@ export const updateMatchWinnerService = async (
         scoreA == null ||
         scoreB == null
     ) {
+
         throw new ApiError(
             400,
             "Scores are required."
         );
+
     }
 
     if (scoreA === scoreB) {
+
         throw new ApiError(
             400,
             "Scores cannot be equal."
         );
+
     }
 
     if (
         winnerId === match.teamA.toString() &&
         scoreA < scoreB
     ) {
+
         throw new ApiError(
             400,
             "Winner score must be higher."
         );
+
     }
 
     if (
         winnerId === match.teamB.toString() &&
         scoreB < scoreA
     ) {
+
         throw new ApiError(
             400,
             "Winner score must be higher."
         );
+
     }
 
     match.scoreA = scoreA;
@@ -115,9 +135,11 @@ export const updateMatchWinnerService = async (
         nextMatch[match.nextMatchSlot] = winnerId;
 
         if (
+
             nextMatch.teamA &&
             nextMatch.teamB &&
             nextMatch.status === "PENDING"
+
         ) {
 
             nextMatch.status = "READY";
@@ -129,6 +151,26 @@ export const updateMatchWinnerService = async (
     }
 
     // -----------------------------------
+    // Update player statistics
+    // -----------------------------------
+
+    const loserId =
+
+        winnerId === match.teamA.toString()
+
+            ? match.teamB.toString()
+
+            : match.teamA.toString();
+
+    await updatePlayerMatchStats(
+
+        winnerId,
+
+        loserId
+
+    );
+
+    // -----------------------------------
     // Check tournament completion
     // -----------------------------------
 
@@ -137,7 +179,9 @@ export const updateMatchWinnerService = async (
         tournament: tournament._id,
 
         status: {
+
             $ne: "COMPLETED"
+
         }
 
     });
@@ -149,6 +193,17 @@ export const updateMatchWinnerService = async (
         tournament.winner = winnerId;
 
         await tournament.save();
+
+        await updateChampionStats(winnerId);
+
+        await updateTournamentPlayedStats(
+            tournament.registeredTeams
+        );
+
+        await createTournamentHistory(
+            tournament,
+            winnerId
+        );
 
     }
 

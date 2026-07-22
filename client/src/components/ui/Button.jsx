@@ -6,8 +6,6 @@ export default function Button({
 
     type = "button",
 
-    variant = "primary",
-
     loading = false,
 
     disabled = false,
@@ -17,19 +15,6 @@ export default function Button({
     ...props
 
 }) {
-
-    const variants = {
-
-        primary:
-            "bg-gradient-to-r from-cyan-500 to-purple-600 text-white hover:brightness-110",
-
-        secondary:
-            "bg-white/10 border border-white/10 hover:bg-white/20",
-
-        danger:
-            "bg-red-500 hover:bg-red-400 text-white"
-
-    };
 
     return (
 
@@ -49,13 +34,33 @@ export default function Button({
 
             className={`
                 h-12
-                px-6
-                rounded-2xl
+
+                px-7
+
+                rounded-xl
+
+                border
+                border-violet-500/20
+
+                bg-gradient-to-r
+                from-violet-600
+                to-violet-500
+
                 font-semibold
+                text-white
+
+                shadow-lg
+                shadow-violet-900/20
+
                 transition-all
+                duration-200
+
+                hover:brightness-110
+                hover:shadow-violet-500/20
+
                 disabled:opacity-50
                 disabled:cursor-not-allowed
-                ${variants[variant]}
+
                 ${className}
             `}
 
@@ -63,15 +68,7 @@ export default function Button({
 
         >
 
-            {
-
-                loading
-
-                    ? "Loading..."
-
-                    : children
-
-            }
+            {loading ? "Loading..." : children}
 
         </motion.button>
 
