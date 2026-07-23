@@ -39,8 +39,25 @@ const userSchema = new mongoose.Schema(
 
         password: {
             type: String,
-            required: [true, "Password is required"],
-            minlength: 8,
+
+            required: [
+                function () {
+
+                    return this.authProviders.includes("LOCAL");
+
+                },
+                "Password is required"
+            ],
+
+            minlength: [
+                function () {
+                    return this.authProviders.includes("LOCAL")
+                        ? 8
+                        : 0;
+                },
+                "Password must be at least 8 characters"
+            ],
+
             select: false
         },
 
@@ -51,6 +68,11 @@ const userSchema = new mongoose.Schema(
         },
 
         avatar: {
+            type: String,
+            default: ""
+        },
+
+        avatarPublicId: {
             type: String,
             default: ""
         },
@@ -220,6 +242,29 @@ const userSchema = new mongoose.Schema(
             default: ""
         },
 
+        googleId: {
+            type: String,
+            default: ""
+        },
+
+        authProviders: {
+            type: [
+                {
+                    type: String,
+                    enum: [
+                        "LOCAL",
+                        "GOOGLE"
+                    ]
+                }
+            ],
+            default: ["LOCAL"]
+        },
+
+        profileCompleted: {
+            type: Boolean,
+            default: false
+        },
+
         stats: {
 
             matchesPlayed: {
@@ -268,7 +313,21 @@ userSchema.pre("save", async function () {
 
 // Compare Password
 userSchema.methods.isPasswordCorrect = async function (password) {
-    return await bcrypt.compare(password, this.password);
+
+    if (!this.password) {
+
+        return false;
+
+    }
+
+    return await bcrypt.compare(
+
+        password,
+
+        this.password
+
+    );
+
 };
 
 // Generate Access Token

@@ -1,6 +1,6 @@
 import { useState } from "react";
-
 import { motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 
 import StepIndicator from "./StepIndicator";
 import StepBasicInfo from "./StepBasicInfo";
@@ -8,31 +8,50 @@ import StepRoleSelection from "./StepRoleSelection";
 import StepRiotVerification from "./StepRiotVerification";
 import StepReview from "./StepReview";
 
+
 export default function RegisterWizard() {
+
+    const location = useLocation();
+
+
+    const googleData =
+        location.state?.googleData || null;
+
+    const isGoogleUser = !!googleData;
+
 
     const [step, setStep] = useState(1);
 
-    const [form, setForm] = useState({
 
-        username: "",
 
-        displayName: "",
+    const [form,setForm]=useState({
 
-        email: "",
+        username:"",
 
-        password: "",
+        displayName:
+            googleData?.displayName || "",
 
-        confirmPassword: "",
 
-        role: "",
+        email:
+            googleData?.email || "",
 
-        riotGameName: "",
 
-        riotTagLine: "",
+        password:"",
 
-        region: "ap"
+        confirmPassword:"",
+
+        role:"",
+
+
+        riotGameName:"",
+
+        riotTagLine:"",
+
+        region:"ap"
+
 
     });
+
 
     const [riotProfile, setRiotProfile] = useState(null);
 
@@ -297,6 +316,7 @@ export default function RegisterWizard() {
                             form={form}
                             setForm={setForm}
                             next={() => setStep(2)}
+                            googleMode={isGoogleUser}
                         />
 
                     )}
@@ -374,13 +394,10 @@ export default function RegisterWizard() {
                                 >
 
                                     <StepReview
-
                                         form={form}
-
                                         riotProfile={null}
-
+                                        googleData={googleData}
                                         back={() => setStep(2)}
-
                                     />
 
                                 </motion.div>
@@ -413,13 +430,10 @@ export default function RegisterWizard() {
                             >
 
                                 <StepReview
-
                                     form={form}
-
                                     riotProfile={riotProfile}
-
+                                    googleData={googleData}
                                     back={() => setStep(3)}
-
                                 />
 
                             </motion.div>

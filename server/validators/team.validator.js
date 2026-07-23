@@ -19,26 +19,21 @@ export const updateTeamSchema = z.object({
     name: z
         .string()
         .trim()
-        .min(3, "Team name must be at least 3 characters")
-        .max(30, "Team name cannot exceed 30 characters")
+        .min(3)
+        .max(30)
         .optional(),
 
     description: z
         .string()
         .trim()
-        .max(300, "Description cannot exceed 300 characters")
-        .optional(),
-
-    logo: z
-        .string()
-        .trim()
-        .url("Invalid logo URL")
+        .max(300)
         .optional()
 
-}).refine(
-    (data) => Object.keys(data).length > 0,
+})
+.refine(
+    (data)=>Object.keys(data).length > 0,
     {
-        message: "At least one field must be provided"
+        message:"At least one field must be provided"
     }
 );
 

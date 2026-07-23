@@ -16,6 +16,11 @@ const teamSchema = new mongoose.Schema(
             default: ""
         },
 
+        logoPublicId: {
+            type: String,
+            default: ""
+        },
+
         description: {
             type: String,
             default: "",

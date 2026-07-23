@@ -16,7 +16,7 @@ export default function useUpdateProfile() {
 
         onSuccess: (response) => {
 
-            console.log("API Response:", response);
+            console.log("API Response:", JSON.stringify(response, null, 2));
 
             console.log("User Before:", useAuthStore.getState().user);
 

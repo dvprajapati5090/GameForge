@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 import {
@@ -15,37 +16,52 @@ import useRegister from "../../hooks/useRegister";
 
 import { useNavigate } from "react-router-dom";
 
+import { completeGoogleProfile } from "../../services/google.service";
+
+import useAuthStore from "../../store/authStore";
+
 export default function StepReview({
 
     form,
 
     riotProfile,
 
+    googleData,
+
     back
 
 }) {
+
+    const setUser = useAuthStore((s) => s.setUser);
+    const setAccessToken = useAuthStore((s) => s.setAccessToken);
 
     const navigate = useNavigate();
 
     const register = useRegister();
 
+    const [loading, setLoading] = useState(false);
+
     async function handleRegister() {
 
         try {
 
-            await register.mutateAsync({
+            setLoading(true);
 
-                username: form.username,
+            if (googleData) {
 
-                displayName: form.displayName,
+                const response = await completeGoogleProfile({
 
-                email: form.email,
+                    googleId: googleData.googleId,
 
-                password: form.password,
+                    email: googleData.email,
 
-                role: form.role,
+                    displayName: form.displayName,
 
-                ...(form.role === "PLAYER" && {
+                    avatar: googleData.avatar,
+
+                    username: form.username,
+
+                    role: form.role,
 
                     gameName: form.riotGameName,
 
@@ -53,9 +69,39 @@ export default function StepReview({
 
                     region: form.region
 
-                })
+                });
 
-            });
+                setUser(response.data.user);
+
+                setAccessToken(response.data.accessToken);
+
+            } else {
+
+                await register.mutateAsync({
+
+                    username: form.username,
+
+                    displayName: form.displayName,
+
+                    email: form.email,
+
+                    password: form.password,
+
+                    role: form.role,
+
+                    ...(form.role === "PLAYER" && {
+
+                        riotGameName: form.riotGameName,
+
+                        riotTagLine: form.riotTagLine,
+
+                        region: form.region
+
+                    })
+
+                });
+
+            }
 
             navigate("/dashboard");
 
@@ -64,6 +110,12 @@ export default function StepReview({
         catch (error) {
 
             console.log(error);
+
+        }
+
+        finally {
+
+            setLoading(false);
 
         }
 
@@ -332,7 +384,7 @@ export default function StepReview({
 
                 <Button
 
-                    loading={register.isPending}
+                    loading={loading || register.isPending}
 
                     onClick={handleRegister}
 

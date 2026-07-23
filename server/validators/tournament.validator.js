@@ -31,11 +31,8 @@ export const createTournamentSchema = z.object({
         .max(1000)
         .optional(),
 
-    banner: z
-        .string()
-        .optional(),
-
     maxTeams: z
+        .coerce
         .number()
         .refine(
             value => [4, 8, 16, 32, 64, 128].includes(value),
@@ -51,6 +48,7 @@ export const createTournamentSchema = z.object({
     tournamentStart: z.string(),
 
     prizePool: z
+        .coerce
         .number()
         .nonnegative()
         .optional(),
@@ -61,10 +59,13 @@ export const createTournamentSchema = z.object({
 
 });
 
-export const updateTournamentSchema = createTournamentSchema.partial();
+export const updateTournamentSchema =
+    createTournamentSchema.partial();
 
 export const completeTournamentSchema = z.object({
+
     winnerTeamId: z
         .string()
         .min(1, "Winner team is required")
+
 });

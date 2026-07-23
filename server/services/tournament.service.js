@@ -13,6 +13,8 @@ import { createNotification } from "./notification.service.js";
 
 import { generateBracket } from "../utils/bracketGenerator.js";
 
+import { uploadToCloudinary, deleteFromCloudinary } from "../utils/cloudinaryUpload.js";
+
 import {
     emitTournamentUpdated,
     emitBracketUpdated
@@ -60,7 +62,8 @@ const createSingleEliminationBracket = async (tournament, teams) => {
 
 export const createTournamentService = async (
     tournamentData,
-    organizerId
+    organizerId,
+    file
 ) => {
 
     const {
@@ -117,6 +120,40 @@ export const createTournamentService = async (
         );
     }
 
+    if (file) {
+
+        const uploaded = await uploadToCloudinary(
+
+            file.buffer,
+
+            {
+                folder: "gameforge/tournaments",
+
+                transformation: [
+
+                    {
+                        width: 1200,
+                        height: 500,
+                        crop: "fill"
+                    }
+
+                ]
+
+            }
+
+        );
+
+        console.log(
+            "TOURNAMENT BANNER:",
+            uploaded
+        );
+
+        tournamentData.banner = uploaded.url;
+
+        tournamentData.bannerPublicId = uploaded.publicId;
+
+    }
+
     const tournament =
         await Tournament.create({
 
@@ -125,7 +162,8 @@ export const createTournamentService = async (
             mode,
             format,
             description,
-            banner,
+            banner: tournamentData.banner || "",
+            bannerPublicId: tournamentData.bannerPublicId || "",
             organizer: organizerId,
             maxTeams,
             registrationStart: registrationStartDate,
@@ -243,7 +281,8 @@ export const getAllTournamentsService = async (query) => {
 export const updateTournamentService = async (
     tournamentId,
     updateData,
-    userId
+    userId,
+    file
 ) => {
 
     const tournament = await Tournament.findById(tournamentId);
@@ -314,7 +353,71 @@ export const updateTournamentService = async (
         );
     }
 
+    const oldBannerPublicId =
+        tournament.bannerPublicId;
+
+
+    if (file) {
+
+        const uploaded = await uploadToCloudinary(
+
+            file.buffer,
+
+            {
+                folder: "gameforge/tournaments",
+
+                transformation: [
+
+                    {
+                        width:1200,
+                        height:500,
+                        crop:"fill"
+                    }
+
+                ]
+
+            }
+
+        );
+
+
+        updateData.banner = uploaded.url;
+
+        updateData.bannerPublicId =
+            uploaded.publicId;
+
+    }
+
     Object.assign(tournament, updateData);
+
+    if (
+
+        file &&
+
+        oldBannerPublicId &&
+
+        oldBannerPublicId !== tournament.bannerPublicId
+
+    ) {
+
+        try {
+
+            await deleteFromCloudinary(
+                oldBannerPublicId
+            );
+
+        }
+
+        catch(error) {
+
+            console.error(
+                "Failed deleting old tournament banner",
+                error
+            );
+
+        }
+
+    }
 
     await tournament.save();
 

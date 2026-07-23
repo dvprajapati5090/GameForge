@@ -24,7 +24,16 @@ export default function StepReview({
                     overflow-auto
                 "
             >
-                {JSON.stringify(form, null, 2)}
+                {JSON.stringify(
+                    {
+                        ...form,
+                        banner: form.banner
+                            ? form.banner.name
+                            : null
+                    },
+                    null,
+                    2
+                )}
             </pre>
 
             <div className="flex justify-between">
@@ -43,21 +52,25 @@ export default function StepReview({
                     onClick={() => {
 
                         mutation.mutate({
-                    
+
                             ...form,
-                    
+
+                            maxTeams: Number(form.maxTeams),
+
+                            prizePool: Number(form.prizePool || 0),
+
                             registrationStart: new Date(
                                 form.registrationStart
                             ).toISOString(),
-                    
+
                             registrationEnd: new Date(
                                 form.registrationEnd
                             ).toISOString(),
-                    
+
                             tournamentStart: new Date(
                                 form.tournamentStart
                             ).toISOString()
-                    
+
                         });
                     
                     }}

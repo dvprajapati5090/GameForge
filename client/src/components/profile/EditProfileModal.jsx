@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import useAuthStore from "../../store/authStore";
 
@@ -53,6 +53,10 @@ export default function EditProfileModal({
         user?.favoriteGames || []
     );
 
+    const [avatarFile, setAvatarFile] = useState(null);
+
+    const fileInputRef = useRef(null);
+
     const updateProfileMutation = useUpdateProfile();
 
     useEffect(() => {
@@ -64,6 +68,8 @@ export default function EditProfileModal({
             setBio(user?.bio || "");
 
             setSelectedGames(user?.favoriteGames || []);
+
+            setAvatarFile(null);
 
         }
 
@@ -164,6 +170,90 @@ export default function EditProfileModal({
                     <div className="space-y-6">
 
                         <div>
+
+                            <div>
+
+                                <label className="text-gray-300">
+
+                                    Avatar
+
+                                </label>
+
+                                <div className="flex items-center gap-5 mt-3">
+
+                                    <img
+                                        src={
+                                            avatarFile
+                                                ? URL.createObjectURL(avatarFile)
+                                                : user?.avatar ||
+                                                `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                                                    user?.displayName || "User"
+                                                )}&background=1e293b&color=fff`
+                                        }
+                                        alt="avatar"
+                                        className="
+                                            h-20
+                                            w-20
+                                            rounded-full
+                                            object-cover
+                                            border
+                                            border-cyan-500
+                                        "
+                                    />
+
+                                    <div>
+
+                                        <button
+
+                                            type="button"
+
+                                            onClick={() => fileInputRef.current.click()}
+
+                                            className="
+                                                px-4
+                                                py-2
+                                                rounded-lg
+                                                bg-cyan-600
+                                                hover:bg-cyan-500
+                                            "
+
+                                        >
+
+                                            Choose Image
+
+                                        </button>
+
+                                        <input
+
+                                            ref={fileInputRef}
+
+                                            type="file"
+
+                                            accept="image/*"
+
+                                            hidden
+
+                                            onChange={(e) => {
+
+                                                if (e.target.files[0]) {
+
+                                                    setAvatarFile(
+
+                                                        e.target.files[0]
+
+                                                    );
+
+                                                }
+
+                                            }}
+
+                                        />
+
+                                    </div>
+
+                                </div>
+
+                            </div>
 
                             <label className="text-gray-300">
 
@@ -298,17 +388,35 @@ export default function EditProfileModal({
                                         favoriteGames: selectedGames
                                     });
 
+                                    const formData = new FormData();
+
+                                    formData.append(
+                                        "displayName",
+                                        displayName
+                                    );
+
+                                    formData.append(
+                                        "bio",
+                                        bio
+                                    );
+
+                                    formData.append(
+                                        "favoriteGames",
+                                        JSON.stringify(selectedGames)
+                                    );
+
+                                    if (avatarFile) {
+
+                                        formData.append(
+                                            "avatar",
+                                            avatarFile
+                                        );
+
+                                    }
+
                                     updateProfileMutation.mutate(
 
-                                        {
-
-                                            displayName,
-
-                                            bio,
-
-                                            favoriteGames: selectedGames
-
-                                        },
+                                        formData,
 
                                         {
 

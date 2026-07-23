@@ -1,49 +1,32 @@
 import Background from "../components/auth/Background";
 import RegisterWizard from "../components/register/RegisterWizard";
+import { useLocation } from "react-router-dom";
 
 export default function RegisterPage() {
 
+    const location = useLocation();
+    const googleData = location.state?.googleData;
+
     return (
-
         <>
-
             <Background />
 
-            <main
+            <div
                 className="
                     relative
                     z-10
-
                     min-h-screen
-
                     flex
-                    items-center
                     justify-center
-
+                    items-start
                     px-6
-                    py-6
+                    py-8
                 "
             >
-
-                <div
-                    className="
-                        w-full
-                        max-w-6xl
-
-                        flex
-                        items-center
-                        justify-center
-                    "
-                >
-
-                    <RegisterWizard />
-
-                </div>
-
-            </main>
-
+                <RegisterWizard
+                    googleData={googleData}
+                />
+            </div>
         </>
-
     );
-
 }

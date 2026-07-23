@@ -18,7 +18,8 @@ export const createTeam = asyncHandler(async (req, res) => {
 
     const team = await createTeamService(
         req.body,
-        req.user._id
+        req.user._id,
+        req.file
     );
 
     return res.status(201).json(
@@ -49,7 +50,8 @@ export const updateTeam = asyncHandler(async (req, res) => {
 
     const team = await updateTeamService(
         req.user._id,
-        req.body
+        req.body,
+        req.file
     );
 
     return res.status(200).json(

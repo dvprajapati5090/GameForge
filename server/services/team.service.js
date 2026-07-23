@@ -12,7 +12,9 @@ import { createNotification } from "./notification.service.js";
 
 import { emitTeamUpdated } from "../socket/socketManager.js";
 
-export const createTeamService = async (teamData, userId) => {
+import { uploadToCloudinary, deleteFromCloudinary } from "../utils/cloudinaryUpload.js";
+
+export const createTeamService = async (teamData, userId, file) => {
 
     const {
         name,
@@ -36,6 +38,40 @@ export const createTeamService = async (teamData, userId) => {
         );
     }
 
+    if (file) {
+
+        const uploaded = await uploadToCloudinary(
+
+            file.buffer,
+
+            {
+
+                folder: "gameforge/team-logos",
+
+                transformation: [
+
+                    {
+
+                        width: 512,
+
+                        height: 512,
+
+                        crop: "fill"
+
+                    }
+
+                ]
+
+            }
+
+        );
+
+        teamData.logo = uploaded.url;
+
+        teamData.logoPublicId = uploaded.publicId;
+
+    }
+
     // Check duplicate team name
     const existingTeam = await Team.findOne({
         name
@@ -50,11 +86,21 @@ export const createTeamService = async (teamData, userId) => {
 
     // Create team
     const team = await Team.create({
+
         name,
+
         description,
+
+        logo: teamData.logo,
+
+        logoPublicId: teamData.logoPublicId,
+
         captain: user._id,
+
         members: [user._id],
+
         createdBy: user._id
+
     });
 
     // Update user's team
@@ -93,59 +139,186 @@ export const getMyTeamService = async (userId) => {
     return team;
 };
 
-export const updateTeamService = async (userId,updateData) => {
+export const updateTeamService = async (
+
+    userId,
+
+    updateData,
+
+    file
+
+) => {
 
     const user = await User.findById(userId)
         .select("+team");
 
+
     if (!user.team) {
+
         throw new ApiError(
             404,
             "You are not part of any team"
         );
+
     }
+
 
     const team = await Team.findById(user.team);
 
+
     if (!team) {
+
         throw new ApiError(
             404,
             "Team not found"
         );
+
     }
 
-    // Ownership Check
-    if (team.captain.toString() !== user._id.toString()) {
+
+    if (
+        team.captain.toString() !== user._id.toString()
+    ) {
+
         throw new ApiError(
             403,
             "Only the team captain can update the team"
         );
+
     }
 
-    // Duplicate name check
+
     if (
         updateData.name &&
         updateData.name !== team.name
     ) {
+
         const existingTeam = await Team.findOne({
             name: updateData.name
         });
 
+
         if (existingTeam) {
+
             throw new ApiError(
                 409,
                 "Team name already exists"
             );
+
         }
+
     }
 
-    Object.assign(team, updateData);
+
+    const oldLogoPublicId = team.logoPublicId;
+
+
+    // Upload new logo
+    if (file) {
+
+        const uploaded = await uploadToCloudinary(
+
+            file.buffer,
+
+            {
+                folder: "gameforge/team-logos",
+
+                transformation: [
+                    {
+                        width:512,
+                        height:512,
+                        crop:"fill"
+                    }
+                ]
+            }
+
+        );
+
+
+        console.log(
+            "UPLOADED TEAM LOGO:",
+            uploaded
+        );
+
+
+        updateData.logo = uploaded.url;
+
+        updateData.logoPublicId = uploaded.publicId;
+
+    }
+
+
+
+    const allowedUpdates = {
+
+        name: updateData.name,
+
+        description: updateData.description,
+
+        logo: updateData.logo,
+
+        logoPublicId: updateData.logoPublicId
+
+    };
+
+
+    Object.keys(allowedUpdates)
+    .forEach((key)=>{
+
+        if(
+            allowedUpdates[key] === undefined
+        ){
+
+            delete allowedUpdates[key];
+
+        }
+
+    });
+
+
+
+    Object.assign(
+        team,
+        allowedUpdates
+    );
+
 
     await team.save();
+
+
+
+    // Delete old logo after successful update
+    if(
+        file &&
+        oldLogoPublicId &&
+        oldLogoPublicId !== team.logoPublicId
+    ){
+
+        try {
+
+            await deleteFromCloudinary(
+                oldLogoPublicId
+            );
+
+        }
+
+        catch(error){
+
+            console.error(
+                "Failed to delete old team logo:",
+                error
+            );
+
+        }
+
+    }
+
+
 
     return await teamDetailsQuery(
         Team.findById(team._id)
     );
+
 };
 
 export const invitePlayerService = async (

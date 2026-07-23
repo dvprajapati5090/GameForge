@@ -15,27 +15,108 @@ export const getTournaments = async (params = {}) => {
 
 export const createTournament = async (data) => {
 
+    const formData = new FormData();
+
+
+    Object.entries(data).forEach(([key, value]) => {
+
+        if (key === "banner") return;
+
+
+        // Convert numbers to JSON string
+        if (
+            key === "maxTeams" ||
+            key === "prizePool"
+        ) {
+
+            formData.append(
+                key,
+                JSON.stringify(Number(value))
+            );
+
+        } 
+        else {
+
+            formData.append(
+                key,
+                value
+            );
+
+        }
+
+    });
+
+
+    if (data.banner) {
+
+        formData.append(
+            "banner",
+            data.banner
+        );
+
+    }
+
+
     const res = await api.post(
+
         "/tournaments",
-        data
+
+        formData,
+
+        {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        }
+
     );
+
 
     return res.data;
 
 };
 
-export const updateTournament = async (
-    id,
-    data
-) => {
+export const updateTournament = async (id, data) => {
+
+    // No image selected -> send JSON
+    if (!data.banner || !(data.banner instanceof File)) {
+
+        const res = await api.patch(
+            `/tournaments/${id}`,
+            {
+                ...data,
+                prizePool: Number(data.prizePool),
+                maxTeams: data.maxTeams !== undefined
+                    ? Number(data.maxTeams)
+                    : undefined
+            }
+        );
+
+        return res.data;
+    }
+
+    // Image selected -> send FormData
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+
+        if (value !== undefined && value !== null) {
+            formData.append(key, value);
+        }
+
+    });
 
     const res = await api.patch(
         `/tournaments/${id}`,
-        data
+        formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        }
     );
 
     return res.data;
-
 };
 
 export const deleteTournament = async (id) => {

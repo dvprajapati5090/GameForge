@@ -305,8 +305,23 @@ function MemberCard({
                     >
 
                         {
+                            member.avatar ? (
 
-                            member.riotCard ? (
+                                <img
+
+                                    src={member.avatar}
+
+                                    alt={member.displayName}
+
+                                    className="
+                                        w-full
+                                        h-full
+                                        object-cover
+                                    "
+
+                                />
+
+                            ) : member.riotCard ? (
 
                                 <img
 

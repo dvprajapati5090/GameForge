@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import GradientButton from "../ui/GradientButton";
 
@@ -12,7 +12,9 @@ export default function CreateTeamForm() {
 
         name: "",
 
-        description: ""
+        description: "",
+
+        logo: null
 
     });
 
@@ -30,9 +32,14 @@ export default function CreateTeamForm() {
 
     };
 
-    const validate = () => {
-
+    
     const newErrors = {};
+
+    const [logoFile, setLogoFile] = useState(null);
+
+    const fileInputRef = useRef(null);
+
+    const validate = () => {
 
     if (form.name.trim().length < 3) {
 
@@ -68,7 +75,19 @@ export default function CreateTeamForm() {
         if (!validate())
             return;
 
-        createMutation.mutate(form);
+        const formData = new FormData();
+
+        formData.append("name", form.name);
+
+        formData.append("description", form.description);
+
+        if (logoFile) {
+
+            formData.append("logo", logoFile);
+
+        }
+
+        createMutation.mutate(formData);
 
     };
 
@@ -81,6 +100,87 @@ export default function CreateTeamForm() {
             className="space-y-8"
 
         >
+
+            <div>
+
+                <label className="block mb-3 font-semibold">
+
+                    Team Logo
+
+                </label>
+
+                <div className="flex items-center gap-5">
+
+                    <img
+
+                        src={
+                            logoFile
+                                ? URL.createObjectURL(logoFile)
+                                : "https://placehold.co/120x120?text=Logo"
+                        }
+
+                        alt="Logo"
+
+                        className="
+                            h-24
+                            w-24
+                            rounded-full
+                            object-cover
+                            border
+                            border-cyan-500
+                        "
+
+                    />
+
+                    <div>
+
+                        <button
+
+                            type="button"
+
+                            onClick={() => fileInputRef.current.click()}
+
+                            className="
+                                px-5
+                                py-3
+                                rounded-xl
+                                bg-cyan-600
+                                hover:bg-cyan-500
+                            "
+
+                        >
+
+                            Choose Logo
+
+                        </button>
+
+                        <input
+
+                            ref={fileInputRef}
+
+                            type="file"
+
+                            hidden
+
+                            accept="image/*"
+
+                            onChange={(e) => {
+
+                                if (e.target.files[0]) {
+
+                                    setLogoFile(e.target.files[0]);
+
+                                }
+
+                            }}
+
+                        />
+
+                    </div>
+
+                </div>
+
+            </div>
 
             <div>
 

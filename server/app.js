@@ -12,6 +12,8 @@ import playerRoutes from "./routes/player.routes.js";
 import matchRoutes from "./routes/match.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 
+import googleRoutes from "./routes/google.routes.js";
+
 import errorHandler from "./middleware/error.middleware.js";
 
 const app = express();
@@ -37,6 +39,8 @@ app.use("/api/tournaments",tournamentRoutes);
 app.use("/api/players",playerRoutes);
 app.use("/api/matches",matchRoutes);
 app.use("/api/notifications",notificationRoutes);
+
+app.use("/api/auth/google",googleRoutes);
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);

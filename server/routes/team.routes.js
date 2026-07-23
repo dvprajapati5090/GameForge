@@ -23,12 +23,15 @@ import {
     transferCaptain
 } from "../controllers/team.controller.js";
 
+import upload from "../middleware/upload.middleware.js";
+
 const router = express.Router();
 
 router.post(
     "/",
     verifyJWT,
     authorizeRoles("PLAYER"),
+    upload.single("logo"),
     validate(createTeamSchema),
     createTeam
 );
@@ -44,6 +47,7 @@ router.patch(
     "/",
     verifyJWT,
     authorizeRoles("PLAYER"),
+    upload.single("logo"),
     validate(updateTeamSchema),
     updateTeam
 );

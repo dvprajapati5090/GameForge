@@ -49,6 +49,11 @@ const tournamentSchema = new mongoose.Schema(
             default: ""
         },
 
+        bannerPublicId: {
+            type: String,
+            default: ""
+        },
+
         organizer: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",

@@ -1,25 +1,34 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateMatch } from "../services/match.service";
+import { updateTournament } from "../services/tournament.service";
 
-export default function useUpdateMatch() {
+export default function useUpdateTournament(id) {
 
     const queryClient = useQueryClient();
 
     return useMutation({
 
-        mutationFn: updateMatch,
+        mutationFn: (data) =>
+            updateTournament(id, data),
 
         onSuccess: () => {
 
             queryClient.invalidateQueries({
-                queryKey: ["bracket"]
+                queryKey: ["tournament", id]
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: ["host-tournaments"]
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: ["tournaments"]
             });
 
         },
 
         onError: (error) => {
 
-            console.error("MATCH UPDATE ERROR");
+            console.error("TOURNAMENT UPDATE ERROR");
 
             console.error(error);
 

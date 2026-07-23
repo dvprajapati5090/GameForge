@@ -6,6 +6,8 @@ import {
     getMMRDetails
 } from "./thirdParty/henrik.service.js";
 
+import { uploadToCloudinary } from "../utils/cloudinaryUpload.js";
+
 export const getProfileService = async (userId) => {
 
     const user = await User.findById(userId)
@@ -22,43 +24,183 @@ export const getProfileService = async (userId) => {
 
 };
 
-export const updateProfileService = async (userId, updateData) => {
+export const updateProfileService = async (
 
-    const allowedUpdates = {
-        displayName: updateData.displayName,
-        bio: updateData.bio,
-        favoriteGames: updateData.favoriteGames,
-        riotGameName: updateData.riotGameName,
-        riotTagLine: updateData.riotTagLine,
-        preferredRole: updateData.preferredRole
-    };
+    userId,
 
-    // Remove undefined values
-    Object.keys(allowedUpdates).forEach((key) => {
-        if (allowedUpdates[key] === undefined) {
-            delete allowedUpdates[key];
-        }
-    });
+    updateData,
 
-    const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        {
-            $set: allowedUpdates
-        },
-        {
-            new: true,
-            runValidators: true
-        }
-    ).select("-password -refreshToken");
+    file
 
-    if (!updatedUser) {
+) => {
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+
         throw new ApiError(
             404,
             "User not found"
         );
+
+    }
+
+    // Parse favourite games
+    if (updateData.favoriteGames) {
+
+        try {
+
+            updateData.favoriteGames = JSON.parse(
+                updateData.favoriteGames
+            );
+
+        }
+
+        catch {
+
+            updateData.favoriteGames = [];
+
+        }
+
+    }
+
+    // Upload new avatar
+    if (file) {
+
+        const uploaded = await uploadToCloudinary(
+
+            file.buffer,
+
+            {
+
+                folder: "gameforge/avatars",
+
+                transformation: [
+
+                    {
+
+                        width: 512,
+
+                        height: 512,
+
+                        crop: "fill",
+
+                        gravity: "face"
+
+                    }
+
+                ]
+
+            }
+
+        );
+
+        updateData.avatar = uploaded.url;
+
+        updateData.avatarPublicId = uploaded.publicId;
+
+    }
+
+    const allowedUpdates = {
+
+        displayName: updateData.displayName,
+
+        bio: updateData.bio,
+
+        favoriteGames: updateData.favoriteGames,
+
+        riotGameName: updateData.riotGameName,
+
+        riotTagLine: updateData.riotTagLine,
+
+        preferredRole: updateData.preferredRole,
+
+        avatar: updateData.avatar,
+
+        avatarPublicId: updateData.avatarPublicId
+
+    };
+
+    // Remove undefined values
+    Object.keys(allowedUpdates).forEach((key) => {
+
+        if (allowedUpdates[key] === undefined) {
+
+            delete allowedUpdates[key];
+
+        }
+
+    });
+
+    const updatedUser = await User.findByIdAndUpdate(
+
+        userId,
+
+        {
+
+            $set: allowedUpdates
+
+        },
+
+        {
+
+            returnDocument: "after",
+
+            runValidators: true
+
+        }
+
+    ).select("-password -refreshToken");
+
+    if (!updatedUser) {
+
+        throw new ApiError(
+
+            404,
+
+            "User not found"
+
+        );
+
+    }
+
+    // Delete previous avatar only after successful DB update
+    if (
+
+        file &&
+
+        user.avatarPublicId &&
+
+        user.avatarPublicId !== updatedUser.avatarPublicId
+
+    ) {
+
+        try {
+
+            await deleteFromCloudinary(
+
+                user.avatarPublicId
+
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+
+                "Failed to delete old avatar:",
+
+                error
+
+            );
+
+        }
+
     }
 
     return updatedUser;
+
 };
 
 export const getPublicProfileService = async (username) => {

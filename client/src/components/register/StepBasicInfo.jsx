@@ -20,7 +20,9 @@ export default function StepBasicInfo({
 
     setForm,
 
-    next
+    next,
+
+    googleMode
 
 }) {
 
@@ -35,20 +37,21 @@ export default function StepBasicInfo({
         form.password === form.confirmPassword;
 
     const canContinue =
-
         form.username.length >= 3 &&
-
         form.displayName.length >= 3 &&
-
         form.email.length > 5 &&
-
-        form.password.length >= 8 &&
-
-        passwordsMatch &&
-
         username.data?.data?.available &&
-
-        email.data?.data?.available;
+        (
+            googleMode ||
+            email.data?.data?.available
+        ) &&
+        (
+            googleMode ||
+            (
+                form.password.length >= 8 &&
+                passwordsMatch
+            )
+        );
 
     function update(field, value) {
 
@@ -331,6 +334,8 @@ export default function StepBasicInfo({
 
                         value={form.email}
 
+                        disabled={googleMode}
+
                         onChange={(e) =>
 
                             update("email", e.target.value)
@@ -365,115 +370,122 @@ export default function StepBasicInfo({
 
                 </motion.div>
 
-                {/* Password */}
+                {
+                    !googleMode && (
 
-                <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25 }}
-                    className="space-y-4"
-                >
+                        <>
+                            {/* Password */}
 
-                    <FieldTitle
+                                <motion.div
+                                    initial={{ opacity: 0, y: 15 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.25 }}
+                                    className="space-y-4"
+                                >
 
-                        icon={<Lock size={20} />}
+                                    <FieldTitle
 
-                        title="Password"
+                                        icon={<Lock size={20} />}
 
-                        subtitle="Create a secure password with at least 8 characters."
+                                        title="Password"
 
-                    />
+                                        subtitle="Create a secure password with at least 8 characters."
 
-                    <Input
+                                    />
 
-                        placeholder="Password"
+                                    <Input
 
-                        type="password"
+                                        placeholder="Password"
 
-                        value={form.password}
+                                        type="password"
 
-                        onChange={(e) =>
+                                        value={form.password}
 
-                            update("password", e.target.value)
+                                        onChange={(e) =>
 
-                        }
+                                            update("password", e.target.value)
 
-                    />
+                                        }
 
-                    <PasswordStrength
+                                    />
 
-                        strength={passwordStrength}
+                                    <PasswordStrength
 
-                    />
+                                        strength={passwordStrength}
 
-                </motion.div>
+                                    />
 
-                {/* Confirm Password */}
+                                </motion.div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="space-y-4"
-                >
+                                {/* Confirm Password */}
 
-                    <FieldTitle
+                                <motion.div
+                                    initial={{ opacity: 0, y: 15 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="space-y-4"
+                                >
 
-                        icon={<Lock size={20} />}
+                                    <FieldTitle
 
-                        title="Confirm Password"
+                                        icon={<Lock size={20} />}
 
-                        subtitle="Re-enter your password to make sure everything matches."
+                                        title="Confirm Password"
 
-                    />
+                                        subtitle="Re-enter your password to make sure everything matches."
 
-                    <Input
+                                    />
 
-                        placeholder="Confirm Password"
+                                    <Input
 
-                        type="password"
+                                        placeholder="Confirm Password"
 
-                        value={form.confirmPassword}
+                                        type="password"
 
-                        onChange={(e) =>
+                                        value={form.confirmPassword}
 
-                            update(
+                                        onChange={(e) =>
 
-                                "confirmPassword",
+                                            update(
 
-                                e.target.value
+                                                "confirmPassword",
 
-                            )
+                                                e.target.value
 
-                        }
+                                            )
 
-                        success={
+                                        }
 
-                            passwordsMatch
+                                        success={
 
-                                ? "Passwords match"
+                                            passwordsMatch
 
-                                : ""
+                                                ? "Passwords match"
 
-                        }
+                                                : ""
 
-                        error={
+                                        }
 
-                            form.confirmPassword.length > 0 &&
+                                        error={
 
-                            !passwordsMatch
+                                            form.confirmPassword.length > 0 &&
 
-                                ? "Passwords do not match"
+                                            !passwordsMatch
 
-                                : ""
+                                                ? "Passwords do not match"
 
-                        }
+                                                : ""
 
-                    />
+                                        }
 
-                </motion.div>
+                                    />
 
-                {/* Continue */}
+                                </motion.div>
+
+                                {/* Continue */}
+                        </>
+                    )
+                }
 
                 <motion.div
                     initial={{ opacity: 0, y: 15 }}

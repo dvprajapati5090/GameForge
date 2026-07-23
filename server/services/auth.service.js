@@ -93,64 +93,128 @@ export const registerUserService = async (userData) => {
 
         tagLine,
 
-        region
+        region,
+
+        googleId,
+
+        avatar,
+
+        authProvider
 
     } = userData;
 
-    // Check if username already exists
+
+    const provider =
+        authProvider || "LOCAL";
+
+
+    // Check username
     const existingUsername = await User.findOne({
+
         username
+
     });
 
+
     if (existingUsername) {
+
         throw new ApiError(
             409,
             "Username already exists"
         );
+
     }
 
-    // Check if email already exists
+
+    // Check email
     const existingEmail = await User.findOne({
+
         email
+
     });
 
+
     if (existingEmail) {
+
         throw new ApiError(
             409,
             "Email already exists"
         );
+
     }
+
+
 
     let riotData = {};
 
+
+
+    // Riot verification only for PLAYER
     if (role === "PLAYER") {
 
-        riotData = await verifyRiotAccountService({
 
-            gameName,
+        riotData =
+            await verifyRiotAccountService({
 
-            tagLine,
+                gameName,
 
-            region
+                tagLine,
 
-        });
+                region
+
+            });
+
 
     }
 
-    // Create new user
-    const user = await User.create({
+
+
+
+    const userPayload = {
+
 
         username,
 
+
         displayName,
+
 
         email,
 
-        password,
 
         role,
 
+
+        authProviders: [
+
+            provider
+
+        ],
+
+
+
+        ...(provider === "GOOGLE" && {
+
+            googleId,
+
+            avatar,
+
+            isVerified:true
+
+        }),
+
+
+
+        ...(provider === "LOCAL" && {
+
+            password
+
+        }),
+
+
+
         ...(role === "PLAYER" && {
+
 
             riotGameName: riotData.gameName,
 
@@ -162,39 +226,96 @@ export const registerUserService = async (userData) => {
 
             riotVerified: riotData.verified,
 
+
             accountLevel: riotData.level,
+
 
             currentRank: riotData.currentRank,
 
+
             rankRating: riotData.rankRating,
+
 
             highestRank: riotData.highestRank,
 
+
             riotCard: riotData.playerCard,
+
 
             riotTitle: riotData.playerTitle,
 
-            syncStatus: "SYNCED",
 
-            riotLastSyncedAt: new Date()
+            syncStatus:"SYNCED",
+
+
+            riotLastSyncedAt:new Date()
+
 
         })
 
-    });
+    };
 
-    // Generate Access & Refresh Tokens
-    const { accessToken, refreshToken } =
-        await generateAccessAndRefreshTokens(user._id);
 
-    // Get user without sensitive fields
-    const createdUser = await User.findById(user._id)
-        .select("-password -refreshToken");
+
+    const user = await User.create(
+
+        userPayload
+
+    );
+
+
+
+    // Generate tokens
+
+    const {
+
+        accessToken,
+
+        refreshToken
+
+    } = await generateAccessAndRefreshTokens(
+
+        user._id
+
+    );
+
+
+
+    user.refreshToken = refreshToken;
+
+    await user.save();
+
+
+
+    const createdUser = await User.findById(
+
+        user._id
+
+    )
+
+    .select(
+
+        "-password -refreshToken"
+
+    );
+
+
 
     return {
+
+
         user: createdUser,
+
+
         accessToken,
+
+
         refreshToken
+
+
     };
+
+
 };
 
 export const loginUserService = async ({ email, password }) => {
@@ -207,6 +328,22 @@ export const loginUserService = async ({ email, password }) => {
             401,
             "Invalid email or password"
         );
+    }
+
+    if (
+
+        !user.authProviders.includes("LOCAL")
+
+    ) {
+
+        throw new ApiError(
+
+            400,
+
+            "This account uses Google Sign-In. Please continue with Google."
+
+        );
+
     }
 
     // Compare password

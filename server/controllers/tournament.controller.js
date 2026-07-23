@@ -16,23 +16,29 @@ import {
     checkTournamentEligibilityService
 } from "../services/tournament.service.js";
 
-export const createTournament =
-asyncHandler(async (req, res) => {
+export const createTournament = asyncHandler(
+    async (req, res) => {
 
-    const tournament =
-        await createTournamentService(
-            req.body,
-            req.user._id
+        console.log("REQ FILE:", req.file);
+
+        const tournament =
+            await createTournamentService(
+                req.body,
+                req.user._id,
+                req.file
+            );
+
+
+        return res.json(
+            new ApiResponse(
+                201,
+                tournament,
+                "Tournament created successfully"
+            )
         );
 
-    return res.status(201).json(
-        new ApiResponse(
-            "Tournament created successfully",
-            tournament
-        )
-    );
-
-});
+    }
+);
 
 export const getTournamentById = asyncHandler(async (req, res) => {
 
@@ -69,7 +75,8 @@ export const updateTournament = asyncHandler(async (req, res) => {
         await updateTournamentService(
             req.params.id,
             req.body,
-            req.user._id
+            req.user._id,
+            req.file
         );
 
     return res.status(200).json(

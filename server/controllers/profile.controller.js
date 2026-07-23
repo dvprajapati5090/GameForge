@@ -27,7 +27,8 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
     const updatedProfile = await updateProfileService(
         req.user._id,
-        req.body
+        req.body,
+        req.file
     );
 
     return res.status(200).json(

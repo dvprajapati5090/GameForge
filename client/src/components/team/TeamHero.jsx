@@ -86,24 +86,42 @@ export default function TeamHero({ team }) {
 
                 <div className="flex items-center gap-8">
 
-                    <div
-                        className="
-                            w-28
-                            h-28
-                            rounded-3xl
-                            bg-gradient-to-br
-                            from-cyan-500
-                            to-purple-600
-                            flex
-                            items-center
-                            justify-center
-                            shadow-[0_0_35px_rgba(6,182,212,0.35)]
-                        "
-                    >
+                    {
+                        team.logo ? (
 
-                        <Shield size={54} />
+                            <img
+                                src={team.logo}
+                                alt={team.name}
+                                className="
+                                    w-28
+                                    h-28
+                                    rounded-3xl
+                                    object-cover
+                                "
+                            />
 
-                    </div>
+                        ) : (
+
+                            <div
+                                className="
+                                    w-28
+                                    h-28
+                                    rounded-3xl
+                                    bg-gradient-to-br
+                                    from-cyan-500
+                                    to-purple-600
+                                    flex
+                                    items-center
+                                    justify-center
+                                "
+                            >
+
+                                <Shield size={50}/>
+
+                            </div>
+
+                        )
+                    }
 
                     <div>
 

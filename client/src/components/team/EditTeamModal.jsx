@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import useUpdateTeam from "../../hooks/useUpdateTeam";
 
@@ -18,17 +18,23 @@ export default function EditTeamModal({
 
     const updateMutation = useUpdateTeam();
 
+    const [logoFile, setLogoFile] = useState(null);
+
+    const fileInputRef = useRef(null);
+
     useEffect(() => {
 
-        if (team) {
+        if(team){
 
             setName(team.name);
 
             setDescription(team.description || "");
 
+            setLogoFile(null);
+
         }
 
-    }, [team]);
+    },[team,open]);
 
     if (!open) return null;
 
@@ -36,20 +42,25 @@ export default function EditTeamModal({
 
         e.preventDefault();
 
+        const formData = new FormData();
+
+        formData.append("name", name);
+
+        formData.append("description", description);
+
+        if (logoFile) {
+
+            formData.append("logo", logoFile);
+
+        }
+
         updateMutation.mutate(
 
-            {
-                name,
-                description
-            },
+            formData,
 
             {
 
-                onSuccess: () => {
-
-                    onClose();
-
-                }
+                onSuccess: () => onClose()
 
             }
 
@@ -100,6 +111,82 @@ export default function EditTeamModal({
                     onSubmit={handleSubmit}
                     className="space-y-5 mt-8"
                 >
+
+                    <div>
+
+                        <label className="block mb-3">
+
+                            Team Logo
+
+                        </label>
+
+                        <div className="flex items-center gap-5">
+
+                            <img
+
+                                src={
+                                    logoFile
+                                        ? URL.createObjectURL(logoFile)
+                                        : team?.logo
+                                }
+
+                                alt="logo"
+
+                                className="
+                                    h-24
+                                    w-24
+                                    rounded-full
+                                    object-cover
+                                    border
+                                    border-cyan-500
+                                "
+
+                            />
+
+                            <button
+
+                                type="button"
+
+                                onClick={() => fileInputRef.current.click()}
+
+                                className="
+                                    px-4
+                                    py-2
+                                    rounded-lg
+                                    bg-cyan-600
+                                "
+
+                            >
+
+                                Change Logo
+
+                            </button>
+
+                            <input
+
+                                hidden
+
+                                ref={fileInputRef}
+
+                                type="file"
+
+                                accept="image/*"
+
+                                onChange={(e) => {
+
+                                    if (e.target.files[0]) {
+
+                                        setLogoFile(e.target.files[0]);
+
+                                    }
+
+                                }}
+
+                            />
+
+                        </div>
+
+                    </div>
 
                     <input
 

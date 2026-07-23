@@ -1,20 +1,34 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { register } from "../services/auth.service";
+import { completeGoogleProfile } from "../services/google.service";
 
 import useAuthStore from "../store/authStore";
 
 export default function useRegister() {
 
-    const setUser = useAuthStore((state) => state.setUser);
+    const {
+        setUser,
+        setAccessToken
+    } = useAuthStore();
 
     return useMutation({
 
-        mutationFn: register,
+        mutationFn: (data) => {
 
-        onSuccess: (response) => {
+            if (data.googleId) {
+                return completeGoogleProfile(data);
+            }
 
-            setUser(response.data.user);
+            return register(data);
+
+        },
+
+        onSuccess: ({ data }) => {
+
+            setUser(data.user);
+
+            setAccessToken(data.accessToken);
 
         }
 

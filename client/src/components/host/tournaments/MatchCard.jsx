@@ -1,6 +1,8 @@
 import Button from "../../ui/Button";
 import useUpdateMatch from "../../../hooks/useUpdateMatch";
 
+import TeamLogo from "../../team/TeamLogo";
+
 export default function MatchCard({ match }) {
 
     const mutation = useUpdateMatch(match.tournament);
@@ -67,10 +69,9 @@ function TeamRow({ team }) {
 
         <div className="flex items-center gap-3">
 
-            <img
-                src={team?.logo || "https://placehold.co/50"}
-                alt=""
-                className="w-10 h-10 rounded-full"
+            <TeamLogo
+                team={team}
+                size="h-10 w-10"
             />
 
             <span>{team?.name || "BYE"}</span>

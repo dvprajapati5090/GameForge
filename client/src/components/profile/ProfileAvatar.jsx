@@ -178,20 +178,21 @@ export default function ProfileAvatar({ player }) {
                     >
 
                         {
-                            profile?.riotCard ? (
+                            profile?.avatar ? (
 
                                 <motion.img
-                                    initial={{
-                                        scale:1.08
-                                    }}
+                                    src={profile.avatar}
+                                    alt="Avatar"
+                                    className="
+                                        w-full
+                                        h-full
+                                        object-cover
+                                    "
+                                />
 
-                                    animate={{
-                                        scale:1
-                                    }}
+                            ) : profile?.riotCard ? (
 
-                                    transition={{
-                                        duration:8
-                                    }}
+                                <motion.img
                                     src={`https://media.valorant-api.com/playercards/${profile.riotCard}/displayicon.png`}
                                     alt="Player Card"
                                     className="

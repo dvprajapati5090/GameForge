@@ -17,6 +17,8 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
+import GoogleLoginButton from "../components/auth/GoogleLoginButton";
+
 export default function Login() {
 
     const {
@@ -474,6 +476,26 @@ export default function Login() {
                                 </span>
 
                             </button>
+
+                            <div className="mt-6">
+
+                                <div className="flex items-center gap-4 mb-6">
+
+                                    <div className="flex-1 h-px bg-white/10" />
+
+                                    <span className="text-gray-400 text-sm">
+
+                                        OR
+
+                                    </span>
+
+                                    <div className="flex-1 h-px bg-white/10" />
+
+                                </div>
+
+                                <GoogleLoginButton />
+
+                            </div>
 
                             <p className="text-center text-gray-400 mt-6">
 

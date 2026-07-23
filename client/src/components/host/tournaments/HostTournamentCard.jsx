@@ -31,6 +31,26 @@ export default function HostTournamentCard({
             "
         >
 
+            <div className="relative h-48 overflow-hidden rounded-t-2xl">
+                {tournament.banner ? (
+                    <img
+                        src={tournament.banner}
+                        alt={tournament.name}
+                        className="h-full w-full object-cover"
+                    />
+                ) : (
+                    <div className="h-full w-full bg-gradient-to-r from-cyan-600 via-blue-700 to-purple-700" />
+                )}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
+
+                <div className="absolute bottom-4 left-4">
+                    <h2 className="text-2xl font-bold text-white">
+                        {tournament.name}
+                    </h2>
+                </div>
+            </div>
+
             <div className="flex justify-between">
 
                 <h2 className="text-2xl font-black">

@@ -1,10 +1,23 @@
 import api from "../api/axios";
 
-export const updateProfile = async (data) => {
+export const updateProfile = async (formData) => {
 
     const response = await api.patch(
+
         "/profile",
-        data
+
+        formData,
+
+        {
+
+            headers: {
+
+                "Content-Type": "multipart/form-data"
+
+            }
+
+        }
+
     );
 
     return response.data;

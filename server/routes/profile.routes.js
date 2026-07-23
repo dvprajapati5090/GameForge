@@ -13,6 +13,7 @@ import {
 
 import { updateProfileSchema } from "../validators/profile.validator.js";
 
+import upload from "../middleware/upload.middleware.js";
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.get(
 router.patch(
     "/",
     verifyJWT,
+    upload.single("avatar"),
     validate(updateProfileSchema),
     updateProfile
 );

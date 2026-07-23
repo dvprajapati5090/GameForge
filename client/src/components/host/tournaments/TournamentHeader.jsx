@@ -1,6 +1,5 @@
 import Button from "../../ui/Button";
 
-
 export default function TournamentHeader({
 
     tournament,
@@ -11,33 +10,55 @@ export default function TournamentHeader({
 
     return (
 
-        <div className="flex justify-between">
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900">
 
-            <div>
+            {/* Banner */}
+            <div className="relative h-72">
 
-                <h1 className="text-5xl font-black">
+                {tournament.banner ? (
 
-                    {tournament.name}
+                    <img
+                        src={tournament.banner}
+                        alt={tournament.name}
+                        className="h-full w-full object-cover"
+                    />
 
-                </h1>
+                ) : (
 
-                <p className="mt-3 text-gray-400">
+                    <div className="h-full w-full bg-gradient-to-r from-cyan-600 via-blue-700 to-purple-700" />
 
-                    {tournament.description}
+                )}
 
-                </p>
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+
+                {/* Tournament Info */}
+                <div className="absolute bottom-8 left-8">
+
+                    <h1 className="text-5xl font-black text-white">
+
+                        {tournament.name}
+
+                    </h1>
+
+                    <p className="mt-3 max-w-3xl text-lg text-gray-200">
+
+                        {tournament.description || "No description provided."}
+
+                    </p>
+
+                </div>
 
             </div>
 
-
-            <div className="flex gap-4">
+            {/* Buttons */}
+            <div className="flex justify-end gap-4 p-6">
 
                 <Button
                     onClick={onEdit}
                 >
                     Edit
                 </Button>
-
 
                 <Button
                     variant="danger"
@@ -47,7 +68,6 @@ export default function TournamentHeader({
                 </Button>
 
             </div>
-
 
         </div>
 

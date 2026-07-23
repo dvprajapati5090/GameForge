@@ -1,3 +1,5 @@
+import TeamLogo from "../team/TeamLogo";
+
 export default function TournamentTeams({
 
     tournament
@@ -35,12 +37,9 @@ export default function TournamentTeams({
 
                         >
 
-                            <img
-
-                                src={team.logo}
-
-                                className="w-12 h-12 rounded-full"
-
+                            <TeamLogo
+                                team={team}
+                                size="h-24 w-24"
                             />
 
                             <div>

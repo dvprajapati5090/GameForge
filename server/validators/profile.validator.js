@@ -15,9 +15,33 @@ export const updateProfileSchema = z.object({
         .max(250)
         .optional(),
 
-    favoriteGames: z
-        .array(z.string())
-        .optional(),
+    favoriteGames: z.preprocess(
+
+        (value) => {
+
+            if (typeof value === "string") {
+
+                try {
+
+                    return JSON.parse(value);
+
+                }
+
+                catch {
+
+                    return [];
+
+                }
+
+            }
+
+            return value;
+
+        },
+
+        z.array(z.string()).optional()
+
+    ),
 
     riotGameName: z
         .string()
@@ -37,10 +61,6 @@ export const updateProfileSchema = z.object({
         "CONTROLLER",
         "SENTINEL",
         "FLEX"
-    ]).optional(),
-
-    favoriteGames: z
-        .array(z.string())
-        .optional()
+    ]).optional()
 
 });

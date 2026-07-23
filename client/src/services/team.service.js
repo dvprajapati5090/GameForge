@@ -8,9 +8,25 @@ export const getMyTeam = async () => {
 
 };
 
-export const createTeam = async (data) => {
+export const createTeam = async (formData) => {
 
-    const res = await api.post("/team", data);
+    const res = await api.post(
+
+        "/team",
+
+        formData,
+
+        {
+
+            headers: {
+
+                "Content-Type": "multipart/form-data"
+
+            }
+
+        }
+
+    );
 
     return res.data;
 
@@ -57,11 +73,24 @@ export const rejectInvitation = async (id) => {
 
 };
 
-export const updateTeam = async (data) => {
+export const updateTeam = async (formData) => {
 
     const res = await api.patch(
+
         "/team",
-        data
+
+        formData,
+
+        {
+
+            headers: {
+
+                "Content-Type": "multipart/form-data"
+
+            }
+
+        }
+
     );
 
     return res.data;

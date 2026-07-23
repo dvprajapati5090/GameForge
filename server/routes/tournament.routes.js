@@ -12,6 +12,8 @@ import {
     completeTournamentSchema
 } from "../validators/tournament.validator.js";
 
+import upload from "../middleware/upload.middleware.js";
+
 import {
     createTournament,
     getTournamentById,
@@ -33,6 +35,18 @@ router.post(
     "/",
     verifyJWT,
     authorizeRoles("HOST"),
+    upload.single("banner"),
+    (req,res,next)=>{
+
+        if(req.body.maxTeams)
+            req.body.maxTeams = Number(req.body.maxTeams);
+
+        if(req.body.prizePool)
+            req.body.prizePool = Number(req.body.prizePool);
+
+        next();
+
+    },
     validate(createTournamentSchema),
     createTournament
 );
@@ -66,6 +80,7 @@ router.patch(
     "/:id",
     verifyJWT,
     authorizeRoles("HOST"),
+    upload.single("banner"),
     validate(updateTournamentSchema),
     updateTournament
 );
