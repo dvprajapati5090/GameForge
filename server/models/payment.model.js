@@ -40,6 +40,7 @@ const paymentSchema = new mongoose.Schema(
         type:String,
         enum:[
             "CREATED",
+            "SUCCESS",
             "PAID",
             "FAILED",
             "REFUNDED"
