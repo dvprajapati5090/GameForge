@@ -6,6 +6,8 @@ import EmptyTeam from "../components/team/EmptyTeam";
 import TeamHero from "../components/team/TeamHero";
 import TeamMembers from "../components/team/TeamMembers";
 
+import TeamChat from "../components/team/TeamChat";
+
 import TeamSettings from "../components/team/TeamSettings";
 
 export default function TeamPage() {
@@ -38,6 +40,8 @@ export default function TeamPage() {
             <TeamHero team={team} />
 
             <TeamMembers team={team} />
+
+            <TeamChat />
 
             <TeamSettings team={team} />
 

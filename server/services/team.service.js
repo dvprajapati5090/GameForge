@@ -14,6 +14,9 @@ import { emitTeamUpdated } from "../socket/socketManager.js";
 
 import { uploadToCloudinary, deleteFromCloudinary } from "../utils/cloudinaryUpload.js";
 
+import Chat from "../models/chat.model.js";
+import Message from "../models/message.model.js";
+
 export const createTeamService = async (teamData, userId, file) => {
 
     const {
@@ -101,6 +104,11 @@ export const createTeamService = async (teamData, userId, file) => {
 
         createdBy: user._id
 
+    });
+
+    await Chat.create({
+        team: team._id,
+        members: [user._id]
     });
 
     // Update user's team
@@ -552,6 +560,17 @@ export const acceptInvitationService = async (
         team.save()
     ]);
 
+    await Chat.findOneAndUpdate(
+        {
+            team: team._id
+        },
+        {
+            $addToSet: {
+                members: user._id
+            }
+        }
+    );
+
     const updatedTeam = await teamDetailsQuery(
         Team.findById(team._id)
     );
@@ -745,6 +764,31 @@ export const leaveTeamService = async (userId) => {
         // Captain is alone
         if (team.members.length === 1) {
 
+            // Find chat before deleting
+            const chat = await Chat.findOne({
+                team: team._id
+            });
+
+            // Delete all chat messages
+            if (chat) {
+                await Message.deleteMany({
+                    chat: chat._id
+                });
+
+                await Chat.findByIdAndDelete(chat._id);
+            }
+
+            // Delete pending invitations
+            await Invitation.deleteMany({
+                team: team._id
+            });
+
+            // (Optional) Delete team notifications
+            await Notification.deleteMany({
+                type: "TEAM"
+            });
+
+            // Delete team
             await Team.findByIdAndDelete(team._id);
 
             user.team = null;
@@ -782,6 +826,15 @@ export const leaveTeamService = async (userId) => {
 
     emitTeamUpdated(
         updatedTeam.members.map(member => member._id)
+    );
+
+    await Chat.findOneAndUpdate(
+        { team: team._id },
+        {
+            $pull: {
+                members: user._id
+            }
+        }
     );
 
     return {
@@ -860,6 +913,15 @@ export const removeMemberService = async (
         team.save(),
         member.save()
     ]);
+
+    await Chat.findOneAndUpdate(
+        { team: team._id },
+        {
+            $pull: {
+                members: member._id
+            }
+        }
+    );
 
     const updatedTeam = await teamDetailsQuery(
         Team.findById(team._id)

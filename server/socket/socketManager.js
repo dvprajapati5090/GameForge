@@ -28,6 +28,26 @@ export const initializeSocket = (server) => {
 
         });
 
+        socket.on("join-team", (teamId) => {
+
+            socket.join(`team:${teamId}`);
+
+            console.log(
+                `${socket.id} joined team:${teamId}`
+            );
+
+        });
+
+        socket.on("leave-team", (teamId) => {
+
+            socket.leave(`team:${teamId}`);
+
+            console.log(
+                `${socket.id} left team:${teamId}`
+            );
+
+        });
+
         socket.on("disconnect", () => {
 
             console.log(`🔴 Disconnected: ${socket.id}`);
@@ -81,5 +101,27 @@ export const emitBracketUpdated = () => {
     if (!io) return;
 
     io.emit("bracketUpdated");
+
+};
+
+export const emitTeamMessage = (
+
+    teamId,
+
+    message
+
+) => {
+
+    const io = getIO();
+
+    if (!io) return;
+
+    io.to(`team:${teamId}`).emit(
+
+        "team-message",
+
+        message
+
+    );
 
 };
