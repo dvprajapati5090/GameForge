@@ -78,7 +78,10 @@ export const createTournamentService = async (
         registrationStart,
         registrationEnd,
         tournamentStart,
+        isPaid = false,
+        entryFee = 0,
         prizePool = 0,
+        currency = "INR",
         rules = ""
 
     } = tournamentData;
@@ -169,7 +172,10 @@ export const createTournamentService = async (
             registrationStart: registrationStartDate,
             registrationEnd: registrationEndDate,
             tournamentStart: tournamentStartDate,
+            isPaid,
+            entryFee,
             prizePool,
+            currency,
             rules,
             status: "DRAFT"
 

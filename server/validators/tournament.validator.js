@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createTournamentSchema = z.object({
+const tournamentBaseSchema = z.object({
 
     name: z
         .string()
@@ -37,7 +37,8 @@ export const createTournamentSchema = z.object({
         .refine(
             value => [4, 8, 16, 32, 64, 128].includes(value),
             {
-                message: "Max teams must be one of 4, 8, 16, 32, 64 or 128"
+                message:
+                    "Max teams must be one of 4, 8, 16, 32, 64 or 128"
             }
         ),
 
@@ -47,11 +48,27 @@ export const createTournamentSchema = z.object({
 
     tournamentStart: z.string(),
 
+    isPaid: z
+        .union([
+            z.boolean(),
+            z.string().transform(value => value === "true")
+        ])
+        .optional()
+        .default(false),
+
+    entryFee: z
+        .coerce
+        .number()
+        .min(0)
+        .optional()
+        .default(0),
+
     prizePool: z
         .coerce
         .number()
-        .nonnegative()
-        .optional(),
+        .min(0)
+        .optional()
+        .default(0),
 
     rules: z
         .string()
@@ -59,13 +76,40 @@ export const createTournamentSchema = z.object({
 
 });
 
+export const createTournamentSchema =
+    tournamentBaseSchema.superRefine((data, ctx) => {
+
+        if (
+            data.isPaid &&
+            data.entryFee <= 0
+        ) {
+
+            ctx.addIssue({
+
+                code: z.ZodIssueCode.custom,
+
+                path: ["entryFee"],
+
+                message:
+                    "Entry fee must be greater than 0"
+
+            });
+
+        }
+
+    });
+
 export const updateTournamentSchema =
-    createTournamentSchema.partial();
+    tournamentBaseSchema.partial();
 
-export const completeTournamentSchema = z.object({
+export const completeTournamentSchema =
+    z.object({
 
-    winnerTeamId: z
-        .string()
-        .min(1, "Winner team is required")
+        winnerTeamId: z
+            .string()
+            .min(
+                1,
+                "Winner team is required"
+            )
 
-});
+    });

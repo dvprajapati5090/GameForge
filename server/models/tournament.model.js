@@ -102,9 +102,27 @@ const tournamentSchema = new mongoose.Schema(
             type: Date
         },
 
+        isPaid: {
+            type: Boolean,
+            default: false
+        },
+
+        entryFee: {
+            type: Number,
+            default: 0,
+            min: 0
+        },
+
         prizePool: {
             type: Number,
-            default: 0
+            default: 0,
+            min: 0
+        },
+
+        currency: {
+            type: String,
+            default: "INR",
+            enum: ["INR"]
         },
 
         rules: {

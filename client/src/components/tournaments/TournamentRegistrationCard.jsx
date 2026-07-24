@@ -14,6 +14,13 @@ import useWithdrawTournament from "../../hooks/useWithdrawTournament";
 import useTournamentEligibility from "../../hooks/useTournamentEligibility";
 import EligibilityChecklist from "./EligibilityChecklist";
 
+import useCreatePaymentOrder from "../../hooks/useCreatePaymentOrder";
+
+import useVerifyPayment from "../../hooks/useVerifyPayment";
+
+import { toast } from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
+
 export default function TournamentRegistrationCard({
 
     tournament
@@ -38,6 +45,12 @@ export default function TournamentRegistrationCard({
     const withdrawMutation =
         useWithdrawTournament();
 
+    const queryClient = useQueryClient();
+
+    const createOrderMutation = useCreatePaymentOrder();  
+        
+    const verifyPaymentMutation = useVerifyPayment();
+
     const registered =
         tournament.registeredTeams?.length || 0;
 
@@ -50,6 +63,104 @@ export default function TournamentRegistrationCard({
 
     const alreadyRegistered =
         tournament.isRegistered;
+
+
+
+
+    const handleRegister = async () => {
+
+        if (!tournament.isPaid) {
+
+            registerMutation.mutate(
+
+                tournament._id
+
+            );
+
+            return;
+
+        }
+
+        try {
+
+            const { data } =
+
+                await createOrderMutation.mutateAsync(
+
+                    tournament._id
+
+                );
+
+            const options = {
+
+                key: data.key,
+
+                amount: data.amount,
+
+                currency: data.currency,
+
+                order_id: data.orderId,
+
+                name: "GameForge",
+
+                description: tournament.name,
+
+                handler: async function (response) {
+
+                    try {
+
+                        await verifyPaymentMutation.mutateAsync({
+
+                            paymentId: data.paymentId,
+
+                            razorpay_order_id:
+                                response.razorpay_order_id,
+
+                            razorpay_payment_id:
+                                response.razorpay_payment_id,
+
+                            razorpay_signature:
+                                response.razorpay_signature
+
+                        });
+
+                        queryClient.invalidateQueries({
+                            queryKey: ["tournament"]
+                        });
+
+                        toast.success(
+
+                            "Registration Successful"
+
+                        );
+
+                    }
+
+                    catch {}
+
+                },
+
+                theme: {
+
+                    color: "#06b6d4"
+
+                }
+
+            };
+
+            const razorpay =
+
+                new window.Razorpay(options);
+
+            razorpay.open();
+
+        }
+
+        catch {}
+
+    };
+
+
 
     return (
 
@@ -158,6 +269,28 @@ export default function TournamentRegistrationCard({
             </div>
 
             {
+                tournament.isPaid && (
+
+                    <div className="mt-6 rounded-xl bg-amber-500/10 border border-amber-500/30 p-4">
+
+                        <p className="text-sm text-gray-400">
+
+                            Entry Fee
+
+                        </p>
+
+                        <p className="text-2xl font-bold text-amber-400">
+
+                            ₹{tournament.entryFee}
+
+                        </p>
+
+                    </div>
+
+                )
+            }
+
+            {
 
                 !isLoading && eligibility && (
 
@@ -257,21 +390,21 @@ export default function TournamentRegistrationCard({
 
                             className="w-full"
 
-                            loading={registerMutation.isPending}
-
-                            onClick={()=>
-
-                                registerMutation.mutate(
-
-                                    tournament._id
-
-                                )
-
+                            loading={
+                                registerMutation.isPending ||
+                                createOrderMutation.isPending ||
+                                verifyPaymentMutation.isPending
                             }
+
+                            onClick={handleRegister}
 
                         >
 
-                            Register Team
+                            {
+                                tournament.isPaid
+                                    ? `Pay ₹${tournament.entryFee} & Register`
+                                    : "Register Team"
+                            }
 
                         </Button>
 

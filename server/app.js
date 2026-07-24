@@ -16,6 +16,8 @@ import chatRoutes from "./routes/chat.routes.js";
 
 import googleRoutes from "./routes/google.routes.js";
 
+import paymentRoutes from "./routes/payment.routes.js";
+
 import errorHandler from "./middleware/error.middleware.js";
 
 const app = express();
@@ -45,6 +47,8 @@ app.use("/api/notifications",notificationRoutes);
 app.use("/api/team-chat",chatRoutes);
 
 app.use("/api/auth/google",googleRoutes);
+
+app.use("/api/payments",paymentRoutes);
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);

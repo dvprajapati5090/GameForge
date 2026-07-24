@@ -22,6 +22,65 @@ export default function StepPrizeRules({
 
         <div className="space-y-6">
 
+            <div className="space-y-6">
+
+                <label className="flex items-center gap-3">
+
+                    <input
+                        type="checkbox"
+                        checked={form.isPaid}
+                        onChange={(e)=>
+
+                            setForm({
+                                ...form,
+                                isPaid: e.target.checked
+                            })
+
+                        }
+                    />
+
+                    Paid Tournament
+
+                </label>
+
+                {
+
+                    form.isPaid && (
+
+                        <div>
+
+                            <label className="block mb-2">
+
+                                Entry Fee (₹)
+
+                            </label>
+
+                            <input
+                                type="number"
+                                min="1"
+                                value={form.entryFee}
+                                onChange={(e)=>
+
+                                    setForm({
+
+                                        ...form,
+
+                                        entryFee:Number(e.target.value)
+
+                                    })
+
+                                }
+                                className="input"
+                            />
+
+                        </div>
+
+                    )
+
+                }
+
+            </div>
+
             <input
                 type="number"
                 placeholder="Prize Pool"

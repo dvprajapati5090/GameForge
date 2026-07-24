@@ -16,6 +16,28 @@ export default function StepReview({
 
         <div className="space-y-6">
 
+            <div>
+
+                <strong>Paid Tournament:</strong>
+
+                {form.isPaid ? " Yes" : " No"}
+
+            </div>
+
+            {
+                form.isPaid && (
+
+                    <div>
+
+                        <strong>Entry Fee:</strong>
+
+                        ₹{form.entryFee}
+
+                    </div>
+
+                )
+            }
+
             <pre
                 className="
                     bg-white/5
