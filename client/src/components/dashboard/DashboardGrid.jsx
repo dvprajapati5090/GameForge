@@ -7,9 +7,26 @@ export default function DashboardGrid() {
 
     return (
 
-        <div className="mt-8 space-y-8">
+        <section
+            className="
+                mt-10
+                flex
+                flex-col
+                gap-8
+            "
+        >
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            {/* Top Row */}
+
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    gap-8
+
+                    xl:grid-cols-2
+                "
+            >
 
                 <TournamentWidget />
 
@@ -17,7 +34,17 @@ export default function DashboardGrid() {
 
             </div>
 
-            <div className="grid lg:grid-cols-[2fr_1fr] gap-8">
+            {/* Bottom Row */}
+
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    gap-8
+
+                    xl:grid-cols-[1.8fr_1fr]
+                "
+            >
 
                 <AnalyticsChart />
 
@@ -25,7 +52,7 @@ export default function DashboardGrid() {
 
             </div>
 
-        </div>
+        </section>
 
     );
 
