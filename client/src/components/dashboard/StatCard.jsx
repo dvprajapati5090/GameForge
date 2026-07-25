@@ -7,47 +7,136 @@ export default function StatCard({
     color
 }) {
     return (
+
         <motion.div
             whileHover={{
-                y: -6,
-                scale: 1.03
+                y: -4,
+                scale: 1.015
             }}
             transition={{
                 duration: 0.25
             }}
             className="
-                rounded-2xl
+                group
+                relative
+                overflow-hidden
+
+                rounded-3xl
+
                 border
-                border-white/10
-                bg-white/5
-                backdrop-blur-xl
-                p-6
-                shadow-lg
-                hover:shadow-cyan-500/20
+                border-white/5
+
+                bg-[#141B2D]/90
+
+                backdrop-blur-2xl
+
+                p-5
+
                 transition-all
+                duration-300
+
+                hover:border-violet-500/20
+                hover:shadow-[0_12px_32px_rgba(139,92,246,0.12)]
             "
         >
-            <div className="flex justify-between items-center">
 
-                <div>
+            {/* Ambient Glow */}
 
-                    <p className="text-gray-400 text-sm">
+            <div
+                className="
+                    absolute
+                    -top-16
+                    -right-16
+
+                    h-40
+                    w-40
+
+                    rounded-full
+
+                    bg-violet-500/8
+
+                    blur-[90px]
+
+                    opacity-0
+
+                    transition-all
+                    duration-500
+
+                    group-hover:opacity-100
+                "
+            />
+
+            <div className="relative z-10 flex items-center justify-between">
+
+                <div className="flex-1">
+
+                    <p
+                        className="
+                            text-sm
+                            font-semibold
+
+                            tracking-wide
+
+                            text-slate-400
+                        "
+                    >
                         {title}
                     </p>
 
-                    <h2 className="text-3xl font-bold mt-2 text-white">
+                    <h2
+                        className="
+                            mt-2
+
+                            text-[2.2rem]
+                            leading-none
+
+                            font-black
+
+                            tracking-tight
+
+                            text-white
+                        "
+                    >
                         {value}
                     </h2>
 
                 </div>
 
                 <div
-                    className={`text-4xl ${color}`}
+                    className="
+                        flex
+                        h-12
+                        w-12
+
+                        items-center
+                        justify-center
+
+                        rounded-2xl
+
+                        border
+                        border-white/5
+
+                        bg-white/5
+
+                        transition-all
+                        duration-300
+
+                        group-hover:bg-violet-500/10
+                        group-hover:scale-105
+                    "
                 >
-                    {icon}
+
+                    <div className={`${color} text-xl`}>
+
+                        {icon}
+
+                    </div>
+
                 </div>
 
             </div>
+
         </motion.div>
+
     );
 }
