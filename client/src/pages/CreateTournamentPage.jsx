@@ -33,11 +33,7 @@ export default function CreateTournamentPage() {
 
         prizePool: 0,
 
-        rules: "",
-
-        isPaid: false,
-
-        entryFee: 0
+        rules: ""
 
     });
 

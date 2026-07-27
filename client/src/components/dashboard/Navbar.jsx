@@ -7,10 +7,6 @@ export default function Navbar() {
   return (
     <header
       className="
-
-                relative
-                z-[1000]
-                
                 h-20
 
                 flex

@@ -4,169 +4,175 @@ import StatusBadge from "./StatusBadge";
 import {
     Calendar,
     Trophy,
-    Users
+    Users,
+    ArrowRight,
+    Swords,
 } from "lucide-react";
 
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-export default function HostTournamentCard({
-
-    tournament
-
-}) {
-
+export default function HostTournamentCard({ tournament }) {
     const navigate = useNavigate();
 
     return (
-
-        <div
+        <motion.div
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
             className="
-                rounded-3xl
-                bg-slate-900
+                group
+                relative
+                overflow-hidden
+                rounded-[30px]
                 border
-                border-white/10
-                p-6
-                hover:border-cyan-500
-                transition
+                border-violet-500/20
+                bg-white/5
+                backdrop-blur-2xl
+                shadow-[0_0_35px_rgba(124,58,237,0.12)]
             "
         >
-
-            <div className="relative h-48 overflow-hidden rounded-t-2xl">
-                {tournament.banner ? (
-                    <img
-                        src={tournament.banner}
-                        alt={tournament.name}
-                        className="h-full w-full object-cover"
-                    />
-                ) : (
-                    <div className="h-full w-full bg-gradient-to-r from-cyan-600 via-blue-700 to-purple-700" />
-                )}
-
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
-
-                <div className="absolute bottom-4 left-4">
-                    <h2 className="text-2xl font-bold text-white">
-                        {tournament.name}
-                    </h2>
-                </div>
-            </div>
-
-            <div className="flex justify-between">
-
-                <h2 className="text-2xl font-black">
-
-                    {tournament.name}
-
-                </h2>
-
-                <StatusBadge
-                    status={tournament.status}
-                />
-
-            </div>
-
-            <p className="mt-3 text-gray-400">
-
-                {tournament.description}
-
-            </p>
-
-            <div className="mt-6">
-
-                <RegistrationProgress
-
-                    registered={tournament.registrationCount}
-
-                    maxTeams={
-                        tournament.maxTeams
-                    }
-
-                />
-
-            </div>
-
-            <div className="grid grid-cols-3 gap-4 mt-8">
-
-                <Info
-
-                    icon={<Users size={18}/>}
-
-                    value={`${tournament.maxTeams} Teams`}
-
-                />
-
-                <Info
-
-                    icon={<Trophy size={18}/>}
-
-                    value={`₹${tournament.prizePool}`}
-
-                />
-
-                <Info
-
-                    icon={<Calendar size={18}/>}
-
-                    value={
-                        new Date(tournament.tournamentStart)
-                            .toLocaleDateString()
-                    }
-
-                />
-
-            </div>
-
-            <button
-
-                onClick={() => {
-                    navigate(`/host/tournaments/${tournament._id}`);
-                }}
-
+            <div
                 className="
-                    mt-8
-                    w-full
-                    rounded-xl
-                    py-3
-                    bg-gradient-to-r
-                    from-cyan-500
-                    to-purple-600
-                    font-bold
+                    absolute
+                    inset-0
+                    bg-gradient-to-br
+                    from-violet-600/10
+                    via-transparent
+                    to-fuchsia-600/10
                 "
+            />
 
-            >
+            <div
+                className="
+                    absolute
+                    -right-24
+                    -top-24
+                    h-64
+                    w-64
+                    rounded-full
+                    bg-violet-600/15
+                    blur-[120px]
+                "
+            />
 
-                Manage Tournament
+            <div className="relative z-10 p-7">
+                <div className="flex items-start justify-between gap-5">
+                    <div className="flex items-start gap-5">
+                        <div
+                            className="
+                                flex
+                                h-16
+                                w-16
+                                items-center
+                                justify-center
+                                rounded-2xl
+                                bg-gradient-to-br
+                                from-violet-500
+                                to-fuchsia-500
+                                text-white
+                            "
+                        >
+                            <Swords size={28} />
+                        </div>
 
-            </button>
+                        <div>
+                            <h2 className="text-3xl font-black text-white">
+                                {tournament.name}
+                            </h2>
 
-        </div>
+                            <p className="mt-3 max-w-2xl text-gray-400">
+                                {tournament.description}
+                            </p>
+                        </div>
+                    </div>
 
+                    <StatusBadge status={tournament.status} />
+                </div>
+
+                <div className="mt-7">
+                    <RegistrationProgress
+                        registered={tournament.registrationCount}
+                        maxTeams={tournament.maxTeams}
+                    />
+                </div>
+
+                <div className="mt-8 grid gap-4 md:grid-cols-3">
+                    <Info
+                        icon={<Users size={18} />}
+                        title="Teams"
+                        value={`${tournament.maxTeams} Teams`}
+                    />
+
+                    <Info
+                        icon={<Trophy size={18} />}
+                        title="Prize Pool"
+                        value={`₹${Number(
+                            tournament.prizePool || 0
+                        ).toLocaleString("en-IN")}`}
+                    />
+
+                    <Info
+                        icon={<Calendar size={18} />}
+                        title="Start Date"
+                        value={new Date(
+                            tournament.tournamentStart
+                        ).toLocaleDateString("en-IN")}
+                    />
+                </div>
+
+                <button
+                    onClick={() =>
+                        navigate(`/host/tournaments/${tournament._id}`)
+                    }
+                    className="
+                        mt-8
+                        flex
+                        w-full
+                        items-center
+                        justify-center
+                        gap-3
+                        rounded-2xl
+                        bg-gradient-to-r
+                        from-violet-600
+                        to-fuchsia-600
+                        py-4
+                        font-semibold
+                        text-white
+                        transition-all
+                        duration-300
+                        hover:scale-[1.01]
+                        hover:shadow-[0_0_30px_rgba(124,58,237,0.35)]
+                    "
+                >
+                    Manage Tournament
+                    <ArrowRight size={18} />
+                </button>
+            </div>
+        </motion.div>
     );
-
 }
 
-function Info({
-
-    icon,
-
-    value
-
-}) {
-
+function Info({ icon, title, value }) {
     return (
+        <div
+            className="
+                rounded-2xl
+                border
+                border-white/10
+                bg-white/5
+                p-5
+            "
+        >
+            <div className="flex items-center gap-2 text-violet-300">
+                {icon}
+                <span className="text-xs font-medium uppercase tracking-wide">
+                    {title}
+                </span>
+            </div>
 
-        <div className="flex items-center gap-2">
-
-            {icon}
-
-            <span className="text-sm">
-
+            <div className="mt-3 text-base font-bold text-white">
                 {value}
-
-            </span>
-
+            </div>
         </div>
-
     );
-
 }
