@@ -1,60 +1,56 @@
-import useAuthStore from "../../store/authStore";
 import { motion } from "framer-motion";
+import useAuthStore from "../../store/authStore";
 
 export default function ProfileAvatar({ player }) {
-
     const profile = player;
 
-    const banner =
-        profile?.riotCard
-            ? `https://media.valorant-api.com/playercards/${profile.riotCard}/largeart.png`
-            : null;
+    const banner = profile?.riotCard
+        ? `https://media.valorant-api.com/playercards/${profile.riotCard}/largeart.png`
+        : null;
 
     return (
-
         <div
             className="
                 relative
-                h-80
-                rounded-3xl
+                h-[360px]
                 overflow-hidden
+                rounded-[32px]
                 border
                 border-white/10
+                bg-[#0B0F17]
+                shadow-[0_18px_50px_rgba(0,0,0,0.45)]
             "
         >
-
             {/* Banner */}
 
-            {
-                banner ? (
-
-                    <img
-                        src={banner}
-                        alt="Player Card"
-                        className="
-                            absolute
-                            inset-0
-                            w-full
-                            h-full
-                            object-cover object-top
-                        "
-                    />
-
-                ) : (
-
-                    <div
-                        className="
-                            absolute
-                            inset-0
-                            bg-gradient-to-br
-                            from-slate-900
-                            via-purple-900
-                            to-cyan-900
-                        "
-                    />
-
-                )
-            }
+            {banner ? (
+                <motion.img
+                    initial={{ scale: 1.03 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 8 }}
+                    src={banner}
+                    alt="Player Card"
+                    className="
+                        absolute
+                        inset-0
+                        h-full
+                        w-full
+                        object-cover
+                        object-top
+                    "
+                />
+            ) : (
+                <div
+                    className="
+                        absolute
+                        inset-0
+                        bg-gradient-to-br
+                        from-[#151926]
+                        via-[#101522]
+                        to-[#0B0F17]
+                    "
+                />
+            )}
 
             {/* Dark Overlay */}
 
@@ -63,213 +59,218 @@ export default function ProfileAvatar({ player }) {
                     absolute
                     inset-0
                     bg-gradient-to-b
-                    from-black/20
-                    via-slate-900/35
-                    to-slate-950
+                    from-black/10
+                    via-black/35
+                    to-[#090B12]/95
                 "
             />
 
-            {/* Blur Glow */}
+            {/* Ambient Glow */}
 
             <div
                 className="
                     absolute
-                    -top-20
-                    -left-20
+                    -top-24
+                    left-1/2
+                    h-72
                     w-72
-                    h-56
+                    -translate-x-1/2
                     rounded-full
-                    bg-cyan-500/20
-                    blur-3xl
-                    animate-pulse
+                    bg-violet-500/10
+                    blur-[120px]
                 "
             />
+
+            {/* Soft Border */}
 
             <div
                 className="
                     absolute
-                    -bottom-20
-                    -right-20
-                    w-72
-                    h-56
-                    bg-purple-600/20
-                    rounded-full
-                    blur-3xl
+                    inset-0
+                    rounded-[32px]
+                    border
+                    border-white/5
                 "
             />
 
             {/* Avatar */}
 
             <motion.div
-
                 initial={{
-                    scale: 0.8,
-                    opacity: 0
+                    opacity: 0,
+                    scale: 0.92,
+                    y: 20,
                 }}
-
                 animate={{
-                    scale: 1,
                     opacity: 1,
-                    y:[0,-8,0]
+                    scale: 1,
+                    y: [0, -4, 0],
                 }}
-
                 transition={{
-                    delay: 0.2,
                     duration: 0.5,
-                    y:{
-
-                        duration:5,
-
-                        repeat:Infinity,
-
-                        ease:"easeInOut"
-
-                    }
+                    y: {
+                        duration: 8,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                    },
                 }}
-
                 className="
                     absolute
                     left-1/2
-                    bottom-6
-                    -translate-x-1/2
+                    bottom-8
                     z-30
+                    -translate-x-1/2
                 "
             >
+                {/* Outer Glow */}
 
                 <div
-
                     className="
                         absolute
-                        inset-0
+                        inset-[-10px]
                         rounded-full
-                        animate-[spin_12s_linear_infinite]
-                        opacity-40
-                        blur-sm
-                        bg-gradient-to-r
-                        from-cyan-400
-                        via-purple-500
-                        to-cyan-400
+                        bg-violet-500/15
+                        blur-2xl
                     "
-
                 />
+
+                {/* Decorative Ring */}
 
                 <div
                     className="
-                        w-48
-                        h-48
+                        absolute
+                        inset-[-6px]
                         rounded-full
-                        bg-gradient-to-r
-                        from-cyan-500
-                        via-blue-500
-                        to-purple-600
-                        p-1.5
-                        shadow-[0_0_45px_rgba(6,182,212,0.45)]
+                        border
+                        border-violet-400/15
+                    "
+                />
+
+                {/* Avatar Frame */}
+
+                <div
+                    className="
+                        relative
+                        h-52
+                        w-52
+                        rounded-full
+                        bg-gradient-to-br
+                        from-violet-500
+                        via-violet-600
+                        to-indigo-600
+                        p-[4px]
                     "
                 >
+                    <div
+                        className="
+                            relative
+                            h-full
+                            w-full
+                            overflow-hidden
+                            rounded-full
+                            border
+                            border-white/10
+                            bg-[#0B0F17]
+                        "
+                    >
+                        {profile?.riotCard ? (
+                            <motion.img
+                                initial={{ scale: 1.05 }}
+                                animate={{ scale: 1 }}
+                                transition={{ duration: 6 }}
+                                src={`https://media.valorant-api.com/playercards/${profile.riotCard}/displayicon.png`}
+                                alt="Player Card"
+                                className="
+                                    h-full
+                                    w-full
+                                    object-cover
+                                "
+                            />
+                        ) : (
+                            <div
+                                className="
+                                    flex
+                                    h-full
+                                    w-full
+                                    items-center
+                                    justify-center
+                                    text-6xl
+                                    font-black
+                                    text-white
+                                "
+                            >
+                                {profile?.displayName
+                                    ?.charAt(0)
+                                    ?.toUpperCase()}
+                            </div>
+                        )}
+
+                        <div
+                            className="
+                                absolute
+                                inset-0
+                                bg-gradient-to-b
+                                from-transparent
+                                via-transparent
+                                to-black/25
+                            "
+                        />
+                    </div>
+
+                    {/* Online Indicator */}
 
                     <div
                         className="
-                            w-full
-                            h-full
+                            absolute
+                            bottom-4
+                            right-4
+                            flex
+                            h-6
+                            w-6
+                            items-center
+                            justify-center
                             rounded-full
-                            overflow-hidden
-                            bg-slate-900
+                            border-2
+                            border-[#0B0F17]
+                            bg-emerald-400
+                            shadow-[0_0_14px_rgba(74,222,128,0.6)]
                         "
                     >
-
-                        {
-                            profile?.riotCard ? (
-
-                                <motion.img
-                                    initial={{
-                                        scale:1.08
-                                    }}
-
-                                    animate={{
-                                        scale:1
-                                    }}
-
-                                    transition={{
-                                        duration:8
-                                    }}
-                                    src={`https://media.valorant-api.com/playercards/${profile.riotCard}/displayicon.png`}
-                                    alt="Player Card"
-                                    className="
-                                        w-full
-                                        h-full
-                                        object-cover
-                                    "
-                                />
-
-                            ) : (
-
-                                <div
-                                    className="
-                                        w-full
-                                        h-full
-                                        flex
-                                        items-center
-                                        justify-center
-                                        text-5xl
-                                        font-black
-                                    "
-                                >
-                                    {profile?.displayName?.charAt(0)?.toUpperCase()}
-                                </div>
-
-                            )
-                        }
-
-                        <div
-                            className="
-                                absolute
-                                -bottom-4
-                                left-1/2
-                                -translate-x-1/2
-                                px-4
-                                py-1.5
-                                rounded-full
-                                bg-gradient-to-r
-                                from-yellow-500
-                                to-amber-400
-                                text-slate-900
-                                text-sm
-                                font-black
-                                shadow-lg
-                                border
-                                border-yellow-300
-                            "
-                        >
-
-                            LV {profile?.accountLevel ?? 1}
-
-                        </div>
-
-                        <div
-                            className="
-                                absolute
-                                bottom-2
-                                right-2
-                                w-6
-                                h-6
-                                rounded-full
-                                bg-emerald-400
-                                border-[5px]
-                                border-slate-900
-                                shadow-[0_0_18px_rgba(16,185,129,0.8)]
-                            "
-                        />
-
+                        <div className="h-2 w-2 rounded-full bg-white" />
                     </div>
-
                 </div>
+                                {/* Level Badge */}
 
-                
-
+                <motion.div
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ duration: 0.2 }}
+                    className="
+                        absolute
+                        -bottom-5
+                        left-1/2
+                        -translate-x-1/2
+                        rounded-full
+                        border
+                        border-white/10
+                        bg-[#111827]/90
+                        px-6
+                        py-2
+                        backdrop-blur-xl
+                        shadow-lg
+                    "
+                >
+                    <span
+                        className="
+                            text-sm
+                            font-semibold
+                            tracking-[0.22em]
+                            text-violet-200
+                        "
+                    >
+                        LEVEL {profile?.accountLevel ?? 1}
+                    </span>
+                </motion.div>
             </motion.div>
-
         </div>
-
     );
-
 }

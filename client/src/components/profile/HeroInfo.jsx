@@ -1,150 +1,220 @@
-import { CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
-import useAuthStore from "../../store/authStore";
+import { CheckCircle2, Sparkles } from "lucide-react";
 
+import useAuthStore from "../../store/authStore";
 import RiotIdentityCard from "./RiotIdentityCard";
 
 export default function HeroInfo({ player }) {
-
     const profile = player;
 
     const getRankColor = () => {
-
         if (!profile?.currentRank)
-            return "from-slate-600 to-slate-700";
+            return "from-slate-700 via-slate-600 to-slate-700";
 
         if (profile.currentRank.includes("IRON"))
-            return "from-gray-600 to-gray-400";
+            return "from-gray-700 to-gray-500";
 
         if (profile.currentRank.includes("BRONZE"))
-            return "from-amber-700 to-amber-500";
+            return "from-amber-700 to-orange-500";
 
         if (profile.currentRank.includes("SILVER"))
             return "from-gray-300 to-slate-100";
 
         if (profile.currentRank.includes("GOLD"))
-            return "from-yellow-500 to-yellow-300";
+            return "from-yellow-500 to-amber-300";
 
         if (profile.currentRank.includes("PLATINUM"))
-            return "from-cyan-500 to-blue-500";
+            return "from-cyan-500 to-sky-500";
 
         if (profile.currentRank.includes("DIAMOND"))
-            return "from-indigo-500 to-purple-500";
+            return "from-indigo-500 to-violet-500";
 
         if (profile.currentRank.includes("ASCENDANT"))
-            return "from-green-500 to-emerald-400";
+            return "from-emerald-500 to-green-400";
 
         if (profile.currentRank.includes("IMMORTAL"))
-            return "from-pink-600 to-red-500";
+            return "from-pink-600 to-rose-500";
 
         if (profile.currentRank.includes("RADIANT"))
             return "from-red-500 to-yellow-400";
 
-        return "from-cyan-500 to-purple-600";
+        return "from-violet-500 to-fuchsia-500";
     };
 
     return (
-
         <div className="text-center">
+            <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45 }}
+                className="space-y-5"
+            >
+                <div className="flex justify-center">
+                    <motion.div
+                        whileHover={{ scale: 1.03 }}
+                        className="
+                            flex
+                            items-center
+                            gap-2
+                            rounded-full
+                            border
+                            border-white/10
+                            bg-white/[0.04]
+                            px-5
+                            py-2
+                            backdrop-blur-xl
+                            transition-colors
+                            hover:border-violet-500/20
+                        "
+                    >
+                        <Sparkles
+                            size={14}
+                            className="text-violet-400"
+                        />
 
-            <div className="space-y-1">
-
-                <p
-                    className="
-                        uppercase
-                        tracking-[8px]
-                        text-cyan-400
-                        text-sm
-                        font-semibold
-                    "
-                >
-                    GAMEFORGE PLAYER
-                </p>
+                        <span
+                            className="
+                                text-[11px]
+                                font-semibold
+                                uppercase
+                                tracking-[0.35em]
+                                text-slate-300
+                            "
+                        >
+                            GameForge Player
+                        </span>
+                    </motion.div>
+                </div>
 
                 <h1
                     className="
-                        text-6xl
+                        text-5xl
                         font-black
-                        bg-gradient-to-r
-                        from-white
-                        via-cyan-200
-                        to-purple-300
-                        bg-clip-text
-                        text-transparent
+                        tracking-tight
+                        text-white
+                        md:text-6xl
                     "
                 >
-
                     {profile?.displayName}
-
                 </h1>
 
+                <p
+                    className="
+                        text-sm
+                        tracking-[0.35em]
+                        uppercase
+                        text-slate-400
+                    "
+                >
+                    Valorant Profile
+                </p>
+            </motion.div>
+
+            <div className="mt-8">
+                <RiotIdentityCard player={profile} />
             </div>
 
-            <RiotIdentityCard player={profile} />
-
-            <div className="flex justify-center gap-5 flex-wrap mt-5">
-
+            <div
+                className="
+                    mt-8
+                    flex
+                    flex-wrap
+                    justify-center
+                    gap-4
+                "
+            >
                 <motion.div
                     whileHover={{
-                        scale: 1.05,
-                        rotate: -1
+                        y: -2,
+                        scale: 1.02,
+                    }}
+                    transition={{
+                        duration: 0.2,
                     }}
                     className={`
                         relative
                         overflow-hidden
-                        px-7
-                        py-3
                         rounded-full
-                        font-bold
                         bg-gradient-to-r
                         ${getRankColor()}
+                        px-7
+                        py-3
                         shadow-lg
                     `}
                 >
+                    <div
+                        className="
+                            relative
+                            flex
+                            items-center
+                            gap-3
+                            font-semibold
+                            tracking-wide
+                            text-white
+                        "
+                    >
+                        <span className="text-lg">
+                            🏆
+                        </span>
 
+                        <span>
+                            {profile?.currentRank || "UNRANKED"}
+                        </span>
+                    </div>
+                </motion.div>
+                                <motion.div
+                    whileHover={{
+                        y: -2,
+                        scale: 1.02,
+                    }}
+                    transition={{
+                        duration: 0.2,
+                    }}
+                    className="
+                        relative
+                        overflow-hidden
+                        rounded-full
+                        border
+                        border-white/10
+                        bg-white/[0.04]
+                        px-7
+                        py-3
+                        backdrop-blur-xl
+                        shadow-lg
+                    "
+                >
                     <div
                         className="
                             absolute
                             inset-0
-                            bg-white/10
-                            opacity-0
-                            hover:opacity-100
-                            transition
+                            bg-gradient-to-r
+                            from-violet-500/5
+                            via-transparent
+                            to-violet-500/5
                         "
                     />
 
-                    <span className="relative z-10 flex items-center gap-2">
+                    <div
+                        className="
+                            relative
+                            flex
+                            items-center
+                            gap-3
+                            font-semibold
+                            text-slate-200
+                        "
+                    >
+                        <CheckCircle2
+                            size={18}
+                            className="text-violet-400"
+                        />
 
-                        🏆
-
-                        {profile?.currentRank || "UNRANKED"}
-
-                    </span>
-
+                        <span className="tracking-wide">
+                            {profile?.rankRating ?? 0} RR
+                        </span>
+                    </div>
                 </motion.div>
-
-                <div
-                    className="
-                        px-8
-                        py-3
-                        rounded-full
-                        border
-                        border-cyan-500/30
-                        bg-cyan-500/10
-                        text-cyan-300
-                        font-bold
-                        text-lg
-                    "
-                >
-
-                    ⚡ {profile?.rankRating ?? 0} RR
-
-                </div>
-
             </div>
-
         </div>
-
     );
-
 }
