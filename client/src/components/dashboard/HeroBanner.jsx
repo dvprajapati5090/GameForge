@@ -25,6 +25,7 @@ export default function HeroBanner() {
             }}
             className="
                 relative
+                z-0
                 overflow-hidden
                 rounded-3xl
                 border

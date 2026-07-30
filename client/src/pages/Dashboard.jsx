@@ -8,7 +8,9 @@ export default function Dashboard() {
 
         <>
 
-            <HeroBanner />
+            <div className="relative z-0">
+                <HeroBanner />
+            </div>
 
             <div className="mt-8">
 

@@ -8,6 +8,8 @@ import GradientButton from "../ui/GradientButton";
 import useChangePassword from "../../hooks/useChangePassword";
 import toast from "react-hot-toast";
 
+import useAuthStore from "../../store/authStore";
+
 export default function ChangePasswordModal({
 
     open,
@@ -23,6 +25,108 @@ export default function ChangePasswordModal({
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const changePasswordMutation = useChangePassword();
+
+    const user = useAuthStore((state) => state.user);
+
+    const isGoogleOnly =
+
+        user?.authProviders?.includes("GOOGLE") &&
+
+        !user?.authProviders?.includes("LOCAL");
+
+
+    if (!open) return null;
+
+    if (isGoogleOnly) {
+
+        return (
+
+            <AnimatePresence>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={onClose}
+                    className="
+                        fixed
+                        inset-0
+                        z-50
+                        flex
+                        items-center
+                        justify-center
+                        bg-black/60
+                        backdrop-blur-sm
+                    "
+                >
+
+                    <motion.div
+
+                        initial={{
+                            opacity: 0,
+                            scale: 0.9
+                        }}
+
+                        animate={{
+                            opacity: 1,
+                            scale: 1
+                        }}
+
+                        exit={{
+                            opacity: 0,
+                            scale: 0.9
+                        }}
+
+                        onClick={(e) => e.stopPropagation()}
+
+                        className="
+                            w-full
+                            max-w-lg
+                            rounded-3xl
+                            bg-slate-900
+                            border
+                            border-white/10
+                            p-8
+                        "
+
+                    >
+
+                        <h2 className="text-3xl font-bold">
+
+                            Password Managed by Google
+
+                        </h2>
+
+                        <p className="mt-6 text-gray-400 leading-7">
+
+                            This GameForge account uses Google Sign-In.
+
+                            Password changes must be made from your Google Account.
+
+                        </p>
+
+                        <div className="mt-8 flex justify-end">
+
+                            <GradientButton
+                                onClick={onClose}
+                            >
+
+                                Close
+
+                            </GradientButton>
+
+                        </div>
+
+                    </motion.div>
+
+                </motion.div>
+
+            </AnimatePresence>
+
+        );
+
+    }
+
 
     if (!open) return null;
 

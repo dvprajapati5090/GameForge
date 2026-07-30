@@ -91,9 +91,9 @@ export default function StepReview({
 
                     ...(form.role === "PLAYER" && {
 
-                        riotGameName: form.riotGameName,
+                        gameName: form.riotGameName,
 
-                        riotTagLine: form.riotTagLine,
+                        tagLine: form.riotTagLine,
 
                         region: form.region
 

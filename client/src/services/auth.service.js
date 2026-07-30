@@ -84,16 +84,20 @@ export const changePassword = (data) =>
 
     );
 
-export const deleteAccount = (data) =>
+export const deleteAccount = async ({ password }) => {
 
-    api.delete(
+    const { data } = await api.delete(
 
         "/auth/delete-account",
 
         {
-
-            data
-
+            data: {
+                password
+            }
         }
 
-    );    
+    );
+
+    return data;
+
+};

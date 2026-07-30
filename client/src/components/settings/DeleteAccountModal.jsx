@@ -29,16 +29,21 @@ export default function DeleteAccountModal({
 
     const logout = useAuthStore((state) => state.logout);
 
+    const user = useAuthStore((state) => state.user);
+
+    const isGoogleOnly =
+        user?.authProviders?.includes("GOOGLE") &&
+        !user?.authProviders?.includes("LOCAL");
+
+    
+
     if (!open) return null;
 
     function handleDelete() {
 
-        if (!password.trim()) {
-
+        if (!isGoogleOnly && !password.trim()) {
             toast.error("Password is required.");
-
             return;
-
         }
 
         if (confirmation !== "DELETE") {
@@ -53,7 +58,9 @@ export default function DeleteAccountModal({
 
             {
 
-                password
+                password: isGoogleOnly
+                    ? undefined
+                    : password
 
             },
 
@@ -166,14 +173,20 @@ export default function DeleteAccountModal({
 
                     <div className="space-y-6 mb-10">
 
-                        <Input
-                            label="Password"
-                            type="password"
-                            value={password}
-                            onChange={(e) =>
-                                setPassword(e.target.value)
-                            }
-                        />
+                        {
+                            !isGoogleOnly && (
+
+                                <Input
+                                    label="Password"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e)=>
+                                        setPassword(e.target.value)
+                                    }
+                                />
+
+                            )
+                        }
 
                         <Input
                             label='Type "DELETE" to confirm'
@@ -235,6 +248,30 @@ export default function DeleteAccountModal({
                         </button>
 
                     </div>
+
+                    {
+                            isGoogleOnly && (
+
+                                <div
+                                    className="
+                                        rounded-xl
+                                        border
+                                        border-blue-500/20
+                                        bg-blue-500/10
+                                        p-4
+                                        text-sm
+                                        text-blue-300
+                                    "
+                                >
+
+                                    This account uses Google Sign-In.
+
+                                    You don't need to enter a password to delete it.
+
+                                </div>
+
+                            )
+                        }
 
                     <div
                         className="

@@ -464,9 +464,41 @@ export const changePasswordService = async (
 
 ) => {
 
-    const user = await User.findById(userId).select("+password");
+    const user = await User.findById(userId)
+        .select("+password");
 
-    const valid = await user.isPasswordCorrect(currentPassword);
+    if (!user) {
+
+        throw new ApiError(
+            404,
+            "User not found"
+        );
+
+    }
+
+    // Google-only accounts cannot change password
+    if (
+
+        user.authProviders.includes("GOOGLE") &&
+        !user.authProviders.includes("LOCAL")
+
+    ) {
+
+        throw new ApiError(
+
+            400,
+
+            "This account uses Google Sign-In. Password changes are managed through Google."
+
+        );
+
+    }
+
+    const valid = await user.isPasswordCorrect(
+
+        currentPassword
+
+    );
 
     if (!valid) {
 
@@ -510,17 +542,31 @@ export const deleteAccountService = async (
 
     }
 
-    const valid = await user.isPasswordCorrect(password);
+    const requiresPassword =
+        user.authProviders.includes("LOCAL");
 
-    if (!valid) {
+    if (requiresPassword) {
 
-        throw new ApiError(
+        if (!password) {
 
-            400,
+            throw new ApiError(
+                400,
+                "Password is required"
+            );
 
-            "Incorrect password."
+        }
 
-        );
+        const valid =
+            await user.isPasswordCorrect(password);
+
+        if (!valid) {
+
+            throw new ApiError(
+                400,
+                "Incorrect password"
+            );
+
+        }
 
     }
 

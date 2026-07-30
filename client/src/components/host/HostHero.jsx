@@ -16,6 +16,7 @@ export default function HostHero() {
             transition={{ duration: 0.5 }}
             className="
                 relative
+                z-0
                 overflow-hidden
                 rounded-[32px]
                 border
