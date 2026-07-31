@@ -21,8 +21,11 @@ import {
     checkEmailAvailability,
     checkUsernameAvailability,
     changePassword,
-    deleteAccount
+    deleteAccount,
+    verifyEmail
 } from "../controllers/auth.controller.js";
+
+import { sendTestEmail } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
@@ -97,6 +100,16 @@ router.delete(
 
     deleteAccount
 
+);
+
+router.post(
+    "/test-email",
+    sendTestEmail
+);
+
+router.get(
+    "/verify-email/:token",
+    verifyEmail
 );
 
 export default router;

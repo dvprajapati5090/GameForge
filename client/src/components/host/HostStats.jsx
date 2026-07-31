@@ -166,26 +166,30 @@ export default function HostStats() {
                         </h2>
 
                         <div
-                            className="
-                                mt-6
-                                h-1.5
-                                w-full
-                                overflow-hidden
-                                rounded-full
-                                bg-white/5
-                            "
-                        >
-                            <div
-                                className="
-                                    h-full
-                                    w-1/3
-                                    rounded-full
-                                    bg-gradient-to-r
-                                    from-violet-500
-                                    to-fuchsia-500
-                                "
-                            />
-                        </div>
+    className="
+        mt-6
+        h-1.5
+        w-full
+        overflow-hidden
+        rounded-full
+        bg-white/5
+    "
+>
+    {card.value > 0 && (
+        <div
+            style={{
+                width: `${Math.min(card.value * 10, 100)}%`,
+            }}
+            className="
+                h-full
+                rounded-full
+                bg-gradient-to-r
+                from-violet-500
+                to-fuchsia-500
+            "
+        />
+    )}
+</div>
                     </div>
 
                     <div

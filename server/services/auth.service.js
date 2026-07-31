@@ -13,6 +13,12 @@ import {
     getMMRDetails
 } from "./thirdParty/henrik.service.js";
 
+import crypto from "crypto";
+
+import {
+    sendVerificationEmail
+} from "./email.service.js";
+
 export const verifyRiotAccountService = async ({
 
     gameName,
@@ -80,41 +86,25 @@ export const registerUserService = async (userData) => {
     const {
 
         username,
-
         displayName,
-
         email,
-
         password,
-
         role,
-
         gameName,
-
         tagLine,
-
         region,
-
         googleId,
-
         avatar,
-
         authProvider
 
     } = userData;
 
-
-    const provider =
-        authProvider || "LOCAL";
-
+    const provider = authProvider || "LOCAL";
 
     // Check username
     const existingUsername = await User.findOne({
-
         username
-
     });
-
 
     if (existingUsername) {
 
@@ -125,14 +115,10 @@ export const registerUserService = async (userData) => {
 
     }
 
-
     // Check email
     const existingEmail = await User.findOne({
-
         email
-
     });
-
 
     if (existingEmail) {
 
@@ -143,47 +129,30 @@ export const registerUserService = async (userData) => {
 
     }
 
-
-
     let riotData = {};
-
-
 
     // Riot verification only for PLAYER
     if (role === "PLAYER") {
 
+        riotData = await verifyRiotAccountService({
 
-        riotData =
-            await verifyRiotAccountService({
+            gameName,
+            tagLine,
+            region
 
-                gameName,
-
-                tagLine,
-
-                region
-
-            });
-
+        });
 
     }
 
-
-
-
     const userPayload = {
-
 
         username,
 
-
         displayName,
-
 
         email,
 
-
         role,
-
 
         authProviders: [
 
@@ -191,30 +160,25 @@ export const registerUserService = async (userData) => {
 
         ],
 
-
-
         ...(provider === "GOOGLE" && {
 
             googleId,
 
             avatar,
 
-            isVerified:true
+            emailVerified: true
 
         }),
-
-
 
         ...(provider === "LOCAL" && {
 
-            password
+            password,
+
+            emailVerified: false
 
         }),
 
-
-
         ...(role === "PLAYER" && {
-
 
             riotGameName: riotData.gameName,
 
@@ -226,47 +190,46 @@ export const registerUserService = async (userData) => {
 
             riotVerified: riotData.verified,
 
-
             accountLevel: riotData.level,
-
 
             currentRank: riotData.currentRank,
 
-
             rankRating: riotData.rankRating,
-
 
             highestRank: riotData.highestRank,
 
-
             riotCard: riotData.playerCard,
-
 
             riotTitle: riotData.playerTitle,
 
+            syncStatus: "SYNCED",
 
-            syncStatus:"SYNCED",
-
-
-            riotLastSyncedAt:new Date()
-
+            riotLastSyncedAt: new Date()
 
         })
 
     };
 
+    // Create user
+    const user = await User.create(userPayload);
 
+    // LOCAL Registration
+    if (provider === "LOCAL") {
 
-    const user = await User.create(
+        await sendVerificationEmail(user);
 
-        userPayload
+        return {
 
-    );
+            requiresEmailVerification: true,
 
+            message:
+                "Registration successful. Please verify your email."
 
+        };
 
-    // Generate tokens
+    }
 
+    // GOOGLE Registration
     const {
 
         accessToken,
@@ -279,57 +242,52 @@ export const registerUserService = async (userData) => {
 
     );
 
-
-
-    user.refreshToken = refreshToken;
-
-    await user.save();
-
-
-
     const createdUser = await User.findById(
 
         user._id
 
-    )
+    ).select(
 
-    .select(
-
-        "-password -refreshToken"
+        "-password -refreshToken -emailVerificationToken"
 
     );
 
-
-
     return {
 
+        requiresEmailVerification: false,
 
         user: createdUser,
 
-
         accessToken,
-
 
         refreshToken
 
-
     };
-
 
 };
 
 export const loginUserService = async ({ email, password }) => {
 
     // Find user with password
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({
+
+        email
+
+    }).select("+password");
 
     if (!user) {
+
         throw new ApiError(
+
             401,
+
             "Invalid email or password"
+
         );
+
     }
 
+    // Google-only account
     if (
 
         !user.authProviders.includes("LOCAL")
@@ -346,29 +304,72 @@ export const loginUserService = async ({ email, password }) => {
 
     }
 
+    // Email not verified
+    if (!user.emailVerified) {
+
+        throw new ApiError(
+
+            403,
+
+            "Please verify your email before logging in."
+
+        );
+
+    }
+
     // Compare password
-    const isPasswordValid = await user.isPasswordCorrect(password);
+    const isPasswordValid = await user.isPasswordCorrect(
+
+        password
+
+    );
 
     if (!isPasswordValid) {
+
         throw new ApiError(
+
             401,
+
             "Invalid email or password"
+
         );
+
     }
 
     // Generate Tokens
-    const { accessToken, refreshToken } =
-        await generateAccessAndRefreshTokens(user._id);
+    const {
 
-    // Get user without sensitive fields
-    const loggedInUser = await User.findById(user._id)
-        .select("-password -refreshToken");
+        accessToken,
+
+        refreshToken
+
+    } = await generateAccessAndRefreshTokens(
+
+        user._id
+
+    );
+
+    // Remove sensitive fields
+    const loggedInUser = await User.findById(
+
+        user._id
+
+    ).select(
+
+        "-password -refreshToken"
+
+    );
 
     return {
+
         user: loggedInUser,
+
         accessToken,
+
         refreshToken
+
     };
+
 };
 
 export const logoutUserService = async (userId) => {
@@ -390,40 +391,107 @@ export const logoutUserService = async (userId) => {
 export const refreshAccessTokenService = async (refreshToken) => {
 
     if (!refreshToken) {
-        throw new ApiError(401, "Refresh token missing");
+
+        throw new ApiError(
+
+            401,
+
+            "Refresh token missing"
+
+        );
+
     }
 
     let decoded;
 
     try {
+
         decoded = jwt.verify(
+
             refreshToken,
+
             process.env.JWT_REFRESH_SECRET
+
         );
-    } catch {
-        throw new ApiError(401, "Invalid or expired refresh token");
+
     }
 
-    const user = await User.findById(decoded._id);
+    catch (error) {
+
+        if (error.name === "TokenExpiredError") {
+
+            throw new ApiError(
+
+                401,
+
+                "Refresh token expired"
+
+            );
+
+        }
+
+        throw new ApiError(
+
+            401,
+
+            "Invalid refresh token"
+
+        );
+
+    }
+
+    const user = await User.findById(
+        decoded._id
+    );
 
     if (!user) {
-        throw new ApiError(404, "User not found");
+
+        throw new ApiError(
+
+            404,
+
+            "User not found"
+
+        );
+
     }
 
     if (user.refreshToken !== refreshToken) {
-        throw new ApiError(401, "Refresh token is invalid");
+
+        throw new ApiError(
+
+            401,
+
+            "Refresh token mismatch"
+
+        );
+
     }
 
-    const accessToken = user.generateAccessToken();
-    const newRefreshToken = user.generateRefreshToken();
+    const accessToken =
+        user.generateAccessToken();
 
-    user.refreshToken = newRefreshToken;
-    await user.save({ validateBeforeSave: false });
+    const newRefreshToken =
+        user.generateRefreshToken();
+
+    user.refreshToken =
+        newRefreshToken;
+
+    await user.save({
+
+        validateBeforeSave: false
+
+    });
 
     return {
+
         accessToken,
-        refreshToken: newRefreshToken
+
+        refreshToken:
+            newRefreshToken
+
     };
+
 };
 
 export const checkUsernameAvailabilityService = async (username) => {
@@ -513,6 +581,8 @@ export const changePasswordService = async (
     }
 
     user.password = newPassword;
+
+    user.refreshToken = "";
 
     await user.save();
 
@@ -696,4 +766,50 @@ export const deleteAccountService = async (
 
     );
 
+};
+
+export const verifyEmailService = async (token) => {
+
+    if (!token) {
+        throw new ApiError(
+            400,
+            "Verification token is missing"
+        );
+    }
+
+    const hashedToken = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+    const user = await User.findOne({
+
+        emailVerificationToken: hashedToken,
+
+        emailVerificationExpires: {
+            $gt: Date.now()
+        }
+
+    });
+
+    if (!user) {
+
+        throw new ApiError(
+            400,
+            "Verification link is invalid or has expired"
+        );
+
+    }
+
+    user.emailVerified = true;
+
+    user.emailVerificationToken = "";
+
+    user.emailVerificationExpires = null;
+
+    await user.save({
+        validateBeforeSave: false
+    });
+
+    return;
 };

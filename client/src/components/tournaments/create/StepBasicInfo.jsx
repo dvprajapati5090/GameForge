@@ -4,12 +4,12 @@ import Button from "../../ui/Button";
 export default function StepBasicInfo({
 
     form,
-
     setForm,
-
-    next
+    next,
+    canProceed
 
 }) {
+
 
     const update = (field, value) =>
         setForm(prev => ({
@@ -17,61 +17,397 @@ export default function StepBasicInfo({
             [field]: value
         }));
 
+
+
+    const selectClass = `
+        w-full
+        rounded-2xl
+        border
+        border-white/10
+        bg-white/5
+        px-5
+        py-4
+        text-white
+        outline-none
+        backdrop-blur-xl
+        transition-all
+        duration-300
+        hover:border-purple-400/40
+        focus:border-purple-500
+        focus:ring-2
+        focus:ring-purple-500/20
+    `;
+
+
+
+    const labelClass = `
+        text-sm
+        font-semibold
+        text-slate-300
+        mb-2
+        block
+    `;
+
+
+
     return (
 
-        <div className="space-y-6">
+        <div className="space-y-8">
 
-            <Input
-                placeholder="Tournament Name"
-                value={form.name}
-                onChange={e => update("name", e.target.value)}
-            />
 
-            <select
-                value={form.game}
-                onChange={e => update("game", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl p-3"
-            >
-                <option>VALORANT</option>
-                <option>BGMI</option>
-                <option>FREE_FIRE</option>
-            </select>
+            <div>
 
-            <select
-                value={form.mode}
-                onChange={e => update("mode", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl p-3"
-            >
-                <option>SOLO</option>
-                <option>DUO</option>
-                <option>SQUAD</option>
-                <option>5V5</option>
-            </select>
+                <h2 className="
+                    text-2xl
+                    font-bold
+                    text-white
+                ">
+                    Tournament Information
+                </h2>
 
-            <select
-                value={form.format}
-                onChange={e => update("format", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl p-3"
-            >
-                <option>SINGLE_ELIMINATION</option>
-            </select>
 
-            <label className="block space-y-2 text-sm font-medium text-slate-200">
-                <span>Maximum teams</span>
+                <p className="
+                    mt-2
+                    text-sm
+                    text-slate-400
+                ">
+                    Configure the basic details of your esports tournament.
+                </p>
+
+            </div>
+
+
+
+
+            {/* Tournament Name */}
+
+            <div>
+
+                <label className={labelClass}>
+                    Tournament Name
+                    <span className="text-red-400 ml-1">
+                        *
+                    </span>
+                </label>
+
+
+                <Input
+    className="
+        !text-white
+        placeholder:!text-slate-400
+        caret-purple-400
+    "
+    placeholder="Enter tournament name"
+    minLength={8}
+    value={form.name}
+    onChange={(e) =>
+        update("name", e.target.value)
+    }
+/>
+
+{form.name.length > 0 && form.name.length < 8 && (
+    <p className="mt-2 text-sm text-red-400">
+        Tournament name must contain at least 8 characters.
+    </p>
+)}
+
+            </div>
+
+
+
+
+
+
+
+            <div className="
+                grid
+                md:grid-cols-2
+                gap-6
+            ">
+
+
+
+                {/* Game */}
+
+                <div>
+
+                    <label className={labelClass}>
+
+                        Game
+
+                        <span className="text-red-400 ml-1">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <select
+
+                        value={form.game}
+
+                        onChange={e =>
+                            update(
+                                "game",
+                                e.target.value
+                            )
+                        }
+
+                        className={selectClass}
+
+                    >
+
+                        <option className="bg-[#111827]">
+                            VALORANT
+                        </option>
+
+
+                        <option className="bg-[#111827]">
+                            BGMI
+                        </option>
+
+
+                        <option className="bg-[#111827]">
+                            FREE_FIRE
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+
+
+
+
+                {/* Mode */}
+
+                <div>
+
+
+                    <label className={labelClass}>
+
+                        Game Mode
+
+                        <span className="text-red-400 ml-1">
+                            *
+                        </span>
+
+                    </label>
+
+
+
+                    <select
+
+                        value={form.mode}
+
+                        onChange={e =>
+                            update(
+                                "mode",
+                                e.target.value
+                            )
+                        }
+
+                        className={selectClass}
+
+                    >
+
+                        <option className="bg-[#111827]">
+                            SOLO
+                        </option>
+
+
+                        <option className="bg-[#111827]">
+                            DUO
+                        </option>
+
+
+                        <option className="bg-[#111827]">
+                            SQUAD
+                        </option>
+
+
+                        <option className="bg-[#111827]">
+                            5V5
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+            {/* Format */}
+
+            <div>
+
+
+                <label className={labelClass}>
+
+                    Tournament Format
+
+                    <span className="text-red-400 ml-1">
+                        *
+                    </span>
+
+                </label>
+
+
+
+
                 <select
-                    value={form.maxTeams}
-                    onChange={e => update("maxTeams", Number(e.target.value))}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl p-3"
-                >
-                    {[4, 8, 16, 32, 64, 128].map(team => (
-                        <option key={team} value={team}>{team} teams</option>
-                    ))}
-                </select>
-            </label>
 
-            <Button onClick={next}>
-                Continue
-            </Button>
+                    value={form.format}
+
+                    onChange={e =>
+                        update(
+                            "format",
+                            e.target.value
+                        )
+                    }
+
+                    className={selectClass}
+
+                >
+
+                    <option className="bg-[#111827]">
+                        SINGLE_ELIMINATION
+                    </option>
+
+
+                </select>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            {/* Maximum Teams */}
+
+            <div>
+
+
+                <label className={labelClass}>
+
+                    Maximum Teams
+
+                    <span className="text-red-400 ml-1">
+                        *
+                    </span>
+
+                </label>
+
+
+
+                <select
+
+                    value={form.maxTeams}
+
+                    onChange={e =>
+                        update(
+                            "maxTeams",
+                            Number(e.target.value)
+                        )
+                    }
+
+                    className={selectClass}
+
+                >
+
+
+                    {
+                        [4,8,16,32,64,128].map(team => (
+
+                            <option
+
+                                key={team}
+
+                                value={team}
+
+                                className="bg-[#111827]"
+
+                            >
+
+                                {team} teams
+
+                            </option>
+
+                        ))
+                    }
+
+
+                </select>
+
+
+            </div>
+
+
+
+
+
+
+
+
+            {/* Button */}
+
+            <div className="
+                flex
+                justify-end
+                pt-4
+            ">
+
+
+                <Button
+
+                    onClick={next}
+
+                    disabled={!canProceed || form.name.trim().length < 8}
+
+                    className={
+
+                        canProceed && form.name.trim().length >= 8
+
+                        ?
+
+                        `
+                        shadow-[0_0_35px_rgba(168,85,247,0.7)]
+                        hover:shadow-[0_0_50px_rgba(168,85,247,0.9)]
+                        `
+
+                        :
+
+                        ""
+
+                    }
+
+                >
+
+                    Continue →
+
+                </Button>
+
+
+            </div>
+
 
         </div>
 

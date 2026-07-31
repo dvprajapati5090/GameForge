@@ -8,8 +8,10 @@ import useAuthStore from "../store/authStore";
 export default function useRegister() {
 
     const {
+
         setUser,
         setAccessToken
+
     } = useAuthStore();
 
     return useMutation({
@@ -17,18 +19,35 @@ export default function useRegister() {
         mutationFn: (data) => {
 
             if (data.googleId) {
+
                 return completeGoogleProfile(data);
+
             }
 
             return register(data);
 
         },
 
-        onSuccess: ({ data }) => {
+        onSuccess: (response) => {
 
-            setUser(data.user);
+            // Only Google registration logs the user in
+            if (response.data) {
 
-            setAccessToken(data.accessToken);
+                const {
+
+                    user,
+                    accessToken
+
+                } = response.data;
+
+                setUser(user);
+
+                setAccessToken(accessToken);
+
+            }
+
+            // Do NOT navigate here.
+            // StepReview will decide what to do.
 
         }
 

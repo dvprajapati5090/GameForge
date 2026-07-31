@@ -5,7 +5,6 @@ import PlayersSearch from "../components/players/PlayersSearch";
 import PlayerGrid from "../components/players/PlayerGrid";
 
 import usePlayers from "../hooks/usePlayers";
-
 import useAuthStore from "../store/authStore";
 
 export default function PlayersPage() {
@@ -16,52 +15,123 @@ export default function PlayersPage() {
 
     const user = useAuthStore((state) => state.user);
 
+
     const players =
         (data?.data || []).filter(
             (player) => player.username !== user?.username
         );
 
-    const filteredPlayers = players.filter((player) =>
 
-        player.displayName
-            .toLowerCase()
-            .includes(search.toLowerCase())
+    const filteredPlayers = players.filter((player) => {
 
-        ||
+        const searchText = search.toLowerCase();
 
-        player.riotGameName
-            .toLowerCase()
-            .includes(search.toLowerCase())
+        return (
 
-        ||
+            player.displayName
+                ?.toLowerCase()
+                .includes(searchText)
 
-        player.username
-            .toLowerCase()
-            .includes(search.toLowerCase())
+            ||
 
-    );
+            player.riotGameName
+                ?.toLowerCase()
+                .includes(searchText)
+
+            ||
+
+            player.username
+                ?.toLowerCase()
+                .includes(searchText)
+
+        );
+
+    });
+
 
     return (
 
-        <div className="space-y-8">
+        <div
+    className="
+        relative
+        min-h-screen
+        overflow-hidden
+        bg-[#090b24]
+        bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)]
+        bg-[size:32px_32px]
+    "
+>
 
-            <PlayersHeader />
+            {/* Background glow */}
 
-            <PlayersSearch
+            <div className="
+                absolute
+                -top-40
+                -left-40
+                w-96
+                h-96
+                bg-purple-600/20
+                rounded-full
+                blur-3xl
+            " />
 
-                value={search}
 
-                onChange={setSearch}
+            <div className="
+                absolute
+                bottom-0
+                right-0
+                w-96
+                h-96
+                bg-blue-600/10
+                rounded-full
+                blur-3xl
+            " />
 
-            />
 
-            <PlayerGrid
+            <div className="
+                relative
+                space-y-8
+                p-6
+                md:p-8
+            ">
 
-                players={filteredPlayers}
 
-                loading={isLoading}
+                <PlayersHeader />
 
-            />
+
+                <div className="
+                    bg-white/5
+                    backdrop-blur-xl
+                    border
+                    border-white/10
+                    rounded-2xl
+                    p-5
+                    shadow-xl
+                ">
+
+                    <PlayersSearch
+
+                        value={search}
+
+                        onChange={setSearch}
+
+                    />
+
+                </div>
+
+
+
+                <PlayerGrid
+
+                    players={filteredPlayers}
+
+                    loading={isLoading}
+
+                />
+
+
+            </div>
+
 
         </div>
 

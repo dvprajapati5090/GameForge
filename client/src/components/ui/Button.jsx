@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 
 export default function Button({
 
@@ -18,29 +19,55 @@ export default function Button({
 
 }) {
 
+
     const variants = {
 
         primary:
-            "bg-gradient-to-r from-cyan-500 to-purple-600 text-white hover:brightness-110",
+        `
+        bg-gradient-to-r
+        from-cyan-500
+        to-purple-600
+        text-white
+
+        shadow-lg
+        shadow-purple-500/30
+
+        hover:shadow-purple-500/70
+        hover:brightness-110
+        `,
+
 
         secondary:
-            "bg-white/10 border border-white/10 hover:bg-white/20",
+        `
+        bg-white/10
+        border
+        border-white/10
+        text-white
+
+        hover:bg-white/20
+        `,
+
 
         danger:
-            "bg-red-500 hover:bg-red-400 text-white"
+        `
+        bg-red-500
+        text-white
+        hover:bg-red-400
+        `
 
     };
+
 
     return (
 
         <motion.button
 
             whileHover={{
-                scale: disabled ? 1 : 1.02
+                scale: disabled ? 1 : 1.04
             }}
 
             whileTap={{
-                scale: disabled ? 1 : 0.98
+                scale: disabled ? 1 : 0.96
             }}
 
             type={type}
@@ -49,13 +76,26 @@ export default function Button({
 
             className={`
                 h-12
-                px-6
+                px-7
                 rounded-2xl
+
+                flex
+                items-center
+                justify-center
+                gap-2
+
                 font-semibold
+
                 transition-all
-                disabled:opacity-50
+                duration-300
+
+                cursor-pointer
+
+                disabled:opacity-40
                 disabled:cursor-not-allowed
+
                 ${variants[variant]}
+
                 ${className}
             `}
 
@@ -64,14 +104,19 @@ export default function Button({
         >
 
             {
-
                 loading
-
-                    ? "Loading..."
-
-                    : children
-
+                ?
+                <>
+                    <Loader2
+                        size={18}
+                        className="animate-spin"
+                    />
+                    Loading...
+                </>
+                :
+                children
             }
+
 
         </motion.button>
 

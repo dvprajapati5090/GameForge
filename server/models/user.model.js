@@ -3,6 +3,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+
 
 //2. Schema
 const userSchema = new mongoose.Schema(
@@ -225,6 +227,16 @@ const userSchema = new mongoose.Schema(
             default: false
         },
 
+        emailVerificationToken: {
+            type: String,
+            default: ""
+        },
+
+        emailVerificationExpires: {
+            type: Date,
+            default: null
+        },
+
         refreshToken: {
             type: String,
             default: ""
@@ -320,6 +332,7 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 
 // Generate Access Token
 userSchema.methods.generateAccessToken = function () {
+    
     return jwt.sign(
         {
             _id: this._id,
@@ -334,6 +347,7 @@ userSchema.methods.generateAccessToken = function () {
 
 // Generate Refresh Token
 userSchema.methods.generateRefreshToken = function () {
+
     return jwt.sign(
         {
             _id: this._id,

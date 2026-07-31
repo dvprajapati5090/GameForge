@@ -10,97 +10,432 @@ export default function StepReview({
 
 }) {
 
+
     const mutation = useCreateTournament();
+
+
+
+    const validateBeforeCreate = () => {
+
+
+        if(!form.name.trim()){
+
+            alert("Tournament name is missing.");
+
+            return false;
+
+        }
+
+
+        if(!form.registrationStart ||
+           !form.registrationEnd ||
+           !form.tournamentStart
+        ){
+
+            alert("Tournament dates are incomplete.");
+
+            return false;
+
+        }
+
+
+
+        if(
+            form.isPaid &&
+            (!form.entryFee || form.entryFee <= 0)
+        ){
+
+            alert("Entry fee is required for paid tournaments.");
+
+            return false;
+
+        }
+
+
+
+        if(!form.rules.trim()){
+
+            alert("Tournament rules are required.");
+
+            return false;
+
+        }
+
+
+        return true;
+
+    };
+
+
+
+
+
+
+
+
+    const createTournament = () => {
+
+
+        if(!validateBeforeCreate()){
+
+            return;
+
+        }
+
+
+
+        mutation.mutate({
+
+            ...form,
+
+            maxTeams:Number(form.maxTeams),
+
+            prizePool:Number(form.prizePool || 0),
+
+
+            registrationStart:new Date(
+                form.registrationStart
+            ).toISOString(),
+
+
+            registrationEnd:new Date(
+                form.registrationEnd
+            ).toISOString(),
+
+
+            tournamentStart:new Date(
+                form.tournamentStart
+            ).toISOString()
+
+
+        });
+
+
+    };
+
+
+
+
+
+
+
+
+
+    const Card = ({title,value,icon}) => (
+
+        <div className="
+            rounded-2xl
+            border
+            border-white/10
+            bg-white/5
+            p-5
+        ">
+
+
+            <div className="
+                flex
+                items-center
+                gap-3
+                mb-3
+            ">
+
+
+                <div className="
+                    w-10
+                    h-10
+                    rounded-xl
+                    bg-purple-500/20
+                    flex
+                    items-center
+                    justify-center
+                ">
+                    {icon}
+                </div>
+
+
+                <p className="
+                    text-sm
+                    text-slate-400
+                ">
+                    {title}
+                </p>
+
+
+            </div>
+
+
+            <p className="
+                text-white
+                font-semibold
+            ">
+                {value}
+            </p>
+
+
+        </div>
+
+    );
+
+
+
+
+
+
 
     return (
 
-        <div className="space-y-6">
+        <div className="space-y-8">
+
+
+
+
+
+            {/* Header */}
 
             <div>
 
-                <strong>Paid Tournament:</strong>
+                <h2 className="
+                    text-2xl
+                    font-bold
+                    text-white
+                ">
+                    Review Tournament
+                </h2>
 
-                {form.isPaid ? " Yes" : " No"}
+
+                <p className="
+                    mt-2
+                    text-slate-400
+                    text-sm
+                ">
+                    Verify all details before publishing.
+                </p>
+
 
             </div>
 
-            {
-                form.isPaid && (
 
-                    <div>
 
-                        <strong>Entry Fee:</strong>
 
-                        ₹{form.entryFee}
 
-                    </div>
 
-                )
-            }
 
-            <pre
-                className="
-                    bg-white/5
-                    rounded-xl
-                    p-6
-                    overflow-auto
-                "
-            >
-                {JSON.stringify(
+
+
+            {/* Main Preview */}
+
+            <div className="
+                rounded-3xl
+                border
+                border-purple-500/30
+                bg-gradient-to-r
+                from-purple-600/20
+                to-indigo-600/20
+                p-8
+            ">
+
+
+                <p className="
+                    text-sm
+                    text-slate-300
+                ">
+                    Tournament Name
+                </p>
+
+
+
+                <h1 className="
+                    text-3xl
+                    font-bold
+                    text-white
+                    mt-2
+                ">
+
+                    {form.name || "Unnamed Tournament"}
+
+                </h1>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            {/* Information Cards */}
+
+            <div className="
+                grid
+                md:grid-cols-2
+                gap-5
+            ">
+
+
+                <Card
+                    title="Game"
+                    value={form.game}
+                    icon="🎮"
+                />
+
+
+
+                <Card
+                    title="Mode"
+                    value={form.mode}
+                    icon="👥"
+                />
+
+
+
+                <Card
+                    title="Format"
+                    value={form.format}
+                    icon="🏆"
+                />
+
+
+
+                <Card
+                    title="Teams"
+                    value={`${form.maxTeams} Teams`}
+                    icon="📋"
+                />
+
+
+
+                <Card
+                    title="Prize Pool"
+                    value={`₹${form.prizePool || 0}`}
+                    icon="💰"
+                />
+
+
+
+                <Card
+                    title="Entry Type"
+                    value={
+                        form.isPaid
+                        ?
+                        `Paid ₹${form.entryFee}`
+                        :
+                        "Free Tournament"
+                    }
+                    icon="🎟️"
+                />
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            {/* Rules */}
+
+            <div className="
+                rounded-2xl
+                border
+                border-white/10
+                bg-white/5
+                p-6
+            ">
+
+
+                <h3 className="
+                    text-white
+                    font-semibold
+                    mb-3
+                ">
+                    Tournament Rules
+                </h3>
+
+
+
+                <p className="
+                    text-slate-300
+                    text-sm
+                    whitespace-pre-line
+                ">
+
                     {
-                        ...form,
-                        banner: form.banner
-                            ? form.banner.name
-                            : null
-                    },
-                    null,
-                    2
-                )}
-            </pre>
+                        form.rules ||
+                        "No rules added."
+                    }
 
-            <div className="flex justify-between">
+                </p>
 
-                <Button
-                    variant="secondary"
-                    onClick={previous}
-                >
-                    Back
-                </Button>
-
-                <Button
-                    
-                    loading={mutation.isPending}
-                    
-                    onClick={() => {
-
-                        mutation.mutate({
-
-                            ...form,
-
-                            maxTeams: Number(form.maxTeams),
-
-                            prizePool: Number(form.prizePool || 0),
-
-                            registrationStart: new Date(
-                                form.registrationStart
-                            ).toISOString(),
-
-                            registrationEnd: new Date(
-                                form.registrationEnd
-                            ).toISOString(),
-
-                            tournamentStart: new Date(
-                                form.tournamentStart
-                            ).toISOString()
-
-                        });
-                    
-                    }}
-                >
-                    Create Tournament
-                </Button>
 
             </div>
+
+
+
+
+
+
+
+
+
+            {/* Buttons */}
+
+            <div className="
+                flex
+                justify-between
+                pt-4
+            ">
+
+
+
+                <Button
+
+                    variant="secondary"
+
+                    onClick={previous}
+
+                >
+
+                    ← Back
+
+                </Button>
+
+
+
+
+
+
+
+                <Button
+
+                    loading={mutation.isPending}
+
+                    onClick={createTournament}
+
+                    className="
+                        shadow-[0_0_40px_rgba(168,85,247,0.7)]
+                        hover:shadow-[0_0_60px_rgba(168,85,247,0.9)]
+                    "
+
+                >
+
+                    Create Tournament 🚀
+
+                </Button>
+
+
+
+            </div>
+
+
+
+
 
         </div>
 

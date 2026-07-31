@@ -6,54 +6,94 @@ import asyncHandler from "../utils/asyncHandler.js";
 
 const verifyJWT = asyncHandler(async (req, res, next) => {
 
-    // Read Authorization Header
     const authHeader = req.header("Authorization");
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (
+        !authHeader ||
+        !authHeader.startsWith("Bearer ")
+    ) {
+
         throw new ApiError(
             401,
             "Unauthorized request"
         );
+
     }
 
-    // Extract Token
-    const token = authHeader.replace("Bearer ", "");
-
-    // Verify Token
-    const decodedToken = jwt.verify(
-        token,
-        process.env.JWT_ACCESS_SECRET
+    const token = authHeader.replace(
+        "Bearer ",
+        ""
     );
 
-    // Find User
-    const user = await User.findById(decodedToken._id)
-        .select("-password -refreshToken");
+    let decodedToken;
 
-    if (!user) {
-        throw new ApiError(
-            401,
-            "Invalid Access Token"
+    try {
+
+        decodedToken = jwt.verify(
+
+            token,
+
+            process.env.JWT_ACCESS_SECRET
+
         );
+
     }
 
-    // Attach User
+    catch (error) {
+
+        if (error.name === "TokenExpiredError") {
+
+            throw new ApiError(
+                401,
+                "Access token expired"
+            );
+
+        }
+
+        throw new ApiError(
+            401,
+            "Invalid access token"
+        );
+
+    }
+
+    const user = await User.findById(
+        decodedToken._id
+    ).select("-password -refreshToken");
+
+    if (!user) {
+
+        throw new ApiError(
+            401,
+            "User not found"
+        );
+
+    }
+
     req.user = user;
 
     next();
 
 });
 
-export const authorizeRoles = (...allowedRoles) => {
+export const authorizeRoles = (...roles) => {
 
     return (req, res, next) => {
 
-        if (!allowedRoles.includes(req.user.role)) {
+        if (!roles.includes(req.user.role)) {
+
             return next(
+
                 new ApiError(
+
                     403,
-                    "You are not allowed to perform this action"
+
+                    "Forbidden"
+
                 )
+
             );
+
         }
 
         next();

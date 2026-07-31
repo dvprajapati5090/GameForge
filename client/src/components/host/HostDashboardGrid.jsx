@@ -1,6 +1,5 @@
 import RecentTournaments from "./RecentTournaments";
 import HostQuickActions from "./HostQuickActions";
-import UpcomingMatches from "./UpcomingMatches";
 
 export default function HostDashboardGrid() {
 
@@ -17,12 +16,6 @@ export default function HostDashboardGrid() {
             <div>
 
                 <HostQuickActions />
-
-                <div className="mt-8">
-
-                    <UpcomingMatches />
-
-                </div>
 
             </div>
 

@@ -5,13 +5,25 @@ const useAuthStore = create((set) => ({
     user: null,
 
     accessToken:
-        sessionStorage.getItem("accessToken"),
+        sessionStorage.getItem("accessToken") || null,
 
     authLoading: true,
 
     setUser: (user) =>
-        set({
-            user
+        set((state) => {
+
+            if (state.user?._id === user?._id) {
+
+                return state;
+
+            }
+
+            return {
+
+                user
+
+            };
+
         }),
 
     setAccessToken: (token) => {

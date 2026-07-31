@@ -8,13 +8,14 @@ const generateAccessAndRefreshTokens = async (userId) => {
         throw new Error("User not found");
     }
 
-    // Generate Tokens
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
-    // Save Refresh Token in Database
     user.refreshToken = refreshToken;
-    await user.save({ validateBeforeSave: false });
+
+    await user.save({
+        validateBeforeSave: false
+    });
 
     return {
         accessToken,

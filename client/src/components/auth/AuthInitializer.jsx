@@ -67,11 +67,12 @@ export default function AuthInitializer({ children }) {
 
         const initialize = async () => {
 
-            try {
+            let token = accessToken;
 
-                let token = accessToken;
+            // Try to restore session only if no access token exists
+            if (!token) {
 
-                if (!token) {
+                try {
 
                     const response = await api.post(
 
@@ -93,6 +94,21 @@ export default function AuthInitializer({ children }) {
 
                 }
 
+                catch {
+
+                    // No valid refresh token.
+                    // This is normal for logged-out users.
+
+                    setAuthLoading(false);
+
+                    return;
+
+                }
+
+            }
+
+            try {
+
                 const userResponse = await getCurrentUser();
 
                 setUser(userResponse.data);
@@ -103,7 +119,7 @@ export default function AuthInitializer({ children }) {
 
                 console.log(
 
-                    "Auth initialization failed:",
+                    "Failed to load current user:",
 
                     error.message
 

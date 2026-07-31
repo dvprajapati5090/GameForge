@@ -7,37 +7,98 @@ import {
     checkEmailAvailabilityService,
     checkUsernameAvailabilityService,
     changePasswordService,
-    deleteAccountService
+    deleteAccountService,
+    verifyEmailService
 } from "../services/auth.service.js";
 
 import ApiResponse from "../utils/apiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import cookieOptions from "../utils/cookieOptions.js";
 
+import { sendEmail } from "../services/email.service.js";
+import testEmailTemplate from "../templates/test.template.js";
+
+import { sendVerificationEmail } from "../services/email.service.js";
+
 export const registerUser = asyncHandler(async (req, res) => {
 
+    const result = await registerUserService(req.body);
+
+    // LOCAL Registration
+    if (result.requiresEmailVerification) {
+
+        return res.status(201).json(
+
+            new ApiResponse(
+
+                201,
+
+                null,
+
+                result.message
+
+            )
+
+        );
+
+    }
+
+    // GOOGLE Registration
     const {
+
         user,
+
         accessToken,
+
         refreshToken
-    } = await registerUserService(req.body);
+
+    } = result;
+
+    const cookieOptions = {
+
+        httpOnly: true,
+
+        secure:
+            process.env.NODE_ENV === "production",
+
+        sameSite: "lax"
+
+    };
 
     return res
+
         .status(201)
+
         .cookie(
+
             "refreshToken",
+
             refreshToken,
+
             cookieOptions
+
         )
+
         .json(
+
             new ApiResponse(
-                "User registered successfully",
+
+                201,
+
                 {
+
                     user,
+
                     accessToken
-                }
+
+                },
+
+                "Registration successful"
+
             )
+
         );
+
 });
 
 export const loginUser = asyncHandler(async (req, res) => {
@@ -218,12 +279,6 @@ export const deleteAccount = asyncHandler(async (req, res) => {
 
         .clearCookie(
 
-            "accessToken"
-
-        )
-
-        .clearCookie(
-
             "refreshToken"
 
         );
@@ -237,6 +292,52 @@ export const deleteAccount = asyncHandler(async (req, res) => {
             null,
 
             "Account deleted successfully."
+
+        )
+
+    );
+
+});
+
+export const sendTestEmail = asyncHandler(async (req, res) => {
+
+    await sendEmail({
+
+        to: req.body.email,
+
+        subject: "GameForge Email Test",
+
+        html: testEmailTemplate("Developer")
+
+    });
+
+    return res.status(200).json(
+
+        new ApiResponse(
+
+            "Email sent successfully"
+
+        )
+
+    );
+
+});
+
+export const verifyEmail = asyncHandler(async (req, res) => {
+
+    const { token } = req.params;
+
+    await verifyEmailService(token);
+
+    return res.status(200).json(
+
+        new ApiResponse(
+
+            200,
+
+            null,
+
+            "Email verified successfully"
 
         )
 

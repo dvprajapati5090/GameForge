@@ -76,8 +76,11 @@ export default function HostHero() {
                 "
             />
 
+
             <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+
                 <div className="max-w-3xl">
+
                     <motion.div
                         initial={{ opacity: 0, x: -15 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -102,36 +105,41 @@ export default function HostHero() {
                         Host Control Center
                     </motion.div>
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.25 }}
-                        className="
-                            mt-6
-                            text-4xl
-                            md:text-5xl
-                            xl:text-6xl
-                            font-black
-                            tracking-tight
-                            text-white
-                        "
-                    >
-                        Welcome back,
-                        <br />
 
-                        <span
-                            className="
-                                bg-gradient-to-r
-                                from-violet-300
-                                via-fuchsia-300
-                                to-violet-400
-                                bg-clip-text
-                                text-transparent
-                            "
-                        >
-                            {user.displayName}
-                        </span>
-                    </motion.h1>
+                    <motion.h1
+    initial={{ opacity: 0, y: 15 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.25 }}
+    className="
+        mt-6
+        text-4xl
+        md:text-5xl
+        xl:text-6xl
+        font-black
+        tracking-tight
+        text-white
+    "
+>
+    Welcome back,
+
+    <br />
+
+    <span
+        className="
+            bg-gradient-to-r
+            from-violet-300
+            via-fuchsia-300
+            to-violet-400
+            bg-clip-text
+            text-transparent
+        "
+    >
+        @{user?.username || "username"}
+    </span>
+
+</motion.h1>
+
+
 
                     <motion.p
                         initial={{ opacity: 0, y: 15 }}
@@ -151,12 +159,21 @@ export default function HostHero() {
                         event from one powerful dashboard.
                     </motion.p>
 
+
+
                     <motion.div
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.45 }}
-                        className="mt-8 flex flex-wrap items-center gap-4"
+                        className="
+                            mt-8
+                            flex
+                            flex-wrap
+                            items-center
+                            gap-4
+                        "
                     >
+
                         <button
                             onClick={() => navigate("/host/create-tournament")}
                             className="
@@ -179,13 +196,21 @@ export default function HostHero() {
                                 active:scale-[0.98]
                             "
                         >
+
                             <PlusCircle
                                 size={20}
-                                className="transition-transform duration-300 group-hover:rotate-90"
+                                className="
+                                    transition-transform
+                                    duration-300
+                                    group-hover:rotate-90
+                                "
                             />
 
                             Create Tournament
+
                         </button>
+
+
 
                         <div
                             className="
@@ -201,6 +226,7 @@ export default function HostHero() {
                                 backdrop-blur-xl
                             "
                         >
+
                             <Sparkles
                                 size={18}
                                 className="text-violet-400"
@@ -209,9 +235,14 @@ export default function HostHero() {
                             <span className="text-sm text-gray-300">
                                 Ready to host your next event
                             </span>
+
                         </div>
+
                     </motion.div>
+
                 </div>
+
+
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -228,6 +259,7 @@ export default function HostHero() {
                         justify-center
                     "
                 >
+
                     <div
                         className="
                             absolute
@@ -239,6 +271,7 @@ export default function HostHero() {
                         "
                     />
 
+
                     <div
                         className="
                             absolute
@@ -249,6 +282,7 @@ export default function HostHero() {
                             border-fuchsia-500/20
                         "
                     />
+
 
                     <div
                         className="
@@ -262,6 +296,7 @@ export default function HostHero() {
                             blur-xl
                         "
                     />
+
 
                     <div
                         className="
@@ -279,13 +314,18 @@ export default function HostHero() {
                             shadow-[0_0_45px_rgba(124,58,237,0.35)]
                         "
                     >
+
                         <ShieldCheck
                             size={46}
                             className="text-violet-300"
                         />
+
                     </div>
+
                 </motion.div>
+
             </div>
+
         </motion.section>
     );
 }

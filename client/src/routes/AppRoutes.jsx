@@ -27,6 +27,8 @@ import HostBracketPage from "../pages/HostBracketPage";
 
 import HostRoute from "./HostRoute";
 
+import VerifyEmail from "../pages/VerifyEmail";
+
 import useAuthStore from "../store/authStore";
 
 export default function AppRoutes() {
@@ -52,6 +54,11 @@ export default function AppRoutes() {
 
                 element={<RegisterPage />}
 
+            />
+
+            <Route
+                path="/verify-email/:token"
+                element={<VerifyEmail />}
             />
 
             <Route

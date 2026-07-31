@@ -1,33 +1,98 @@
-import { Users } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 export default function PlayersHeader() {
 
     return (
 
-        <div>
+        <section className="relative overflow-hidden py-4">
 
-            <div className="flex items-center gap-4">
+            <div
+                className="
+                    absolute
+                    left-40
+                    top-6
+                    h-56
+                    w-56
+                    rounded-full
+                    bg-violet-600/10
+                    blur-[110px]
+                "
+            />
 
-                <Users
-                    size={34}
-                    className="text-cyan-400"
-                />
+            <div className="relative">
 
-                <h1 className="text-5xl font-black">
+                <div
+                    className="
+                        inline-flex
+                        items-center
+                        gap-2
+
+                        rounded-full
+
+                        border
+                        border-violet-500/20
+
+                        bg-violet-500/10
+
+                        px-5
+                        py-2
+
+                        text-sm
+                        font-semibold
+                        text-violet-200
+                    "
+                >
+
+                    <Sparkles size={16} />
+
+                    Player Database
+
+                </div>
+
+                <h1
+                    className="
+                        mt-5
+
+                        text-7xl
+                        font-black
+                        leading-none
+                        tracking-tight
+
+                        bg-gradient-to-r
+                        from-white
+                        via-white
+                        to-violet-300
+
+                        bg-clip-text
+                        text-transparent
+                    "
+                >
 
                     Players
 
                 </h1>
 
+                <p
+                    className="
+                        mt-5
+                        max-w-3xl
+
+                        text-xl
+
+                        leading-8
+
+                        text-slate-400
+                    "
+                >
+
+                    Discover teammates, build your dream squad, recruit elite players
+                    and dominate every tournament.
+
+                </p>
+
             </div>
 
-            <p className="text-gray-400 mt-3">
-
-                Discover teammates and invite them to your squad.
-
-            </p>
-
-        </div>
+        </section>
 
     );
 

@@ -7,16 +7,41 @@ const api = axios.create({
     baseURL: API_URL,
     withCredentials: true,
     headers: {
-        "Content-Type": "application/json",
-    },
+        "Content-Type": "application/json"
+    }
 });
+
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+
+    failedQueue.forEach((promise) => {
+
+        if (error) {
+
+            promise.reject(error);
+
+        } else {
+
+            promise.resolve(token);
+
+        }
+
+    });
+
+    failedQueue = [];
+
+};
 
 api.interceptors.request.use((config) => {
 
     const token = useAuthStore.getState().accessToken;
 
     if (token) {
+
         config.headers.Authorization = `Bearer ${token}`;
+
     }
 
     return config;
@@ -25,18 +50,13 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
 
-    response => response,
+    (response) => response,
 
     async (error) => {
 
-        console.log("========== AXIOS ERROR ==========");
-        console.log("Status:", error.response?.status);
-        console.log("URL:", error.config?.url);
-        console.log("Response:", error.response?.data);
-        console.log(error);
-        console.log("=================================");
-
         const originalRequest = error.config;
+
+        const status = error.response?.status;
 
         const publicRoutes = [
             "/auth/login",
@@ -46,43 +66,90 @@ api.interceptors.response.use(
             "/auth/refresh-token"
         ];
 
-        const shouldSkipRefresh =
-            publicRoutes.some(route =>
-                originalRequest.url.includes(route)
-            );
+        const shouldSkipRefresh = publicRoutes.some((route) =>
+            originalRequest.url.includes(route)
+        );
 
         if (
-            error.response?.status === 401 &&
+
+            status === 401 &&
             !originalRequest._retry &&
             !shouldSkipRefresh
+
         ) {
 
+            if (isRefreshing) {
+
+                return new Promise((resolve, reject) => {
+
+                    failedQueue.push({
+                        resolve,
+                        reject
+                    });
+
+                }).then((token) => {
+
+                    originalRequest.headers.Authorization =
+                        `Bearer ${token}`;
+
+                    return api(originalRequest);
+
+                });
+
+            }
+
             originalRequest._retry = true;
+
+            isRefreshing = true;
 
             try {
 
                 const response = await axios.post(
+
                     `${API_URL}/auth/refresh-token`,
+
                     {},
+
                     {
                         withCredentials: true
                     }
+
                 );
 
-                const accessToken = response.data.data.accessToken;
+                const newAccessToken =
+                    response.data.data.accessToken;
 
-                useAuthStore.getState().setAccessToken(accessToken);
+                useAuthStore
+                    .getState()
+                    .setAccessToken(newAccessToken);
+
+                processQueue(
+                    null,
+                    newAccessToken
+                );
 
                 originalRequest.headers.Authorization =
-                    `Bearer ${accessToken}`;
+                    `Bearer ${newAccessToken}`;
 
                 return api(originalRequest);
 
-            } catch {
+            }
+
+            catch (refreshError) {
+
+                processQueue(refreshError);
 
                 useAuthStore.getState().logout();
 
-                window.location.href = "/login";
+                window.location.replace("/login");
+
+                return Promise.reject(refreshError);
+
+            }
+
+            finally {
+
+                isRefreshing = false;
 
             }
 
