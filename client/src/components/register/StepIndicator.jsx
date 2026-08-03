@@ -58,8 +58,8 @@ export default function StepIndicator({ step }) {
                                 className={`
                                     relative
 
-                                    w-14
-                                    h-14
+                                    w-10
+                                    h-10
 
                                     rounded-full
 
@@ -67,7 +67,7 @@ export default function StepIndicator({ step }) {
                                     items-center
                                     justify-center
 
-                                    text-base
+                                    text-sm
                                     font-bold
 
                                     transition-all
@@ -77,9 +77,9 @@ export default function StepIndicator({ step }) {
 
                                     ${
                                         completed
-                                            ? "bg-violet-500 border-violet-400 text-white shadow-lg shadow-violet-500/40"
+                                            ? "bg-black border-white/20 text-white shadow-lg shadow-violet-500/40"
                                             : active
-                                            ? "bg-violet-500/20 border-violet-400 text-violet-300 shadow-lg shadow-violet-500/30"
+                                            ? "bg-black border-white/20 text-white shadow-lg shadow-violet-500/30"
                                             : "bg-white/5 border-white/10 text-slate-500"
                                     }
                                 `}
@@ -94,7 +94,7 @@ export default function StepIndicator({ step }) {
 
                                             rounded-full
 
-                                            bg-violet-500/20
+                                            bg-black
 
                                             animate-ping
                                         "
@@ -108,7 +108,7 @@ export default function StepIndicator({ step }) {
 
                                         completed
 
-                                            ? <Check size={20} />
+                                            ? <Check size={16} />
 
                                             : current
 
@@ -120,9 +120,9 @@ export default function StepIndicator({ step }) {
 
                             <p
                                 className={`
-                                    mt-4
+                                    mt-3
 
-                                    text-sm
+                                    text-xs
 
                                     font-medium
 
@@ -183,8 +183,8 @@ export default function StepIndicator({ step }) {
                                             h-full
 
                                             bg-gradient-to-r
-                                            from-violet-500
-                                            to-fuchsia-400
+                                            from-black
+                                            to-black
                                         "
 
                                     />

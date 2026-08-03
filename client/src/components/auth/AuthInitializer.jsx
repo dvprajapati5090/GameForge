@@ -286,7 +286,7 @@ export default function AuthInitializer({ children }) {
 
                     icon: Users,
 
-                    color: "text-cyan-400",
+                    color: "text-white",
 
                     border: "border-cyan-500/40",
 
@@ -302,7 +302,7 @@ export default function AuthInitializer({ children }) {
 
                     border: "border-red-500/40",
 
-                    bg: "bg-red-500/10"
+                    bg: "bg-white/20"
 
                 },
 
@@ -310,11 +310,11 @@ export default function AuthInitializer({ children }) {
 
                     icon: Gamepad2,
 
-                    color: "text-purple-400",
+                    color: "text-white/80",
 
-                    border: "border-purple-500/40",
+                    border: "border-white/10",
 
-                    bg: "bg-purple-500/10"
+                    bg: "bg-black"
 
                 },
 
@@ -357,7 +357,7 @@ export default function AuthInitializer({ children }) {
                         w-96
                         rounded-2xl
                         border
-                        bg-[#0B1220]
+                        bg-black
                         p-4
                         shadow-2xl
                         flex

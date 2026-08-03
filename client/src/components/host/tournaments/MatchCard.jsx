@@ -9,7 +9,7 @@ export default function MatchCard({ match }) {
 
     return (
 
-        <div className="bg-slate-900 rounded-2xl p-5 mb-6">
+        <div className="bg-black border border-white/10 rounded-2xl p-5 mb-6">
 
             <TeamRow team={match.teamA} />
 

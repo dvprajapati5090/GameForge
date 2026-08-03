@@ -28,7 +28,7 @@ export default function Input({
 
     return (
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2 w-full">
 
 
             {
@@ -36,9 +36,11 @@ export default function Input({
 
                     <label className="
                         block
-                        text-sm
-                        font-semibold
-                        text-slate-300
+                        text-[11px]
+                        font-bold
+                        uppercase
+                        tracking-wider
+                        text-slate-400
                     ">
                         {label}
                     </label>
@@ -58,18 +60,19 @@ export default function Input({
                     className={`
 
                         w-full
-                        h-14
+                        h-11
 
-                        rounded-2xl
+                        rounded-xl
 
                         border
-                        border-white/10
+                        border-white/20
 
-                        bg-white/5
+                        bg-white/10
 
-                        px-5
-                        pr-12
+                        px-4
+                        pr-10
 
+                        text-sm
                         !text-white
 
                         placeholder:!text-slate-400
@@ -88,10 +91,10 @@ export default function Input({
                         shadow-black/20
 
 
-                        hover:border-purple-400/40
+                        hover:border-white/30
 
 
-                        focus:border-purple-500
+                        focus:border-white/40
 
                         focus:ring-2
                         focus:ring-purple-500/20
@@ -140,7 +143,7 @@ export default function Input({
 
                                 className="
                                     animate-spin
-                                    text-purple-400
+                                    text-white/80
                                 "
 
                             />
@@ -201,7 +204,9 @@ export default function Input({
                 helper && !error && (
 
                     <p className="
-                        text-xs
+                        text-[10px]
+                        uppercase
+                        tracking-wide
                         text-slate-500
                     ">
                         {helper}
@@ -218,7 +223,7 @@ export default function Input({
                 error && (
 
                     <p className="
-                        text-sm
+                        text-[11px]
                         text-red-400
                     ">
                         {error}
@@ -235,7 +240,7 @@ export default function Input({
                 success && (
 
                     <p className="
-                        text-sm
+                        text-[11px]
                         text-emerald-400
                     ">
                         {success}

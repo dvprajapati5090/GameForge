@@ -9,7 +9,7 @@ export default function RegisteredTeams({
         <div
             className="
                 mt-10
-                bg-slate-900
+                bg-black border border-white/10
                 rounded-2xl
                 border
                 border-slate-800
@@ -17,7 +17,7 @@ export default function RegisteredTeams({
             "
         >
 
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 className="text-2xl font-bold font-mono mb-6">
 
                 Registered Teams
 
@@ -48,7 +48,7 @@ export default function RegisteredTeams({
                                     className="
                                         flex
                                         justify-between
-                                        bg-slate-800
+                                        bg-black border border-white/10
                                         rounded-lg
                                         p-4
                                     "
@@ -61,7 +61,7 @@ export default function RegisteredTeams({
 
                                     </span>
 
-                                    <span className="text-cyan-400">
+                                    <span className="text-white">
 
                                         {team.members.length} Players
 

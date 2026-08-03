@@ -48,7 +48,7 @@ export default function HeroSection() {
 
           tracking-[0.45rem]
 
-          text-violet-400
+          text-white
 
           text-sm
 
@@ -73,7 +73,7 @@ export default function HeroSection() {
       >
         <span className="text-white">GAME</span>
 
-        <span className="text-violet-400">FORGE</span>
+        <span className="text-white">FORGE</span>
       </h1>
 
       {/* Main Heading */}
@@ -110,7 +110,7 @@ export default function HeroSection() {
   "
       >
         <div className="flex items-start gap-4">
-          <div className="mt-2 h-2.5 w-2.5 rounded-full bg-violet-400" />
+          <div className="mt-2 h-2.5 w-2.5 rounded-full bg-black" />
 
           <div>
             <h3 className="font-semibold text-white">
@@ -125,7 +125,7 @@ export default function HeroSection() {
         </div>
 
         <div className="flex items-start gap-4">
-          <div className="mt-2 h-2.5 w-2.5 rounded-full bg-violet-400" />
+          <div className="mt-2 h-2.5 w-2.5 rounded-full bg-black" />
 
           <div>
             <h3 className="font-semibold text-white">Build Your Team</h3>
@@ -138,7 +138,7 @@ export default function HeroSection() {
         </div>
 
         <div className="flex items-start gap-4">
-          <div className="mt-2 h-2.5 w-2.5 rounded-full bg-violet-400" />
+          <div className="mt-2 h-2.5 w-2.5 rounded-full bg-black" />
 
           <div>
             <h3 className="font-semibold text-white">

@@ -41,7 +41,7 @@ export default function Modal({
                     rounded-3xl
                     border
                     border-white/10
-                    bg-slate-900
+                    bg-black border border-white/10
                     p-8
                     shadow-2xl
                 "

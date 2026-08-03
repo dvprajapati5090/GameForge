@@ -51,9 +51,9 @@ function StatCard({
 
     return (
 
-        <div className="rounded-2xl bg-slate-900 p-6">
+        <div className="rounded-2xl bg-black border border-white/10 p-6">
 
-            <div className="text-cyan-400">
+            <div className="text-white">
 
                 {icon}
 
@@ -65,7 +65,7 @@ function StatCard({
 
             </p>
 
-            <h2 className="text-2xl font-bold mt-2">
+            <h2 className="text-2xl font-bold font-mono mt-2">
 
                 {value}
 

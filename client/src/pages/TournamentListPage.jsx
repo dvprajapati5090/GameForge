@@ -37,7 +37,7 @@ export default function TournamentListPage() {
 
             <div className="flex justify-between items-center mb-8">
 
-                <h1 className="text-4xl font-bold">
+                <h1 className="text-4xl font-bold font-mono">
 
                     Tournaments
 

@@ -39,3 +39,13 @@ const startServer = async () => {
 };
 
 startServer();
+
+// Gracefully handle uncaught errors so the process doesn't silently die
+process.on("unhandledRejection", (reason, promise) => {
+    console.error("[UnhandledRejection]", promise, "reason:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+    console.error("[UncaughtException]", err);
+    process.exit(1);
+});

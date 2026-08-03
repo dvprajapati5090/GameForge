@@ -120,7 +120,7 @@ function InfoCard({
 
         <div
             className="
-                bg-slate-900
+                bg-black border border-white/10
                 rounded-xl
                 p-5
                 border
@@ -128,7 +128,7 @@ function InfoCard({
             "
         >
 
-            <div className="text-cyan-400">
+            <div className="text-white">
 
                 {icon}
 

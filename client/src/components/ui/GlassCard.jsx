@@ -22,9 +22,9 @@ export default function GlassCard({
                 rounded-2xl
 
                 border
-                border-white/10
+                border-white/20
 
-                bg-[#121826]/72
+                bg-black/50
 
                 backdrop-blur-2xl
 
@@ -35,8 +35,8 @@ export default function GlassCard({
                 transition-all
                 duration-300
 
-                hover:border-violet-500/30
-                hover:shadow-[0_30px_80px_rgba(139,92,246,.12)]
+                hover:border-white/30
+                hover:shadow-[0_30px_80px_rgba(255,255,255,.05)]
 
                 ${className}
             `}
@@ -54,7 +54,7 @@ export default function GlassCard({
                     transition-opacity
                     duration-500
 
-                    bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,.08),transparent_60%)]
+                    bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,.05),transparent_60%)]
                 "
       />
 
@@ -70,9 +70,9 @@ export default function GlassCard({
 
                     border
 
-                    border-violet-500/0
+                    border-white/20
 
-                    group-hover:border-violet-500/15
+                    group-hover:border-white/30
 
                     transition-all
                     duration-500

@@ -93,7 +93,7 @@ export default function HeroActions({player}) {
 
                         className={`
                             ${syncMutation.isPending ? "animate-spin" : ""}
-                            group-hover:text-cyan-400
+                            group-hover:text-white
                             transition-colors
                         `}
 

@@ -11,7 +11,7 @@ export default function EmptyPlayers() {
                 className="mx-auto text-gray-500"
             />
 
-            <h2 className="text-3xl font-bold mt-6">
+            <h2 className="text-3xl font-bold font-mono mt-6">
 
                 No Players Found
 

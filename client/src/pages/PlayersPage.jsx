@@ -1,140 +1,71 @@
-import { useState } from "react";
-
-import PlayersHeader from "../components/players/PlayersHeader";
-import PlayersSearch from "../components/players/PlayersSearch";
-import PlayerGrid from "../components/players/PlayerGrid";
-
-import usePlayers from "../hooks/usePlayers";
-import useAuthStore from "../store/authStore";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import usePlayers from '../hooks/usePlayers';
+import useAuthStore from '../store/authStore';
+import PlayerCard from '../components/players/PlayerCard';
 
 export default function PlayersPage() {
+  const { data, isLoading } = usePlayers();
+  const [search, setSearch] = useState('');
+  const user = useAuthStore((s) => s.user);
+  const F = '"Space Mono", monospace';
 
-    const { data, isLoading } = usePlayers();
+  const players = (data?.data || []).filter(p => p.username !== user?.username);
+  const filtered = players.filter(p => {
+    const q = search.toLowerCase();
+    return p.displayName?.toLowerCase().includes(q) || p.riotGameName?.toLowerCase().includes(q) || p.username?.toLowerCase().includes(q);
+  });
 
-    const [search, setSearch] = useState("");
+  return (
+    <div style={{ fontFamily: F, padding: '0 0 40px' }}>
+      {/* Header */}
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32 }}>
+        <p style={{ fontSize: 11, letterSpacing: '0.25em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', marginBottom: 10 }}>// ROSTER</p>
+        <h1 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.03em', lineHeight: 1 }}>Players</h1>
+        <p style={{ marginTop: 10, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
+          {filtered.length} agent{filtered.length !== 1 ? 's' : ''} found
+        </p>
+      </motion.div>
 
-    const user = useAuthStore((state) => state.user);
+      {/* Search */}
+      <div style={{ position: 'relative', marginBottom: 32, maxWidth: 400 }}>
+        <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)', fontSize: 15 }}>⌕</span>
+        <input
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search by name, username, Riot ID..."
+          style={{
+            width: '100%', padding: '12px 16px 12px 38px',
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.09)',
+            borderRadius: 10, color: '#fff', fontSize: 13, fontFamily: F, outline: 'none',
+          }}
+        />
+      </div>
 
-
-    const players =
-        (data?.data || []).filter(
-            (player) => player.username !== user?.username
-        );
-
-
-    const filteredPlayers = players.filter((player) => {
-
-        const searchText = search.toLowerCase();
-
-        return (
-
-            player.displayName
-                ?.toLowerCase()
-                .includes(searchText)
-
-            ||
-
-            player.riotGameName
-                ?.toLowerCase()
-                .includes(searchText)
-
-            ||
-
-            player.username
-                ?.toLowerCase()
-                .includes(searchText)
-
-        );
-
-    });
-
-
-    return (
-
-        <div
-    className="
-        relative
-        min-h-screen
-        overflow-hidden
-        bg-[#090b24]
-        bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)]
-        bg-[size:32px_32px]
-    "
->
-
-            {/* Background glow */}
-
-            <div className="
-                absolute
-                -top-40
-                -left-40
-                w-96
-                h-96
-                bg-purple-600/20
-                rounded-full
-                blur-3xl
-            " />
-
-
-            <div className="
-                absolute
-                bottom-0
-                right-0
-                w-96
-                h-96
-                bg-blue-600/10
-                rounded-full
-                blur-3xl
-            " />
-
-
-            <div className="
-                relative
-                space-y-8
-                p-6
-                md:p-8
-            ">
-
-
-                <PlayersHeader />
-
-
-                <div className="
-                    bg-white/5
-                    backdrop-blur-xl
-                    border
-                    border-white/10
-                    rounded-2xl
-                    p-5
-                    shadow-xl
-                ">
-
-                    <PlayersSearch
-
-                        value={search}
-
-                        onChange={setSearch}
-
-                    />
-
-                </div>
-
-
-
-                <PlayerGrid
-
-                    players={filteredPlayers}
-
-                    loading={isLoading}
-
-                />
-
-
-            </div>
-
-
+      {/* Grid */}
+      {isLoading ? (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '40vh', fontSize: 13, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>
+          LOADING AGENTS...
         </div>
-
-    );
-
+      ) : filtered.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '60px 24px', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: 16 }}>
+          <p style={{ fontSize: 32, marginBottom: 16 }}>⌀</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>NO AGENTS FOUND</p>
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
+          {filtered.map((player, i) => (
+            <motion.div
+              key={player._id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: i * 0.05 }}
+            >
+              <PlayerCard player={player} />
+            </motion.div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }

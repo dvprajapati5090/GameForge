@@ -15,7 +15,7 @@ export default function EmptyTournament() {
                 overflow-hidden
                 rounded-[32px]
                 border
-                border-violet-500/20
+                border-white/20
                 bg-white/5
                 backdrop-blur-2xl
                 py-20
@@ -29,9 +29,9 @@ export default function EmptyTournament() {
                     absolute
                     inset-0
                     bg-gradient-to-br
-                    from-violet-600/10
+                    from-black
                     via-transparent
-                    to-fuchsia-600/10
+                    to-black
                 "
             />
 
@@ -43,7 +43,7 @@ export default function EmptyTournament() {
                     h-72
                     w-72
                     rounded-full
-                    bg-violet-600/15
+                    bg-white
                     blur-[120px]
                 "
             />
@@ -58,14 +58,14 @@ export default function EmptyTournament() {
                         justify-center
                         rounded-full
                         border
-                        border-violet-500/30
-                        bg-violet-500/10
+                        border-white/20
+                        bg-black
                         shadow-[0_0_35px_rgba(124,58,237,0.25)]
                     "
                 >
                     <Trophy
                         size={52}
-                        className="text-violet-300"
+                        className="text-white"
                     />
                 </div>
 
@@ -88,8 +88,8 @@ export default function EmptyTournament() {
                         gap-3
                         rounded-2xl
                         bg-gradient-to-r
-                        from-violet-600
-                        to-fuchsia-600
+                        from-black
+                        to-black
                         px-7
                         py-4
                         font-semibold

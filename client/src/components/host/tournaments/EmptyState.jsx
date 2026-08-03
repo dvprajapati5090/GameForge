@@ -14,7 +14,7 @@ export default function EmptyState() {
                 border
                 border-dashed
                 border-white/10
-                bg-slate-900
+                bg-black border border-white/10
                 p-16
                 text-center
             "
@@ -24,7 +24,7 @@ export default function EmptyState() {
 
                 size={70}
 
-                className="mx-auto text-cyan-400"
+                className="mx-auto text-white"
 
             />
 

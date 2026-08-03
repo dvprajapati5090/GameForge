@@ -76,7 +76,7 @@ export default function MessageBubble({ message }) {
                             ${
                                 mine
                                     ? "bg-cyan-500 text-black rounded-br-md"
-                                    : "bg-slate-800 rounded-bl-md"
+                                    : "bg-black border border-white/10 rounded-bl-md"
                             }
                         `}
                     >

@@ -22,7 +22,7 @@ export default function TournamentHero({ tournament }) {
 
             <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-cyan-500/20 blur-3xl"/>
 
-            <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-purple-500/20 blur-3xl"/>
+            <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-black blur-3xl"/>
 
             <div className="relative z-10">
 
@@ -32,7 +32,7 @@ export default function TournamentHero({ tournament }) {
 
                         <div className="flex gap-3 items-center mb-5">
 
-                            <span className="px-4 py-1 rounded-full bg-cyan-500/20 text-cyan-400 font-semibold">
+                            <span className="px-4 py-1 rounded-full bg-cyan-500/20 text-white font-semibold">
 
                                 {tournament.game}
 
@@ -94,7 +94,7 @@ export default function TournamentHero({ tournament }) {
 
                         </p>
 
-                        <h2 className="text-4xl font-black text-cyan-400">
+                        <h2 className="text-4xl font-black text-white">
 
                             ₹{tournament.prizePool}
 
@@ -177,7 +177,7 @@ function HeroCard({
 
         <div className="rounded-2xl bg-white/5 border border-white/10 p-5">
 
-            <div className="flex items-center gap-2 text-cyan-400">
+            <div className="flex items-center gap-2 text-white">
 
                 {icon}
 

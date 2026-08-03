@@ -10,7 +10,7 @@ export default function TournamentRegisterButton({
 
     return (
 
-        <div className="bg-[#111827] rounded-xl p-6">
+        <div className="bg-black border border-white/10 rounded-xl p-6">
 
             <h2 className="text-xl font-bold mb-6">
 

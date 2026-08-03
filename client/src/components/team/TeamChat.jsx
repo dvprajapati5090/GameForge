@@ -147,7 +147,7 @@ export default function TeamChat() {
                     rounded-3xl
                     border
                     border-white/10
-                    bg-slate-900
+                    bg-black border border-white/10
                     p-6
                 "
             >
@@ -305,7 +305,7 @@ export default function TeamChat() {
                     className="
                         flex-1
                         rounded-xl
-                        bg-slate-800
+                        bg-black border border-white/10
                         border
                         border-white/10
                         px-4

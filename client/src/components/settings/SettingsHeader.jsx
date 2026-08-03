@@ -1,5 +1,11 @@
-import { Settings, Sparkles } from "lucide-react";
+/**
+ * SettingsHeader — Gaming glass redesign (no Tailwind)
+ */
+import { Settings, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
+import FloatingParticles from "../ui/FloatingParticles";
+
+const F = '"Space Mono", monospace';
 
 export default function SettingsHeader() {
     return (
@@ -7,123 +13,82 @@ export default function SettingsHeader() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="
-                relative
-                overflow-hidden
-                rounded-3xl
-                border
-                border-white/10
-                bg-gradient-to-br
-                from-[#15182f]/95
-                via-[#11152b]/95
-                to-[#0d1224]/95
-                backdrop-blur-xl
-                px-8
-                py-8
-                shadow-[0_0_60px_rgba(139,92,246,0.12)]
-            "
+            style={{
+                position: 'relative', overflow: 'hidden',
+                border: '1px solid rgba(192,192,192,0.12)',
+                borderTop: '2px solid #e8003d',
+                background: 'rgba(7,0,10,0.72)',
+                backdropFilter: 'blur(28px)',
+                borderRadius: 24,
+                padding: '32px 36px',
+                fontFamily: F,
+                boxShadow: '0 0 60px rgba(232,0,61,0.07), 0 24px 80px rgba(0,0,0,0.5)',
+            }}
         >
-            {/* Glow */}
-            <div
-                className="
-                    absolute
-                    -top-24
-                    right-0
-                    h-56
-                    w-56
-                    rounded-full
-                    bg-cyan-500/10
-                    blur-3xl
-                    pointer-events-none
-                "
-            />
+            <FloatingParticles count={16} color="#e8003d" opacity={0.25} speed={0.5} />
 
-            <div
-                className="
-                    absolute
-                    -bottom-24
-                    left-0
-                    h-56
-                    w-56
-                    rounded-full
-                    bg-purple-600/10
-                    blur-3xl
-                    pointer-events-none
-                "
-            />
+            {/* Dot grid */}
+            <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+                backgroundImage: 'radial-gradient(rgba(192,192,192,0.06) 1px, transparent 1px)',
+                backgroundSize: '26px 26px',
+            }} />
 
-            <div className="relative flex items-center justify-between">
-                <div>
-                    <div className="flex items-center gap-5">
-                        <div
-                            className="
-                                flex
-                                h-16
-                                w-16
-                                items-center
-                                justify-center
-                                rounded-2xl
-                                border
-                                border-cyan-400/20
-                                bg-gradient-to-br
-                                from-cyan-500/20
-                                to-purple-600/20
-                                shadow-[0_0_25px_rgba(34,211,238,0.18)]
-                            "
+            <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                    {/* Icon */}
+                    <motion.div
+                        animate={{ rotate: [0, 360] }}
+                        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                        style={{
+                            width: 64, height: 64, borderRadius: 18, flexShrink: 0,
+                            background: 'linear-gradient(135deg, rgba(232,0,61,0.18), rgba(124,58,237,0.12))',
+                            border: '1px solid rgba(232,0,61,0.35)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 0 24px rgba(232,0,61,0.2)',
+                        }}
+                    >
+                        <Settings size={30} color="#e8003d" />
+                    </motion.div>
+
+                    <div>
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                            style={{ fontSize: 9, color: 'rgba(232,0,61,0.7)', letterSpacing: '0.28em', textTransform: 'uppercase', marginBottom: 6 }}
                         >
-                            <Settings
-                                size={32}
-                                className="text-cyan-300"
-                            />
-                        </div>
-
-                        <div>
-                            <h1
-                                className="
-                                    text-5xl
-                                    font-black
-                                    tracking-tight
-                                    bg-gradient-to-r
-                                    from-white
-                                    via-purple-200
-                                    to-cyan-300
-                                    bg-clip-text
-                                    text-transparent
-                                "
-                            >
-                                Settings
-                            </h1>
-
-                            <p className="mt-2 text-gray-400 text-lg">
-                                Manage your GameForge account and preferences.
-                            </p>
-                        </div>
+                            ACCOUNT PREFERENCES
+                        </motion.p>
+                        <h1 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1,
+                            background: 'linear-gradient(90deg, #fff 0%, rgba(192,192,192,0.7) 100%)',
+                            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                        }}>Settings</h1>
+                        <p style={{ marginTop: 8, fontSize: 12, color: 'rgba(192,192,192,0.45)', letterSpacing: '0.04em' }}>
+                            Manage your GameForge account and preferences.
+                        </p>
                     </div>
                 </div>
 
-                <div
-                    className="
-                        hidden
-                        lg:flex
-                        items-center
-                        gap-2
-                        rounded-full
-                        border
-                        border-emerald-400/20
-                        bg-emerald-500/10
-                        px-5
-                        py-2
-                    "
+                {/* Status badge */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3 }}
+                    style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 8,
+                        padding: '10px 20px', borderRadius: 999,
+                        background: 'rgba(34,197,94,0.1)',
+                        border: '1px solid rgba(34,197,94,0.3)',
+                        boxShadow: '0 0 14px rgba(34,197,94,0.15)',
+                    }}
                 >
-                    <Sparkles
-                        size={16}
-                        className="text-emerald-400"
+                    <motion.div
+                        animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }}
                     />
-
-                    <span className="text-sm font-semibold text-emerald-300">
-                        Account Active
-                    </span>
-                </div>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#22c55e', letterSpacing: '0.1em' }}>ACCOUNT ACTIVE</span>
+                </motion.div>
             </div>
         </motion.div>
     );

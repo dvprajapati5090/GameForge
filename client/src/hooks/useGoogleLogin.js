@@ -47,8 +47,9 @@ export default function useGoogleLogin() {
                 "Welcome back to GameForge!"
             );
 
-
-            navigate("/");
+            // Route to the correct dashboard based on role
+            const destination = data.user?.role === "HOST" ? "/host" : "/dashboard";
+            navigate(destination);
 
         },
 

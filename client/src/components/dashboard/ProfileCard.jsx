@@ -23,7 +23,7 @@ export default function ProfileCard() {
             "
         >
 
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 className="text-2xl font-bold font-mono mb-6">
                 Riot Profile
             </h2>
 

@@ -70,10 +70,10 @@ export default function StepBasicInfo({
         <GlassCard className="relative overflow-hidden p-8 md:p-10">
 
             {/* Glow */}
-            <div className="absolute -top-24 right-0 h-48 w-48 rounded-full bg-violet-600/20 blur-3xl" />
-            <div className="absolute -bottom-20 -left-10 h-40 w-40 rounded-full bg-fuchsia-500/10 blur-3xl" />
+            <div className="absolute -top-24 right-0 h-48 w-48 rounded-full bg-white blur-3xl" />
+            <div className="absolute -bottom-20 -left-10 h-40 w-40 rounded-full bg-black blur-3xl" />
 
-            <div className="relative z-10 space-y-10">
+            <div className="relative z-10 flex flex-col gap-10">
 
                 {/* Header */}
 
@@ -88,31 +88,31 @@ export default function StepBasicInfo({
                         <div
                             className="
                                 flex
-                                h-14
-                                w-14
+                                h-10
+                                w-10
                                 items-center
                                 justify-center
-                                rounded-2xl
+                                rounded-xl
                                 border
-                                border-violet-500/30
-                                bg-violet-500/10
-                                text-violet-300
+                                border-white/20
+                                bg-black
+                                text-white
                                 shadow-lg
-                                shadow-violet-500/20
+                                shadow-white/10
                             "
                         >
-                            <Shield size={26} />
+                            <Shield size={20} />
                         </div>
 
                         <div>
 
-                            <h2 className="text-3xl font-bold text-white">
+                            <h2 className="text-xl font-bold font-mono text-white">
 
                                 Basic Information
 
                             </h2>
 
-                            <p className="mt-1 text-sm text-gray-400">
+                            <p className="mt-1 text-xs text-gray-400">
 
                                 Create your GameForge account to begin your
                                 competitive journey.
@@ -133,7 +133,7 @@ export default function StepBasicInfo({
                     transition={{ delay: 0.05 }}
                 >
 
-                    <label className="mb-4 block text-sm font-semibold uppercase tracking-wider text-gray-300">
+                    <label className="mb-3 block text-[11px] font-bold uppercase tracking-wider text-gray-400">
 
                         Account Type
 
@@ -150,24 +150,24 @@ export default function StepBasicInfo({
                             }
                             className={`group rounded-2xl border p-5 text-left transition-all duration-300 ${
                                 form.role === "PLAYER"
-                                    ? "border-violet-500/60 bg-violet-500/15 shadow-lg shadow-violet-500/20"
-                                    : "border-white/10 bg-white/5 hover:border-violet-500/30 hover:bg-white/10"
+                                    ? "border-[#0a9396] bg-black shadow-lg shadow-[#0a9396]/20"
+                                    : "border-white/20 bg-white/10 hover:border-[#0a9396]/50 hover:bg-white/20"
                             }`}
                         >
 
-                            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-violet-500/10 text-violet-300">
+                            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-black text-white">
 
-                                <User size={24} />
+                                <User size={20} />
 
                             </div>
 
-                            <h3 className="text-lg font-semibold text-white">
+                            <h3 className="text-sm font-bold text-white">
 
                                 Player
 
                             </h3>
 
-                            <p className="mt-2 text-sm leading-6 text-gray-400">
+                            <p className="mt-1.5 text-xs leading-5 text-gray-400">
 
                                 Join tournaments, build teams, improve rankings
                                 and compete against players worldwide.
@@ -185,24 +185,24 @@ export default function StepBasicInfo({
                             }
                             className={`group rounded-2xl border p-5 text-left transition-all duration-300 ${
                                 form.role === "HOST"
-                                    ? "border-violet-500/60 bg-violet-500/15 shadow-lg shadow-violet-500/20"
-                                    : "border-white/10 bg-white/5 hover:border-violet-500/30 hover:bg-white/10"
+                                    ? "border-[#0a9396] bg-black shadow-lg shadow-[#0a9396]/20"
+                                    : "border-white/20 bg-white/10 hover:border-[#0a9396]/50 hover:bg-white/20"
                             }`}
                         >
 
-                            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-violet-500/10 text-violet-300">
+                            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-black text-white">
 
-                                <Trophy size={24} />
+                                <Trophy size={20} />
 
                             </div>
 
-                            <h3 className="text-lg font-semibold text-white">
+                            <h3 className="text-sm font-bold text-white">
 
                                 Tournament Host
 
                             </h3>
 
-                            <p className="mt-2 text-sm leading-6 text-gray-400">
+                            <p className="mt-1.5 text-xs leading-5 text-gray-400">
 
                                 Organize tournaments, manage participants,
                                 create brackets and host professional events.
@@ -221,12 +221,12 @@ export default function StepBasicInfo({
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="space-y-4"
+                    className="flex flex-col gap-4"
                 >
 
                     <FieldTitle
 
-                        icon={<User size={20} />}
+                        icon={<User size={16} />}
 
                         title="Username"
 
@@ -280,12 +280,12 @@ export default function StepBasicInfo({
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 }}
-                    className="space-y-4"
+                    className="flex flex-col gap-4"
                 >
 
                     <FieldTitle
 
-                        icon={<User size={20} />}
+                        icon={<User size={16} />}
 
                         title="Display Name"
 
@@ -313,12 +313,12 @@ export default function StepBasicInfo({
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="space-y-4"
+                    className="flex flex-col gap-4"
                 >
 
                     <FieldTitle
 
-                        icon={<Mail size={20} />}
+                        icon={<Mail size={16} />}
 
                         title="Email Address"
 
@@ -380,12 +380,12 @@ export default function StepBasicInfo({
                                     initial={{ opacity: 0, y: 15 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.25 }}
-                                    className="space-y-4"
+                                    className="flex flex-col gap-4"
                                 >
 
                                     <FieldTitle
 
-                                        icon={<Lock size={20} />}
+                                        icon={<Lock size={16} />}
 
                                         title="Password"
 
@@ -423,12 +423,12 @@ export default function StepBasicInfo({
                                     initial={{ opacity: 0, y: 15 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.3 }}
-                                    className="space-y-4"
+                                    className="flex flex-col gap-4"
                                 >
 
                                     <FieldTitle
 
-                                        icon={<Lock size={20} />}
+                                        icon={<Lock size={16} />}
 
                                         title="Confirm Password"
 
@@ -502,22 +502,6 @@ export default function StepBasicInfo({
 
                         className="
                             min-w-[180px]
-                            rounded-xl
-                            bg-gradient-to-r
-                            from-violet-600
-                            to-fuchsia-600
-                            px-8
-                            py-3
-                            font-semibold
-                            text-white
-                            shadow-lg
-                            shadow-violet-600/30
-                            transition-all
-                            duration-300
-                            hover:scale-[1.02]
-                            hover:shadow-violet-500/50
-                            disabled:cursor-not-allowed
-                            disabled:opacity-50
                         "
 
                     >
@@ -547,24 +531,24 @@ function FieldTitle({
 
     return (
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
 
             <div className="flex items-center gap-4">
 
                 <div
                     className="
                         flex
-                        h-11
-                        w-11
+                        h-9
+                        w-9
                         items-center
                         justify-center
-                        rounded-xl
+                        rounded-lg
                         border
-                        border-violet-500/30
-                        bg-violet-500/10
-                        text-violet-300
+                        border-white/30
+                        bg-black/50
+                        text-white
                         shadow-md
-                        shadow-violet-500/20
+                        shadow-white/5
                     "
                 >
 
@@ -574,13 +558,13 @@ function FieldTitle({
 
                 <div>
 
-                    <h3 className="text-lg font-semibold text-white">
+                    <h3 className="text-sm font-bold text-white">
 
                         {title}
 
                     </h3>
 
-                    <p className="mt-1 text-sm text-gray-400">
+                    <p className="mt-0.5 text-xs text-gray-400">
 
                         {subtitle}
 
@@ -604,11 +588,11 @@ function PasswordStrength({
 
     const colors = {
 
-        Weak: "from-red-500 to-red-400",
+        Weak: "from-[#9b2226] to-[#ae2012]",
 
-        Medium: "from-amber-500 to-yellow-400",
+        Medium: "from-[#ca6702] to-[#ee9b00]",
 
-        Strong: "from-emerald-500 to-green-400"
+        Strong: "from-[#005f73] to-[#0a9396]"
 
     };
 
@@ -624,17 +608,17 @@ function PasswordStrength({
 
     const textColors = {
 
-        Weak: "text-red-400",
+        Weak: "text-[#ae2012]",
 
-        Medium: "text-yellow-400",
+        Medium: "text-[#ee9b00]",
 
-        Strong: "text-green-400"
+        Strong: "text-[#0a9396]"
 
     };
 
     return (
 
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3">
 
             <div
                 className="

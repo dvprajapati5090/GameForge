@@ -9,7 +9,7 @@ export default function TournamentDescription({
         <div
             className="
                 mt-10
-                bg-slate-900
+                bg-black border border-white/10
                 rounded-2xl
                 border
                 border-slate-800
@@ -17,7 +17,7 @@ export default function TournamentDescription({
             "
         >
 
-            <h2 className="text-2xl font-bold mb-4">
+            <h2 className="text-2xl font-bold font-mono mb-4">
 
                 Description
 

@@ -1,74 +1,22 @@
-const rankColors = {
-
-    "IRON": "bg-stone-700 text-stone-200",
-
-    "BRONZE": "bg-orange-700 text-orange-100",
-
-    "SILVER": "bg-slate-400 text-black",
-
-    "GOLD": "bg-yellow-500 text-black",
-
-    "PLATINUM": "bg-cyan-500 text-black",
-
-    "DIAMOND": "bg-indigo-500 text-white",
-
-    "ASCENDANT": "bg-emerald-500 text-white",
-
-    "IMMORTAL": "bg-red-500 text-white",
-
-    "RADIANT": "bg-yellow-300 text-black"
-
-};
-
-export default function RankBadge({
-
-    rank = "UNRANKED"
-
-}) {
-
-    if (!rank || rank === "UNRANKED") {
-
-        return (
-
-            <span
-                className="
-                    px-3
-                    py-1
-                    rounded-full
-                    bg-gray-700
-                    text-gray-200
-                    text-sm
-                    font-semibold
-                "
-            >
-
-                UNRANKED
-
-            </span>
-
-        );
-
-    }
-
-    const tier = rank.split(" ")[0];
-
+export default function RankBadge({ rank = 'UNRANKED' }) {
+  if (!rank || rank === 'UNRANKED') {
     return (
-
-        <span
-            className={`
-                px-3
-                py-1
-                rounded-full
-                text-sm
-                font-bold
-                ${rankColors[tier] || "bg-gray-700 text-white"}
-            `}
-        >
-
-            {rank}
-
-        </span>
-
+      <span style={{
+        padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, fontFamily: '"Space Mono", monospace',
+        letterSpacing: '0.08em', border: '1px solid rgba(255,255,255,0.12)',
+        background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.5)',
+      }}>
+        UNRANKED
+      </span>
     );
-
+  }
+  return (
+    <span style={{
+      padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, fontFamily: '"Space Mono", monospace',
+      letterSpacing: '0.08em', border: '1px solid rgba(255,255,255,0.2)',
+      background: 'rgba(255,255,255,0.08)', color: '#fff',
+    }}>
+      {rank}
+    </span>
+  );
 }

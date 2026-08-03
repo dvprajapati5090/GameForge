@@ -66,7 +66,7 @@ export default function TeamHero({ team }) {
                     w-72
                     h-72
                     rounded-full
-                    bg-purple-500/10
+                    bg-black
                     blur-3xl
                 "
             />
@@ -129,7 +129,7 @@ export default function TeamHero({ team }) {
                             className="
                                 uppercase
                                 tracking-[0.35em]
-                                text-cyan-400
+                                text-white
                                 text-xs
                                 font-bold
                             "
@@ -238,7 +238,7 @@ function InfoChip({
                     flex
                     items-center
                     gap-2
-                    text-cyan-400
+                    text-white
                 "
             >
 

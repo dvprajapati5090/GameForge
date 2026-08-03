@@ -10,7 +10,7 @@ export default function TournamentPageHero() {
 
             </h1>
 
-            <p className="mt-4 text-lg text-cyan-100 max-w-2xl">
+            <p className="mt-4 text-lg text-white max-w-2xl">
 
                 Join competitive Valorant tournaments, compete against top teams,
                 and climb the GameForge leaderboard.

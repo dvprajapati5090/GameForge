@@ -72,7 +72,7 @@ function InfoCard({
 
     return (
 
-        <div className="bg-[#111827] rounded-xl p-5">
+        <div className="bg-black border border-white/10 rounded-xl p-5">
 
             <div className="text-gray-400">
 

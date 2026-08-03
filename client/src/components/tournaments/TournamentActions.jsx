@@ -105,8 +105,8 @@ export default function TournamentActions({ tournament }) {
                     px-6
                     py-3
                     rounded-xl
-                    bg-purple-600
-                    hover:bg-purple-500
+                    bg-black
+                    hover:bg-black
                 "
             >
 
@@ -120,8 +120,8 @@ export default function TournamentActions({ tournament }) {
                     px-6
                     py-3
                     rounded-xl
-                    bg-red-600
-                    hover:bg-red-500
+                    bg-white/20
+                    hover:bg-white/20
                 "
             >
 

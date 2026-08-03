@@ -10,7 +10,7 @@ export default function TournamentHeader({
 
     return (
 
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900">
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-black border border-white/10">
 
             {/* Banner */}
             <div className="relative h-72">

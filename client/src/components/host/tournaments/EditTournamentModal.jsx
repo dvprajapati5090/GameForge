@@ -39,9 +39,9 @@ export default function EditTournamentModal({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="bg-slate-900 w-full max-w-xl rounded-2xl p-8">
+            <div className="bg-black border border-white/10 w-full max-w-xl rounded-2xl p-8">
 
-                <h2 className="mb-6 text-3xl font-bold">
+                <h2 className="mb-6 text-3xl font-bold font-mono">
                     Edit Tournament
                 </h2>
 
@@ -92,7 +92,7 @@ export default function EditTournamentModal({
                     </div>
 
                     <input
-                        className="w-full rounded bg-slate-800 p-3"
+                        className="w-full rounded bg-black border border-white/10 p-3"
                         value={form.name}
                         onChange={(e) =>
                             setForm({
@@ -103,7 +103,7 @@ export default function EditTournamentModal({
                     />
 
                     <textarea
-                        className="w-full rounded bg-slate-800 p-3"
+                        className="w-full rounded bg-black border border-white/10 p-3"
                         value={form.description}
                         onChange={(e) =>
                             setForm({
@@ -115,7 +115,7 @@ export default function EditTournamentModal({
 
                     <input
                         type="number"
-                        className="w-full rounded bg-slate-800 p-3"
+                        className="w-full rounded bg-black border border-white/10 p-3"
                         value={form.prizePool}
                         onChange={(e) =>
                             setForm({
@@ -127,7 +127,7 @@ export default function EditTournamentModal({
 
                     <input
                         type="number"
-                        className="w-full rounded bg-slate-800 p-3 disabled:opacity-50"
+                        className="w-full rounded bg-black border border-white/10 p-3 disabled:opacity-50"
                         value={form.maxTeams}
                         disabled={
                             new Date() >=
@@ -142,7 +142,7 @@ export default function EditTournamentModal({
                     />
 
                     <textarea
-                        className="w-full rounded bg-slate-800 p-3"
+                        className="w-full rounded bg-black border border-white/10 p-3"
                         value={form.rules}
                         onChange={(e) =>
                             setForm({

@@ -38,7 +38,7 @@ export default function CreateTeamPage() {
                     className="
                         uppercase
                         tracking-[0.4em]
-                        text-cyan-400
+                        text-white
                         text-sm
                         font-bold
                     "

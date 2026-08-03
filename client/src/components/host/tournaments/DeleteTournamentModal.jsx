@@ -14,9 +14,9 @@ export default function DeleteTournamentModal({
 
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
 
-            <div className="bg-slate-900 rounded-2xl p-8 w-[420px]">
+            <div className="bg-black border border-white/10 rounded-2xl p-8 w-[420px]">
 
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-2xl font-bold font-mono">
 
                     Delete Tournament?
 

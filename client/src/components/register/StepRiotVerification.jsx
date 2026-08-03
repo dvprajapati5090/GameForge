@@ -56,17 +56,17 @@ export default function StepRiotVerification({
 
     return (
 
-        <div className="space-y-8">
+        <div className="flex flex-col gap-8">
 
             <div>
 
-                <h2 className="text-4xl font-black">
+                <h2 className="text-2xl font-black">
 
                     Verify Riot Account
 
                 </h2>
 
-                <p className="text-gray-400 mt-2">
+                <p className="text-xs text-gray-400 mt-2">
 
                     Link your Valorant profile.
 
@@ -134,7 +134,7 @@ export default function StepRiotVerification({
                     w-full
                     h-12
                     rounded-2xl
-                    bg-slate-800
+                    bg-black border border-white/10
                     border
                     border-white/10
                     px-4
@@ -163,20 +163,6 @@ export default function StepRiotVerification({
         w-full
         h-14
         overflow-hidden
-        rounded-2xl
-        border
-        border-violet-400/20
-        bg-gradient-to-r
-        from-violet-600
-        via-purple-600
-        to-fuchsia-600
-        shadow-lg
-        shadow-violet-600/20
-        transition-all
-        duration-300
-        hover:-translate-y-0.5
-        hover:shadow-violet-500/40
-        active:scale-[0.98]
     "
 
 >
@@ -230,8 +216,8 @@ export default function StepRiotVerification({
                             border
                             border-cyan-500/40
                             bg-cyan-500/5
-                            p-8
-                            space-y-4
+                            flex flex-col
+                            gap-4
                         "
                     >
 
@@ -243,7 +229,7 @@ export default function StepRiotVerification({
 
                             />
 
-                            <h3 className="text-2xl font-black">
+                            <h3 className="text-xl font-black">
 
                                 Riot Account Verified
 
@@ -351,13 +337,13 @@ function Stat({
             "
         >
 
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-400 text-xs">
 
                 {title}
 
             </p>
 
-            <h3 className="font-bold text-xl mt-1">
+            <h3 className="font-bold text-sm mt-1">
 
                 {value}
 

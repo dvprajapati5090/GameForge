@@ -48,7 +48,7 @@ export default function GradientButton({
                 text-white
 
                 border
-                border-violet-500/20
+                border-white/20
 
                 bg-gradient-to-r
                 from-[#4F1D95]
@@ -60,7 +60,7 @@ export default function GradientButton({
                 transition-all
                 duration-300
 
-                hover:border-violet-400/40
+                hover:border-white/20
                 hover:shadow-[0_18px_45px_rgba(109,40,217,.45)]
                 hover:brightness-105
 
@@ -105,9 +105,9 @@ export default function GradientButton({
                     rounded-xl
 
                     bg-gradient-to-r
-                    from-violet-400/10
+                    from-black
                     via-purple-300/10
-                    to-indigo-400/10
+                    to-black
 
                     opacity-0
                     group-hover:opacity-100

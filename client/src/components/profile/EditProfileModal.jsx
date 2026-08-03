@@ -136,7 +136,7 @@ export default function EditProfileModal({
                         border
                         border-white/10
 
-                        bg-slate-900
+                        bg-black border border-white/10
 
                         p-8
 
@@ -146,7 +146,7 @@ export default function EditProfileModal({
 
                     <div className="flex justify-between items-center mb-8">
 
-                        <h2 className="text-3xl font-bold">
+                        <h2 className="text-3xl font-bold font-mono">
 
                             Edit Profile
 
@@ -268,7 +268,7 @@ export default function EditProfileModal({
                                     mt-2
                                     w-full
                                     rounded-xl
-                                    bg-slate-800
+                                    bg-black border border-white/10
                                     border
                                     border-slate-700
                                     p-4
@@ -297,7 +297,7 @@ export default function EditProfileModal({
                                     mt-2
                                     w-full
                                     rounded-xl
-                                    bg-slate-800
+                                    bg-black border border-white/10
                                     border
                                     border-slate-700
                                     p-4
@@ -343,7 +343,7 @@ export default function EditProfileModal({
 
                                                     ? "bg-gradient-to-r from-purple-600 to-cyan-500 border-transparent text-white"
 
-                                                    : "bg-slate-800 border-slate-700 text-gray-300 hover:border-cyan-500"
+                                                    : "bg-black border border-white/10 border-slate-700 text-gray-300 hover:border-cyan-500"
                                             }
                                         `}
                                     >

@@ -20,7 +20,7 @@ export default function AchievementsSection({
 
             <div>
 
-                <h2 className="text-3xl font-bold">
+                <h2 className="text-3xl font-bold font-mono">
 
                     🏅 Achievements
 

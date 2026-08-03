@@ -17,7 +17,7 @@ export default function PlayersSearch({
                     absolute
                     inset-0
                     rounded-2xl
-                    bg-violet-500/10
+                    bg-black
                     blur-xl
                     opacity-0
                     group-focus-within:opacity-100
@@ -37,13 +37,13 @@ export default function PlayersSearch({
                     border
                     border-white/10
 
-                    bg-[#131A2C]/80
+                    bg-black
                     backdrop-blur-xl
 
                     transition-all
                     duration-300
 
-                    group-focus-within:border-violet-400/40
+                    group-focus-within:border-white/20
                     group-focus-within:shadow-[0_0_25px_rgba(139,92,246,.18)]
                 "
             >
@@ -56,7 +56,7 @@ export default function PlayersSearch({
                         text-slate-500
                         transition-colors
                         duration-300
-                        group-focus-within:text-violet-300
+                        group-focus-within:text-white
                     "
                 />
 

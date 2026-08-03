@@ -144,7 +144,7 @@ export default function StepReview({
                     w-10
                     h-10
                     rounded-xl
-                    bg-purple-500/20
+                    bg-black
                     flex
                     items-center
                     justify-center
@@ -195,8 +195,7 @@ export default function StepReview({
             <div>
 
                 <h2 className="
-                    text-2xl
-                    font-bold
+                    text-2xl font-bold font-mono
                     text-white
                 ">
                     Review Tournament
@@ -227,10 +226,10 @@ export default function StepReview({
             <div className="
                 rounded-3xl
                 border
-                border-purple-500/30
+                border-white/10
                 bg-gradient-to-r
                 from-purple-600/20
-                to-indigo-600/20
+                to-black
                 p-8
             ">
 
@@ -245,8 +244,7 @@ export default function StepReview({
 
 
                 <h1 className="
-                    text-3xl
-                    font-bold
+                    text-3xl font-bold font-mono
                     text-white
                     mt-2
                 ">

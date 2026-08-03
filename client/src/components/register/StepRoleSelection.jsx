@@ -29,17 +29,17 @@ export default function StepRoleSelection({
 
     return (
 
-        <div className="space-y-10">
+        <div className="flex flex-col gap-10">
 
             <div className="text-center">
 
-                <h2 className="text-4xl font-black">
+                <h2 className="text-2xl font-black">
 
                     Choose Your Journey
 
                 </h2>
 
-                <p className="text-gray-400 mt-3">
+                <p className="text-xs text-gray-400 mt-2">
 
                     Select how you'll use GameForge
 
@@ -164,8 +164,8 @@ function RoleCard({
                 transition-all
                 duration-300
                 ${selected
-                    ? "border-cyan-400 ring-2 ring-cyan-400/40"
-                    : ""
+                    ? "border-[#0a9396] ring-2 ring-[#0a9396]/40"
+                    : "border-white/20"
                 }
             `}
 
@@ -189,7 +189,7 @@ function RoleCard({
                                 absolute
                                 top-5
                                 right-5
-                                text-cyan-400
+                                text-white
                             "
 
                             size={28}
@@ -200,25 +200,25 @@ function RoleCard({
 
                 }
 
-                <div className="text-cyan-400">
+                <div className="text-white">
 
                     {icon}
 
                 </div>
 
-                <h3 className="text-3xl font-black mt-6">
+                <h3 className="text-xl font-black mt-4">
 
                     {title}
 
                 </h3>
 
-                <p className="text-gray-400 mt-2">
+                <p className="text-xs text-gray-400 mt-1">
 
                     {description}
 
                 </p>
 
-                <ul className="mt-8 space-y-3">
+                <ul className="mt-8 flex flex-col gap-3">
 
                     {
 
@@ -228,7 +228,7 @@ function RoleCard({
 
                                 key={item}
 
-                                className="flex items-center gap-3"
+                                className="flex items-center gap-3 text-sm"
 
                             >
 
@@ -237,7 +237,7 @@ function RoleCard({
                                         w-2
                                         h-2
                                         rounded-full
-                                        bg-cyan-400
+                                        bg-[#0a9396]
                                     "
                                 />
 

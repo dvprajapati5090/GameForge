@@ -22,23 +22,23 @@ export default function PlayerActions({ player }) {
                     rounded-2xl
 
                     border
-                    border-violet-500/30
+                    border-white/20
 
                     bg-gradient-to-r
-                    from-violet-600/15
-                    via-violet-500/10
-                    to-fuchsia-600/15
+                    from-black
+                    via-white/5
+                    to-black
 
-                    text-violet-200
+                    text-white
                     font-semibold
                     text-lg
 
                     transition-all
                     duration-300
 
-                    hover:border-violet-400/60
-                    hover:from-violet-500/25
-                    hover:to-fuchsia-500/20
+                    hover:border-white/20
+                    hover:from-black
+                    hover:to-black
 
                     hover:text-white
                     hover:shadow-[0_0_30px_rgba(139,92,246,.25)]

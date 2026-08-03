@@ -1,150 +1,111 @@
-import { CheckCircle2 } from "lucide-react";
+/**
+ * HeroInfo — Player profile hero info section (gaming glass theme)
+ * Upgraded from Tailwind className approach to inline Space Mono gaming styles
+ */
 import { motion } from "framer-motion";
-import useAuthStore from "../../store/authStore";
-
 import RiotIdentityCard from "./RiotIdentityCard";
 
+const RANK_ACCENT = (rank = "") => {
+    const r = rank.toUpperCase();
+    if (r.includes("RADIANT"))   return { color: "#ffc107", glow: "rgba(255,193,7,0.4)" };
+    if (r.includes("IMMORTAL"))  return { color: "#e8003d", glow: "rgba(232,0,61,0.4)" };
+    if (r.includes("ASCENDANT")) return { color: "#22c55e", glow: "rgba(34,197,94,0.35)" };
+    if (r.includes("DIAMOND"))   return { color: "#818cf8", glow: "rgba(129,140,248,0.35)" };
+    if (r.includes("PLATINUM"))  return { color: "#22d3ee", glow: "rgba(34,211,238,0.35)" };
+    if (r.includes("GOLD"))      return { color: "#fbbf24", glow: "rgba(251,191,36,0.35)" };
+    if (r.includes("SILVER"))    return { color: "#C0C0C0", glow: "rgba(192,192,192,0.3)" };
+    if (r.includes("BRONZE"))    return { color: "#cd7f32", glow: "rgba(205,127,50,0.3)" };
+    return { color: "#6b7280", glow: "rgba(107,114,128,0.2)" };
+};
+
 export default function HeroInfo({ player }) {
-
     const profile = player;
-
-    const getRankColor = () => {
-
-        if (!profile?.currentRank)
-            return "from-slate-600 to-slate-700";
-
-        if (profile.currentRank.includes("IRON"))
-            return "from-gray-600 to-gray-400";
-
-        if (profile.currentRank.includes("BRONZE"))
-            return "from-amber-700 to-amber-500";
-
-        if (profile.currentRank.includes("SILVER"))
-            return "from-gray-300 to-slate-100";
-
-        if (profile.currentRank.includes("GOLD"))
-            return "from-yellow-500 to-yellow-300";
-
-        if (profile.currentRank.includes("PLATINUM"))
-            return "from-cyan-500 to-blue-500";
-
-        if (profile.currentRank.includes("DIAMOND"))
-            return "from-indigo-500 to-purple-500";
-
-        if (profile.currentRank.includes("ASCENDANT"))
-            return "from-green-500 to-emerald-400";
-
-        if (profile.currentRank.includes("IMMORTAL"))
-            return "from-pink-600 to-red-500";
-
-        if (profile.currentRank.includes("RADIANT"))
-            return "from-red-500 to-yellow-400";
-
-        return "from-cyan-500 to-purple-600";
-    };
+    const { color: rankColor, glow: rankGlow } = RANK_ACCENT(profile?.currentRank);
 
     return (
+        <div style={{ textAlign: "center", fontFamily: '"Space Mono", monospace' }}>
+            {/* Eyebrow label */}
+            <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.32em", color: "rgba(255,255,255,0.28)", textTransform: "uppercase", marginBottom: 12 }}
+            >
+                GAMEFORGE PLAYER
+            </motion.p>
 
-        <div className="text-center">
-
-            <div className="space-y-1">
-
-                <p
-                    className="
-                        uppercase
-                        tracking-[8px]
-                        text-cyan-400
-                        text-sm
-                        font-semibold
-                    "
-                >
-                    GAMEFORGE PLAYER
-                </p>
-
-                <h1
-                    className="
-                        text-6xl
-                        font-black
-                        bg-gradient-to-r
-                        from-white
-                        via-cyan-200
-                        to-purple-300
-                        bg-clip-text
-                        text-transparent
-                    "
-                >
-
-                    {profile?.displayName}
-
-                </h1>
-
-            </div>
-
-            <RiotIdentityCard player={profile} />
-
-            <div className="flex justify-center gap-5 flex-wrap mt-5">
-
-                <motion.div
-                    whileHover={{
-                        scale: 1.05,
-                        rotate: -1
+            {/* Display Name — animated red gradient */}
+            <motion.h1
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                style={{ fontSize: "clamp(32px,6vw,64px)", fontWeight: 700, letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 8 }}
+            >
+                <motion.span
+                    animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                    style={{
+                        display: "inline-block",
+                        background: "linear-gradient(90deg, #e8003d 0%, #ff8060 30%, #fff 55%, #ff3060 80%, #e8003d 100%)",
+                        backgroundSize: "200% 100%",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
                     }}
-                    className={`
-                        relative
-                        overflow-hidden
-                        px-7
-                        py-3
-                        rounded-full
-                        font-bold
-                        bg-gradient-to-r
-                        ${getRankColor()}
-                        shadow-lg
-                    `}
                 >
+                    {profile?.displayName || "Anonymous"}
+                </motion.span>
+            </motion.h1>
 
-                    <div
-                        className="
-                            absolute
-                            inset-0
-                            bg-white/10
-                            opacity-0
-                            hover:opacity-100
-                            transition
-                        "
-                    />
+            {/* Riot identity card */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}>
+                <RiotIdentityCard player={profile} />
+            </motion.div>
 
-                    <span className="relative z-10 flex items-center gap-2">
-
-                        🏆
-
+            {/* Rank + RR chips */}
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginTop: 20 }}
+            >
+                {/* Rank chip */}
+                <motion.div
+                    whileHover={{ scale: 1.06, rotate: -1 }}
+                    style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        padding: "10px 20px", borderRadius: 999,
+                        background: `linear-gradient(135deg, ${rankColor}22 0%, ${rankColor}0d 100%)`,
+                        border: `1px solid ${rankColor}60`,
+                        boxShadow: `0 0 18px ${rankGlow}`,
+                        cursor: "default",
+                    }}
+                >
+                    <span style={{ fontSize: 16 }}>🏆</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: rankColor, letterSpacing: "0.06em" }}>
                         {profile?.currentRank || "UNRANKED"}
-
                     </span>
-
                 </motion.div>
 
-                <div
-                    className="
-                        px-8
-                        py-3
-                        rounded-full
-                        border
-                        border-cyan-500/30
-                        bg-cyan-500/10
-                        text-cyan-300
-                        font-bold
-                        text-lg
-                    "
+                {/* RR chip */}
+                <motion.div
+                    whileHover={{ scale: 1.06 }}
+                    style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        padding: "10px 20px", borderRadius: 999,
+                        background: "rgba(124,58,237,0.12)",
+                        border: "1px solid rgba(124,58,237,0.35)",
+                        boxShadow: "0 0 14px rgba(124,58,237,0.2)",
+                        cursor: "default",
+                    }}
                 >
-
-                    ⚡ {profile?.rankRating ?? 0} RR
-
-                </div>
-
-            </div>
-
+                    <motion.span animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                        ⚡
+                    </motion.span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#a78bfa", letterSpacing: "0.06em" }}>
+                        {profile?.rankRating ?? 0} RR
+                    </span>
+                </motion.div>
+            </motion.div>
         </div>
-
     );
-
 }

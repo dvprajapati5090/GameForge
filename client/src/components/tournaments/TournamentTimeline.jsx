@@ -37,7 +37,7 @@ export default function TournamentTimeline({
         <div
             className="
                 rounded-3xl
-                bg-slate-900
+                bg-black border border-white/10
                 border
                 border-white/10
                 p-8
@@ -67,7 +67,7 @@ export default function TournamentTimeline({
                                     h-12
                                     rounded-full
                                     bg-cyan-500/20
-                                    text-cyan-400
+                                    text-white
                                     flex
                                     items-center
                                     justify-center

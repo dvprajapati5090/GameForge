@@ -169,7 +169,7 @@ export default function TournamentRegistrationCard({
             rounded-3xl
             border
             border-white/10
-            bg-slate-900
+            bg-black border border-white/10
             p-8
             sticky
             top-24
@@ -200,7 +200,7 @@ export default function TournamentRegistrationCard({
 
                 </div>
 
-                <div className="mt-3 h-3 rounded-full bg-slate-800 overflow-hidden">
+                <div className="mt-3 h-3 rounded-full bg-black border border-white/10 overflow-hidden">
 
                     <div
 
@@ -279,7 +279,7 @@ export default function TournamentRegistrationCard({
 
                         </p>
 
-                        <p className="text-2xl font-bold text-amber-400">
+                        <p className="text-2xl font-bold font-mono text-amber-400">
 
                             ₹{tournament.entryFee}
 
@@ -358,7 +358,7 @@ export default function TournamentRegistrationCard({
 
                     registrationClosed ? (
 
-                        <div className="rounded-xl bg-red-500/15 border border-red-500/20 p-4 flex gap-3 items-center">
+                        <div className="rounded-xl bg-white/20 border border-red-500/20 p-4 flex gap-3 items-center">
 
                             <AlertCircle/>
 
@@ -372,7 +372,7 @@ export default function TournamentRegistrationCard({
 
                     isFull ? (
 
-                        <div className="rounded-xl bg-red-500/15 border border-red-500/20 p-4 flex gap-3 items-center">
+                        <div className="rounded-xl bg-white/20 border border-red-500/20 p-4 flex gap-3 items-center">
 
                             <AlertCircle/>
 
@@ -434,7 +434,7 @@ function Info({
 
         <div className="flex gap-4">
 
-            <div className="text-cyan-400">
+            <div className="text-white">
 
                 {icon}
 

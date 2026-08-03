@@ -90,9 +90,9 @@ export default function RegisterWizard() {
                 rounded-[30px]
 
                 border
-                border-violet-500/15
+                border-white/30
 
-                bg-[#131B2E]/75
+                bg-black/60
 
                 backdrop-blur-[24px]
 
@@ -118,7 +118,7 @@ export default function RegisterWizard() {
 
                     rounded-full
 
-                    bg-violet-500/15
+                    bg-white/5
 
                     blur-3xl
 
@@ -140,7 +140,7 @@ export default function RegisterWizard() {
 
                     bg-gradient-to-r
                     from-transparent
-                    via-violet-500/70
+                    via-white/5
                     to-transparent
                 "
             />
@@ -159,7 +159,7 @@ export default function RegisterWizard() {
                     border-l
                     border-t
 
-                    border-violet-500/25
+                    border-white/20
                 "
             />
 
@@ -175,7 +175,7 @@ export default function RegisterWizard() {
                     border-r
                     border-b
 
-                    border-violet-500/25
+                    border-white/20
                 "
             />
 
@@ -222,7 +222,7 @@ export default function RegisterWizard() {
                             className="
                                 mt-2
 
-                                text-4xl
+                                text-2xl
 
                                 font-black
 
@@ -232,7 +232,7 @@ export default function RegisterWizard() {
                             "
                         >
                             Create
-                            <span className="text-violet-400">
+                            <span className="text-white">
                                 {" "}GameForge
                             </span>
                             {" "}Account
@@ -244,9 +244,9 @@ export default function RegisterWizard() {
 
                                 max-w-xl
 
-                                text-sm
+                                text-xs
 
-                                leading-7
+                                leading-6
 
                                 text-slate-400
                             "

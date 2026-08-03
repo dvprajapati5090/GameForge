@@ -6,7 +6,7 @@ export default function TournamentTeams({
 
     return (
 
-        <div className="rounded-3xl bg-slate-900 p-8">
+        <div className="rounded-3xl bg-black border border-white/10 p-8">
 
             <h2 className="text-3xl font-black mb-8">
 
@@ -40,7 +40,7 @@ export default function TournamentTeams({
 
                                 key={team._id}
 
-                                className="flex justify-between items-center bg-slate-800 rounded-xl p-4"
+                                className="flex justify-between items-center bg-black border border-white/10 rounded-xl p-4"
 
                             >
 

@@ -1,533 +1,152 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
+import { Eye, EyeOff, Crosshair } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { loginSchema } from '../validators/auth.validator';
+import useLogin from '../hooks/useLogin';
+import GoogleLoginButton from '../components/auth/GoogleLoginButton';
 
-import { loginSchema } from "../validators/auth.validator";
-import useLogin from "../hooks/useLogin";
+const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+function GlitchText({ text }) {
+  const [display, setDisplay] = useState(text);
+  const scramble = () => {
+    let frame = 0;
+    const iv = setInterval(() => {
+      frame++;
+      const cursor = Math.floor(frame / 2);
+      setDisplay(text.split('').map((c, i) => {
+        if (c === ' ') return ' ';
+        if (i < cursor) return c;
+        return CHARS[Math.floor(Math.random() * CHARS.length)];
+      }).join(''));
+      if (cursor >= text.length) { clearInterval(iv); setDisplay(text); }
+    }, 25);
+  };
+  return <span onMouseEnter={scramble}>{display}</span>;
+}
 
-import Background from "../components/auth/Background";
-import HeroSection from "../components/auth/HeroSection";
-
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useState } from "react";
-
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
-
-import GoogleLoginButton from "../components/auth/GoogleLoginButton";
+const VALORANT_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_083515_290e5a10-0b95-41af-a5e2-32b6389baa4d.mp4';
 
 export default function Login() {
+  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(loginSchema) });
+  const loginMutation = useLogin();
+  const [showPw, setShowPw] = useState(false);
+  const location = useLocation();
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm({
-        resolver: zodResolver(loginSchema)
+  useEffect(() => {
+    if (location.state?.success) toast.success(location.state.success);
+  }, [location]);
+
+  const onSubmit = (data) => {
+    loginMutation.mutate(data, {
+      onError: (err) => toast.error(err.response?.data?.message || 'Login failed'),
     });
-
-    const loginMutation = useLogin();
-
-    const [showPassword, setShowPassword] = useState(false);
-
-    const onSubmit = (data) => {
-        loginMutation.mutate(data, {
-            onError: (error) => {
-                toast.error(
-                    error.response?.data?.message ||
-                    "Login failed"
-                );
-            }
-        });
-    };
-
-    const location = useLocation();
-
-    useEffect(() => {
-
-        if (location.state?.success) {
-
-            toast.success(
-
-                location.state.success
-
-            );
-
-        }
-
-    }, [location]);
-
-    return (
-        <>
-            <Background />
-
-            <div
-                className="
-                    relative
-                    z-10
-                    min-h-screen
-
-                    flex
-
-                    px-8
-                    lg:px-20
-                    xl:px-32
-                "
-            >
-
-                {/* LEFT SIDE */}
-                <HeroSection />
-
-                {/* RIGHT SIDE */}
-                <div
-                    className="
-                        flex
-                        w-full
-                        lg:w-[45%]
-
-                        items-center
-                        justify-center
-
-                        px-8
-                    "
-                >
-
-                    <motion.div
-                        initial={{
-                            opacity: 0,
-                            x: 80,
-                            scale: 0.95
-                        }}
-                        animate={{
-                            opacity: 1,
-                            x: 0,
-                            scale: 1,
-                            y: [0, -6, 0]
-                        }}
-                        transition={{
-                            opacity: { duration: 0.8 },
-                            x: { duration: 0.8 },
-                            scale: { duration: 0.8 },
-                            y: {
-                                duration: 6,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }
-                        }}
-                        whileHover={{
-                            scale: 1.02
-                        }}
-                        className="
-                            relative
-                            overflow-hidden
-
-                            w-full
-                            max-w-md
-
-                            rounded-3xl
-
-                            border
-                            border-white/10
-
-                            bg-slate-950/40
-
-                            backdrop-blur-2xl
-
-                            shadow-[0_0_120px_rgba(59,130,246,0.18)]
-
-                            p-10
-                        "
-                    >
-                        <div
-                            className="
-                                absolute
-                                left-1/2
-                                top-10
-                                -translate-x-1/2
-
-                                w-52
-                                h-24
-
-                                bg-cyan-500/20
-                                blur-3xl
-
-                                rounded-full
-                                pointer-events-none
-                            "
-                        />
-
-                        <div
-                            className="
-                                absolute
-                                inset-0
-
-                                rounded-3xl
-
-                                p-[1px]
-
-                                bg-gradient-to-r
-                                from-cyan-400/30
-                                via-purple-500/30
-                                to-pink-500/30
-
-                                animate-pulse
-                                pointer-events-none
-                            "
-                        />
-
-                        {/* Heading */}
-
-                        <div className="text-center mb-8">
-
-                            <motion.h1
-                                initial={{
-                                    opacity:0,
-                                    y:-20
-                                }}
-                                animate={{
-                                    opacity:1,
-                                    y:0
-                                }}
-                                transition={{
-                                    delay:0.3,
-                                    duration:0.6
-                                }}
-                                className="
-                                    text-5xl
-                                    font-extrabold
-                                    bg-gradient-to-r
-                                    from-purple-400
-                                    via-blue-400
-                                    to-cyan-300
-                                    text-transparent
-                                    bg-clip-text
-                                "
-                            >
-                                GameForge
-                            </motion.h1>
-
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{
-                                    delay: 0.4,
-                                    duration: 0.8
-                                }}
-                                className="mt-3 text-gray-300"
-                            >
-                                Welcome back Player 🎮
-                            </motion.p>
-
-                        </div>
-
-                        {/* FORM */}
-
-                        <form
-                            onSubmit={handleSubmit(onSubmit)}
-                            className="space-y-5"
-                        >
-
-                            {/* EMAIL */}
-
-                            <motion.div
-                            initial={{opacity:0,x:30}}
-                            animate={{opacity:1,x:0}}
-                            transition={{delay:0.45}}
-                            >
-
-                                <label className="text-white/90 font-medium">
-                                    Email
-                                </label>
-
-                                <input
-                                    type="email"
-                                    placeholder="Enter Email"
-                                    {...register("email")}
-                                    className="
-                                        w-full
-                                        rounded-2xl
-                                        bg-slate-900/70
-                                        border
-                                        border-slate-700
-                                        py-4 px-5
-                                        pr-14
-                                        text-white
-                                        placeholder:text-slate-500
-                                        outline-none
-                                        transition
-                                        focus:border-cyan-400
-                                        focus:ring-4
-                                        focus:ring-cyan-400/20
-
-                                        hover:shadow-lg
-                                        hover:shadow-cyan-500/10
-
-                                        duration-300
-                                    "
-                                />
-
-                                {
-                                    errors.email &&
-                                    <p className="text-red-400 text-sm mt-1">
-                                        {errors.email.message}
-                                    </p>
-                                }
-
-                            </motion.div>
-
-                            {/* PASSWORD */}
-
-                            <motion.div
-                            initial={{opacity:0,x:30}}
-                            animate={{opacity:1,x:0}}
-                            transition={{delay:0.5}}
-                            >
-
-                                <label className="text-white/90 font-medium">
-                                    Password
-                                </label>
-
-                                <div className="relative mt-2">
-
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="Enter Password"
-                                        {...register("password")}
-                                        className="
-                                            w-full
-                                            rounded-2xl
-                                            bg-slate-900/70
-                                            border
-                                            border-slate-700
-                                            py-4 px-5
-                                            pr-14
-                                            text-white
-                                            placeholder:text-slate-500
-                                            outline-none
-                                            transition
-                                            focus:border-cyan-400
-                                            focus:ring-4
-                                            focus:ring-cyan-400/20
-                                            
-                                            hover:shadow-lg
-                                            hover:shadow-cyan-500/10
-
-                                            duration-300
-                                        "
-                                    />
-
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="
-                                        absolute
-                                        right-4
-                                        top-1/2
-                                        -translate-y-1/2
-
-                                        text-gray-400
-
-                                        hover:text-cyan-400
-                                        hover:rotate-12
-
-                                        transition-all
-                                        duration-300
-
-                                        cursor-pointer
-                                        "
-                                    >
-                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
-                                    </button>
-
-                                </div>
-
-                                {errors.password && (
-                                    <p className="text-red-400 text-sm mt-1">
-                                        {errors.password.message}
-                                    </p>
-                                )}
-
-                            </motion.div>
-
-                            <motion.div
-                                initial={{ opacity: 0, x: 30 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.75 }}
-                                className="flex items-center justify-between text-sm"
-                            >
-
-                                <label className="flex items-center gap-2 cursor-pointer">
-
-                                    <input
-                                        type="checkbox"
-                                        className="
-                                            accent-purple-600
-                                            w-4
-                                            h-4
-                                        "
-                                    />
-
-                                    <span className="text-gray-300">
-                                        Remember Me
-                                    </span>
-
-                                </label>
-
-                                <button
-                                    type="button"
-                                    className="
-                                        text-cyan-400
-                                        hover:text-cyan-300
-                                        transition
-                                    "
-                                >
-                                    Forgot Password?
-                                </button>
-
-                            </motion.div>
-
-                            {/* BUTTON */}
-
-                            <button
-                                type="submit"
-                                disabled={loginMutation.isPending}
-                                className="
-                                group
-                                relative
-                                overflow-hidden
-
-                                w-full
-
-                                rounded-xl
-
-                                py-4
-
-                                font-bold
-                                text-lg
-
-                                bg-gradient-to-r
-                                from-purple-600
-                                via-blue-600
-                                to-cyan-500
-
-                                text-white
-
-                                shadow-xl
-
-                                transition-all
-                                duration-300
-
-                                hover:scale-[1.02]
-                                hover:shadow-cyan-400/70
-
-                                active:scale-95
-
-                                disabled:opacity-60
-                                disabled:cursor-not-allowed
-                                "
-                            >
-
-                                <span
-                                className="
-                                absolute
-                                top-0
-                                -left-full
-
-                                h-full
-                                w-1/2
-
-                                bg-white/20
-                                skew-x-12
-
-                                transition-all
-                                duration-700
-
-                                group-hover:left-[150%]
-                                "
-                                />
-
-                                <span className="relative z-10">
-
-                                {loginMutation.isPending ? (
-                                    <div className="flex items-center justify-center gap-3">
-
-                                        <div
-                                            className="
-                                                w-5
-                                                h-5
-                                                border-2
-                                                border-white/40
-                                                border-t-white
-                                                rounded-full
-                                                animate-spin
-                                            "
-                                        />
-
-                                        Logging In...
-
-                                    </div>
-                                ) : (
-                                    "Login"
-                                )}
-
-                                </span>
-
-                            </button>
-
-                            <div className="mt-6">
-
-                                <div className="flex items-center gap-4 mb-6">
-
-                                    <div className="flex-1 h-px bg-white/10" />
-
-                                    <span className="text-gray-400 text-sm">
-
-                                        OR
-
-                                    </span>
-
-                                    <div className="flex-1 h-px bg-white/10" />
-
-                                </div>
-
-                                <GoogleLoginButton />
-
-                            </div>
-
-                            <p className="text-center text-gray-400 mt-6">
-
-                                Don't have an account?{" "}
-
-                                <Link
-
-                                    to="/register"
-
-                                    className="
-                                        text-cyan-400
-                                        hover:text-cyan-300
-                                        font-semibold
-                                    "
-
-                                >
-
-                                    Register
-
-                                </Link>
-
-                            </p>
-
-                        </form>
-
-                    </motion.div>
-
-                </div>
-
+  };
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#000', display: 'flex', fontFamily: '"Space Mono", monospace', overflow: 'hidden', position: 'relative' }}>
+      {/* Left: Cinematic video panel */}
+      <div className="hidden lg:block" style={{ flex: '0 0 55%', position: 'relative', overflow: 'hidden' }}>
+        <video autoPlay muted loop playsInline src={VALORANT_VIDEO}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0) 60%, #000 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)' }} />
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+          backgroundSize: '40px 40px' }} />
+        <div style={{ position: 'absolute', bottom: 48, left: 48 }}>
+          <p style={{ fontSize: 11, letterSpacing: '0.3em', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: 12 }}>
+            GAMEFORGE // VALORANT PLATFORM
+          </p>
+          <h2 style={{ fontSize: 'clamp(28px,4vw,48px)', fontWeight: 700, color: '#fff', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
+            The Arena<br />Awaits.
+          </h2>
+          <p style={{ marginTop: 16, fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, maxWidth: 320 }}>
+            Sync your Riot ID. Track your stats. Compete in curated Valorant tournaments.
+          </p>
+        </div>
+      </div>
+
+      {/* Right: Login form */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 32px', position: 'relative', overflowY: 'auto' }}>
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)',
+          backgroundSize: '24px 24px' }} />
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.215, 0.61, 0.355, 1] }}
+          style={{ width: '100%', maxWidth: 400, position: 'relative', zIndex: 1 }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 48 }}>
+            <Crosshair size={22} color="#fff" />
+            <span style={{ fontSize: 18, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em' }}>GameForge</span>
+          </div>
+
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: '#fff', letterSpacing: '-0.03em', marginBottom: 8 }}>
+            <GlitchText text="Sign In" />
+          </h1>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginBottom: 40, letterSpacing: '0.05em' }}>
+            ENTER YOUR CREDENTIALS TO ACCESS THE ARENA
+          </p>
+
+          <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Email */}
+            <div>
+              <label style={{ display: 'block', fontSize: 11, letterSpacing: '0.15em', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: 8 }}>Email</label>
+              <input {...register('email')} type="email" placeholder="agent@gameforge.gg"
+                style={{ width: '100%', padding: '12px 16px', background: 'rgba(255,255,255,0.04)', border: errors.email ? '1px solid rgba(255,80,80,0.6)' : '1px solid rgba(255,255,255,0.1)', borderRadius: 10, color: '#fff', fontSize: 14, fontFamily: '"Space Mono", monospace', outline: 'none', boxSizing: 'border-box' }}
+              />
+              {errors.email && <p style={{ marginTop: 6, fontSize: 11, color: 'rgba(255,80,80,0.9)' }}>{errors.email.message}</p>}
             </div>
 
-        </>
-    );
+            {/* Password */}
+            <div>
+              <label style={{ display: 'block', fontSize: 11, letterSpacing: '0.15em', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: 8 }}>Password</label>
+              <div style={{ position: 'relative' }}>
+                <input {...register('password')} type={showPw ? 'text' : 'password'} placeholder="••••••••"
+                  style={{ width: '100%', padding: '12px 44px 12px 16px', background: 'rgba(255,255,255,0.04)', border: errors.password ? '1px solid rgba(255,80,80,0.6)' : '1px solid rgba(255,255,255,0.1)', borderRadius: 10, color: '#fff', fontSize: 14, fontFamily: '"Space Mono", monospace', outline: 'none', boxSizing: 'border-box' }}
+                />
+                <button type="button" onClick={() => setShowPw(!showPw)}
+                  style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: 0 }}>
+                  {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              {errors.password && <p style={{ marginTop: 6, fontSize: 11, color: 'rgba(255,80,80,0.9)' }}>{errors.password.message}</p>}
+            </div>
 
+            {/* Submit */}
+            <motion.button type="submit" disabled={loginMutation.isPending}
+              style={{ width: '100%', padding: '13px 0', marginTop: 8, background: loginMutation.isPending ? 'rgba(255,255,255,0.6)' : '#fff', color: '#000', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, fontFamily: '"Space Mono", monospace', cursor: loginMutation.isPending ? 'not-allowed' : 'pointer', letterSpacing: '0.08em' }}
+              whileHover={!loginMutation.isPending ? { scale: 1.02 } : {}}
+              whileTap={!loginMutation.isPending ? { scale: 0.98 } : {}}
+            >
+              {loginMutation.isPending ? 'AUTHENTICATING...' : 'ENTER ARENA'}
+            </motion.button>
+
+            {/* Divider */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '4px 0' }}>
+              <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em' }}>OR</span>
+              <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
+            </div>
+
+            {/* Google */}
+            <GoogleLoginButton />
+          </form>
+
+          <p style={{ marginTop: 32, fontSize: 12, color: 'rgba(255,255,255,0.35)', textAlign: 'center' }}>
+            No account yet?{' '}
+            <Link to="/register" style={{ color: '#fff', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.3)' }}>
+              Register here
+            </Link>
+          </p>
+        </motion.div>
+      </div>
+    </div>
+  );
 }

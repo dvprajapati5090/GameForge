@@ -8,14 +8,14 @@ export default function TeamsTab({ tournament }) {
 
         return (
 
-            <div className="rounded-3xl bg-slate-900 p-12 text-center">
+            <div className="rounded-3xl bg-black border border-white/10 p-12 text-center">
 
                 <Users
                     className="mx-auto mb-4 text-gray-500"
                     size={50}
                 />
 
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-2xl font-bold font-mono">
 
                     No Teams Registered
 
@@ -47,7 +47,7 @@ export default function TeamsTab({ tournament }) {
 
                         className="
                             rounded-2xl
-                            bg-slate-900
+                            bg-black border border-white/10
                             border
                             border-white/10
                             p-5
@@ -95,7 +95,7 @@ export default function TeamsTab({ tournament }) {
 
                         </div>
 
-                        <span className="text-cyan-400 font-semibold">
+                        <span className="text-white font-semibold">
 
                             {team.members?.length || 0} Players
 

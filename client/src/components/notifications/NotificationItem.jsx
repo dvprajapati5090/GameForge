@@ -46,7 +46,7 @@ export default function NotificationItem({
 
             icon: Users,
 
-            iconColor: "text-cyan-400",
+            iconColor: "text-white",
 
             border: "border-cyan-500/40",
 
@@ -62,7 +62,7 @@ export default function NotificationItem({
 
             border: "border-red-500/40",
 
-            bg: "bg-red-500/10"
+            bg: "bg-white/20"
 
         },
 
@@ -70,11 +70,11 @@ export default function NotificationItem({
 
             icon: Gamepad2,
 
-            iconColor: "text-purple-400",
+            iconColor: "text-white/80",
 
-            border: "border-purple-500/40",
+            border: "border-white/10",
 
-            bg: "bg-purple-500/10"
+            bg: "bg-black"
 
         },
 
@@ -236,7 +236,7 @@ export default function NotificationItem({
 
                 config.border,
 
-                "bg-[#1b2333]",
+                "bg-black",
 
                 "p-4",
 
@@ -442,7 +442,7 @@ export default function NotificationItem({
 
                                         rounded-lg
 
-                                        bg-red-600
+                                        bg-white/20
 
                                         hover:bg-red-700
 

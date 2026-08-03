@@ -5,7 +5,7 @@ export default function DashboardLayout({ children }) {
 
     return (
 
-        <div className="min-h-screen flex bg-[#0F172A]">
+        <div className="min-h-screen flex bg-black">
 
             <Sidebar />
 

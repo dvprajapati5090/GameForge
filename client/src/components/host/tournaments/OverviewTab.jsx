@@ -6,9 +6,9 @@ export default function OverviewTab({
 
     return (
 
-        <div className="rounded-3xl bg-slate-900 p-8">
+        <div className="rounded-3xl bg-black border border-white/10 p-8">
 
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-bold font-mono">
 
                 Description
 
@@ -20,7 +20,7 @@ export default function OverviewTab({
 
             </p>
 
-            <h2 className="mt-8 text-2xl font-bold">
+            <h2 className="mt-8 text-2xl font-bold font-mono">
 
                 Rules
 

@@ -88,7 +88,7 @@ export default function EditTeamModal({
                     w-full
                     max-w-lg
                     rounded-3xl
-                    bg-slate-900
+                    bg-black border border-white/10
                     border
                     border-white/10
                     p-8
@@ -199,7 +199,7 @@ export default function EditTeamModal({
                         className="
                             w-full
                             rounded-xl
-                            bg-slate-800
+                            bg-black border border-white/10
                             border
                             border-white/10
                             p-4
@@ -224,7 +224,7 @@ export default function EditTeamModal({
                         className="
                             w-full
                             rounded-xl
-                            bg-slate-800
+                            bg-black border border-white/10
                             border
                             border-white/10
                             p-4

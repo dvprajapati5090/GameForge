@@ -90,7 +90,7 @@ export default function InvitePlayerModal({
                 <div className="flex items-center gap-3">
 
                     <UserPlus
-                        className="text-cyan-400"
+                        className="text-white"
                     />
 
                     <h2
@@ -152,7 +152,7 @@ export default function InvitePlayerModal({
                             rounded-xl
                             border
                             border-white/10
-                            bg-slate-800
+                            bg-black border border-white/10
                             px-4
                             py-3
                             outline-none

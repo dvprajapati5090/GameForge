@@ -41,7 +41,7 @@ export default function TeamMembers({ team }) {
 
                 </h2>
 
-                <span className="text-cyan-400 font-semibold">
+                <span className="text-white font-semibold">
 
                     {team.members.length}/{team.maxMembers} Players
 
@@ -299,7 +299,7 @@ function MemberCard({
                             h-full
                             rounded-full
                             overflow-hidden
-                            bg-slate-900
+                            bg-black border border-white/10
                         "
 
                     >
@@ -468,7 +468,7 @@ function MemberCard({
                                 mt-5
                                 w-full
                                 rounded-xl
-                                bg-red-600
+                                bg-white/20
                                 hover:bg-red-700
                                 transition
                                 py-2
@@ -543,7 +543,7 @@ function InviteCard({
 
                 size={40}
 
-                className="text-cyan-400"
+                className="text-white"
 
             />
 

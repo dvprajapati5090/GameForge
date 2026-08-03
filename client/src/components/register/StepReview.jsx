@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 import {
     CheckCircle2,
@@ -103,13 +104,19 @@ export default function StepReview({
 
             }
 
-            navigate("/dashboard");
+            // Route HOST to /host panel, PLAYER to /dashboard
+            const destination = form.role === "HOST" ? "/host" : "/dashboard";
+            navigate(destination);
 
         }
 
         catch (error) {
 
-            console.log(error);
+            console.error(error);
+            toast.error(
+                error?.response?.data?.message ||
+                "Registration failed. Please try again."
+            );
 
         }
 
@@ -131,7 +138,7 @@ export default function StepReview({
 
             transition={{ duration: 0.35 }}
 
-            className="space-y-10"
+            className="flex flex-col gap-10"
 
         >
 
@@ -143,7 +150,7 @@ export default function StepReview({
                     overflow-hidden
                     rounded-3xl
                     border
-                    border-violet-500/20
+                    border-white/20
                     bg-white/5
                     p-10
                     backdrop-blur-xl
@@ -151,9 +158,9 @@ export default function StepReview({
                 "
             >
 
-                <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-violet-600/20 blur-3xl" />
+                <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-white blur-3xl" />
 
-                <div className="absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-fuchsia-600/10 blur-3xl" />
+                <div className="absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-black blur-3xl" />
 
                 <div className="relative">
 
@@ -179,13 +186,13 @@ export default function StepReview({
 
                     </div>
 
-                    <h2 className="mt-6 text-4xl font-black text-white">
+                    <h2 className="mt-4 text-2xl font-black text-white">
 
                         Ready to Join GameForge
 
                     </h2>
 
-                    <p className="mx-auto mt-3 max-w-2xl text-gray-400">
+                    <p className="mx-auto mt-2 text-xs max-w-2xl text-gray-400">
 
                         Everything looks perfect.
                         Review your information one last time before
@@ -206,7 +213,7 @@ export default function StepReview({
                     overflow-hidden
                     rounded-3xl
                     border
-                    border-violet-500/20
+                    border-white/20
                     bg-white/5
                     p-8
                     backdrop-blur-xl
@@ -214,9 +221,9 @@ export default function StepReview({
 
             >
 
-                <div className="absolute -right-16 top-0 h-48 w-48 rounded-full bg-violet-600/10 blur-3xl" />
+                <div className="absolute -right-16 top-0 h-48 w-48 rounded-full bg-white blur-3xl" />
 
-                <div className="relative space-y-7">
+                <div className="relative flex flex-col gap-7">
 
                     <div className="flex items-center gap-4">
 
@@ -229,9 +236,9 @@ export default function StepReview({
                                 justify-center
                                 rounded-2xl
                                 border
-                                border-violet-500/30
-                                bg-violet-500/10
-                                text-violet-300
+                                border-white/20
+                                bg-black
+                                text-white
                             "
                         >
 
@@ -241,13 +248,13 @@ export default function StepReview({
 
                         <div>
 
-                            <h3 className="text-2xl font-bold text-white">
+                            <h3 className="text-xl font-bold font-mono text-white">
 
                                 Account Summary
 
                             </h3>
 
-                            <p className="mt-1 text-gray-400">
+                            <p className="mt-1 text-xs text-gray-400">
 
                                 Please verify all your information.
 
@@ -372,8 +379,8 @@ export default function StepReview({
                         transition-all
                         duration-300
                         hover:-translate-y-0.5
-                        hover:border-violet-500/30
-                        hover:bg-violet-500/10
+                        hover:border-white/20
+                        hover:bg-black
                     "
 
                 >
@@ -389,19 +396,7 @@ export default function StepReview({
                     onClick={handleRegister}
 
                     className="
-                        rounded-2xl
-                        bg-gradient-to-r
-                        from-violet-600
-                        via-purple-600
-                        to-fuchsia-600
-                        px-8
-                        py-3
-                        shadow-lg
-                        shadow-violet-600/20
-                        transition-all
-                        duration-300
-                        hover:-translate-y-0.5
-                        hover:shadow-violet-500/40
+                        min-w-[180px]
                     "
 
                 >
@@ -450,7 +445,7 @@ function ReviewRow({
                 transition-all
                 duration-300
                 hover:-translate-y-0.5
-                hover:border-violet-500/30
+                hover:border-white/20
                 hover:bg-white/10
             "
 
@@ -464,11 +459,11 @@ function ReviewRow({
                     h-24
                     w-24
                     rounded-full
-                    bg-violet-600/10
+                    bg-white
                     blur-3xl
                     transition-all
                     duration-300
-                    group-hover:bg-violet-600/20
+                    group-hover:bg-white
                 "
             />
 
@@ -479,15 +474,15 @@ function ReviewRow({
                     <div
                         className="
                             flex
-                            h-11
-                            w-11
+                            h-9
+                            w-9
                             items-center
                             justify-center
                             rounded-xl
                             border
-                            border-violet-500/20
-                            bg-violet-500/10
-                            text-violet-300
+                            border-white/20
+                            bg-black
+                            text-white
                         "
                     >
 
@@ -499,7 +494,7 @@ function ReviewRow({
 
                         <p
                             className="
-                                text-xs
+                                text-[11px]
                                 font-semibold
                                 uppercase
                                 tracking-widest
@@ -514,7 +509,7 @@ function ReviewRow({
                         <p
                             className="
                                 mt-1
-                                text-lg
+                                text-sm
                                 font-semibold
                                 text-white
                                 break-all

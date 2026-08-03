@@ -36,8 +36,8 @@ export default function StepPrizeRules({
         outline-none
         transition-all
         duration-300
-        hover:border-purple-400/40
-        focus:border-purple-500
+        hover:border-white/10
+        focus:border-white/10
         focus:ring-2
         focus:ring-purple-500/20
     `;
@@ -58,8 +58,7 @@ export default function StepPrizeRules({
             <div>
 
                 <h2 className="
-                    text-2xl
-                    font-bold
+                    text-2xl font-bold font-mono
                     text-white
                 ">
                     Prize Pool & Rules
@@ -152,7 +151,7 @@ export default function StepPrizeRules({
             duration-300
             ${
                 form.isPaid
-                    ? "bg-purple-600 shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+                    ? "bg-black shadow-[0_0_20px_rgba(168,85,247,0.5)]"
                     : "bg-white/20"
             }
         `}
@@ -386,8 +385,8 @@ export default function StepPrizeRules({
                         resize-none
                         transition-all
                         duration-300
-                        hover:border-purple-400/40
-                        focus:border-purple-500
+                        hover:border-white/10
+                        focus:border-white/10
                         focus:ring-2
                         focus:ring-purple-500/20
                     "

@@ -86,9 +86,9 @@ function TimeBox({ value, label }) {
 
     return (
 
-        <div className="rounded-xl bg-slate-800 px-4 py-3 text-center">
+        <div className="rounded-xl bg-black border border-white/10 px-4 py-3 text-center">
 
-            <h2 className="text-2xl font-black text-cyan-400">
+            <h2 className="text-2xl font-black text-white">
 
                 {String(value).padStart(2, "0")}
 

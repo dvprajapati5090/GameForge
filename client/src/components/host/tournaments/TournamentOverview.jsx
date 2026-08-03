@@ -6,7 +6,7 @@ export default function TournamentOverview({ tournament }) {
 
         <div className="space-y-6">
 
-            <div className="rounded-3xl bg-slate-900 p-8 border border-white/10">
+            <div className="rounded-3xl bg-black border border-white/10 p-8 border border-white/10">
 
                 <div className="flex justify-between items-start">
 
@@ -95,7 +95,7 @@ function InfoCard({
 
     return (
 
-        <div className="rounded-2xl bg-slate-900 p-6 border border-white/10">
+        <div className="rounded-2xl bg-black border border-white/10 p-6 border border-white/10">
 
             <p className="text-gray-400">
 

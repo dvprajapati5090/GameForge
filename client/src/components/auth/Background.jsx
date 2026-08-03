@@ -45,7 +45,7 @@ export default function Background() {
                     absolute
                     w-96
                     h-96
-                    bg-purple-600/15
+                    bg-black
                     blur-[130px]
                     rounded-full
                     top-10

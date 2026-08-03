@@ -78,7 +78,7 @@ function LoginCard() {
         border
         border-white/10
 
-        bg-[#10151F]/92
+        bg-black
 
         backdrop-blur-2xl
 
@@ -87,7 +87,7 @@ function LoginCard() {
         transition-all
         duration-500
 
-        hover:border-violet-500/35
+        hover:border-white/20
 
         hover:shadow-[0_35px_90px_rgba(139,92,246,.18)]
 
@@ -99,7 +99,7 @@ function LoginCard() {
     >
       {/* Decorative Lines */}
 
-      <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-transparent via-violet-500/70 to-transparent" />
+      <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-transparent via-white/5 to-transparent" />
 
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -114,7 +114,7 @@ function LoginCard() {
 
         rounded-full
 
-        bg-violet-500/10
+        bg-black
 
         blur-[130px]
 
@@ -140,7 +140,7 @@ function LoginCard() {
 
         rounded-full
 
-        bg-violet-500/8
+        bg-black
 
         blur-[130px]
 
@@ -185,7 +185,7 @@ function LoginCard() {
               "
             >
               Game
-              <span className="text-violet-400">Forge</span>
+              <span className="text-white">Forge</span>
             </h1>
           </div>
 
@@ -274,7 +274,7 @@ function LoginCard() {
               text-slate-300
             "
           >
-            <FaEnvelope className="text-violet-400" />
+            <FaEnvelope className="text-white" />
             EMAIL ADDRESS
           </label>
 
@@ -291,7 +291,7 @@ function LoginCard() {
                 border
                 border-slate-700/70
 
-                bg-[#0D1424]
+                bg-black
 
                 px-5
                 py-3
@@ -305,11 +305,11 @@ function LoginCard() {
                 transition-all
                 duration-300
 
-                focus:border-violet-500
+                focus:border-white/20
                 focus:ring-4
                 focus:ring-violet-500/10
 
-                hover:border-violet-400/40
+                hover:border-white/20
               "
             />
           </div>
@@ -340,7 +340,7 @@ function LoginCard() {
               text-slate-300
             "
           >
-            <FaLock className="text-violet-400" />
+            <FaLock className="text-white" />
             PASSWORD
           </label>
 
@@ -357,7 +357,7 @@ function LoginCard() {
                 border
                 border-slate-700/70
 
-                bg-[#0D1424]
+                bg-black
 
                 px-5
                 py-3
@@ -372,11 +372,11 @@ function LoginCard() {
                 transition-all
                 duration-300
 
-                focus:border-violet-500
+                focus:border-white/20
                 focus:ring-4
                 focus:ring-violet-500/10
 
-                hover:border-violet-400/40
+                hover:border-white/20
               "
             />
 
@@ -391,7 +391,7 @@ function LoginCard() {
 
                 text-slate-400
 
-                hover:text-violet-400
+                hover:text-white
 
                 transition
               "
@@ -433,11 +433,11 @@ function LoginCard() {
             className="
               text-sm
 
-              text-violet-400
+              text-white
 
               transition
 
-              hover:text-violet-300
+              hover:text-white
             "
           >
             Forgot Password?
@@ -474,7 +474,7 @@ function LoginCard() {
 
             rounded-2xl
 
-            bg-violet-600
+            bg-white
 
             py-3.5
 
@@ -487,7 +487,7 @@ function LoginCard() {
             transition-all
             duration-300
 
-            hover:bg-violet-500
+            hover:bg-black
 
             disabled:cursor-not-allowed
             disabled:opacity-60
@@ -569,9 +569,9 @@ function LoginCard() {
                 rounded-lg
 
                 border
-                border-violet-500/25
+                border-white/20
 
-                bg-violet-500/10
+                bg-black
 
                 px-5
                 py-2.5
@@ -582,13 +582,13 @@ function LoginCard() {
                 uppercase
                 tracking-[0.18rem]
 
-                text-violet-300
+                text-white
 
                 transition-all
                 duration-300
 
-                hover:bg-violet-500/20
-                hover:border-violet-400
+                hover:bg-black
+                hover:border-white/20
                 hover:text-white
                 "
             >
@@ -620,7 +620,7 @@ function LoginCard() {
 
           bg-gradient-to-r
           from-transparent
-          via-violet-500/60
+          via-white/5
           to-transparent
         "
       />
@@ -640,7 +640,7 @@ function LoginCard() {
           border-l
           border-t
 
-          border-violet-500/20
+          border-white/20
         "
       />
 
@@ -657,7 +657,7 @@ function LoginCard() {
           border-r
           border-b
 
-          border-violet-500/20
+          border-white/20
         "
       />
     </motion.div>

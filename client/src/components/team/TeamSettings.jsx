@@ -183,7 +183,7 @@ function SettingCard({
 
         >
 
-            <div className="text-cyan-400">
+            <div className="text-white">
 
                 {icon}
 

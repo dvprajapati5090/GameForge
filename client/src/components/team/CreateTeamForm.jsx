@@ -215,7 +215,7 @@ export default function CreateTeamForm() {
                         rounded-2xl
                         border
                         border-white/10
-                        bg-slate-900
+                        bg-black border border-white/10
                         px-5
                         py-4
                         outline-none
@@ -291,7 +291,7 @@ export default function CreateTeamForm() {
                         rounded-2xl
                         border
                         border-white/10
-                        bg-slate-900
+                        bg-black border border-white/10
                         px-5
                         py-4
                         outline-none

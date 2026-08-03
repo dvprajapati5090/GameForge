@@ -1,157 +1,122 @@
 import { motion } from "framer-motion";
-import {
-    CalendarDays,
-    Clock3,
-    Swords,
-    ArrowRight,
-} from "lucide-react";
+import { CalendarDays, Clock3, Swords, ArrowRight } from "lucide-react";
+import { useState } from "react";
 
 const matches = [
-    {
-        title: "Quarter Final",
-        teams: "Team Alpha vs Team Bravo",
-        time: "Today • 7:00 PM",
-    },
-    {
-        title: "Semi Final",
-        teams: "Winner Match 1 vs Winner Match 2",
-        time: "Tomorrow • 6:30 PM",
-    },
+    { title: "Quarter Final", teams: "Team Alpha vs Team Bravo",              time: "Today • 7:00 PM",     accent: '#e8003d' },
+    { title: "Semi Final",    teams: "Winner Match 1 vs Winner Match 2", time: "Tomorrow • 6:30 PM", accent: '#C0C0C0' },
 ];
 
 export default function UpcomingMatches() {
+    const [hoveredIndex, setHoveredIndex] = useState(null);
+
     return (
-        <motion.div
+        <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-            className="
-                relative
-                overflow-hidden
-                rounded-[30px]
-                border
-                border-violet-500/20
-                bg-white/5
-                backdrop-blur-2xl
-                p-6
-                shadow-[0_0_40px_rgba(124,58,237,0.12)]
-            "
+            transition={{ duration: 0.5, delay: 0.25 }}
+            style={{
+                position: 'relative', overflow: 'hidden',
+                borderTop: '2px solid #C0C0C0',
+                border: '1px solid rgba(192,192,192,0.1)',
+                borderTop: '2px solid #C0C0C0',
+                background: '#000000',
+                fontFamily: '"Space Mono", monospace',
+            }}
         >
-            <div
-                className="
-                    absolute
-                    inset-0
-                    bg-gradient-to-br
-                    from-violet-600/10
-                    via-transparent
-                    to-fuchsia-600/10
-                "
-            />
+            {/* Dot grid */}
+            <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+                backgroundImage: 'radial-gradient(rgba(192,192,192,0.1) 1px, transparent 1px)',
+                backgroundSize: '24px 24px',
+            }} />
 
-            <div className="relative z-10">
-                <div
-                    className="
-                        inline-flex
-                        items-center
-                        gap-2
-                        rounded-full
-                        border
-                        border-violet-500/20
-                        bg-violet-500/10
-                        px-4
-                        py-2
-                        text-xs
-                        font-semibold
-                        text-violet-300
-                    "
-                >
-                    <CalendarDays size={14} />
-                    Match Schedule
+            <div style={{ position: 'relative', zIndex: 1, padding: '24px' }}>
+                {/* Header */}
+                <div style={{ marginBottom: 20 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#C0C0C0', padding: '4px 12px', borderRadius: 999 }}>
+                            <CalendarDays size={11} color="#000" />
+                            <span style={{ fontSize: 9, fontWeight: 700, color: '#000', letterSpacing: '0.2em', textTransform: 'uppercase' }}>Match Schedule</span>
+                        </div>
+                        <div style={{ flex: 1, height: 1, background: 'linear-gradient(to right, rgba(192,192,192,0.4), transparent)' }} />
+                    </div>
+                    <h2 style={{ fontSize: 20, fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>Upcoming Matches</h2>
+                    <p style={{ marginTop: 5, fontSize: 11, color: '#C0C0C0', opacity: 0.55, lineHeight: 1.6 }}>Your next scheduled tournament matches.</p>
                 </div>
 
-                <h2 className="mt-4 text-2xl font-black text-white">
-                    Upcoming Matches
-                </h2>
+                {/* Red divider */}
+                <div style={{ height: 1, background: 'linear-gradient(to right, rgba(232,0,61,0.5), transparent)', marginBottom: 14 }} />
 
-                <p className="mt-2 text-sm text-gray-400">
-                    Your next scheduled tournament matches.
-                </p>
-
-                <div className="mt-6 space-y-4">
-                    {matches.map((match, index) => (
-                        <motion.div
-                            key={match.title}
-                            initial={{ opacity: 0, y: 15 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.08 }}
-                            whileHover={{
-                                y: -3,
-                            }}
-                            className="
-                                group
-                                rounded-2xl
-                                border
-                                border-white/10
-                                bg-white/5
-                                p-5
-                                transition-all
-                                duration-300
-                                hover:border-violet-400/30
-                                hover:bg-violet-500/10
-                                hover:shadow-[0_0_25px_rgba(124,58,237,0.15)]
-                            "
-                        >
-                            <div className="flex items-start justify-between">
-                                <div className="flex gap-4">
-                                    <div
-                                        className="
-                                            flex
-                                            h-12
-                                            w-12
-                                            items-center
-                                            justify-center
-                                            rounded-2xl
-                                            bg-gradient-to-br
-                                            from-violet-500
-                                            to-fuchsia-500
-                                            text-white
-                                        "
-                                    >
-                                        <Swords size={20} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {matches.map((match, index) => {
+                        const isRed = match.accent === '#e8003d';
+                        const isHovered = hoveredIndex === index;
+                        return (
+                            <motion.div
+                                key={match.title}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.35, delay: 0.06 * index }}
+                                style={{
+                                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                    borderLeft: `3px solid ${match.accent}`,
+                                    border: `1px solid ${isRed ? 'rgba(232,0,61,0.18)' : 'rgba(192,192,192,0.12)'}`,
+                                    borderLeft: `3px solid ${match.accent}`,
+                                    background: isHovered
+                                        ? (isRed ? 'rgba(232,0,61,0.14)' : 'rgba(192,192,192,0.09)')
+                                        : (isRed ? 'rgba(232,0,61,0.05)' : 'rgba(192,192,192,0.03)'),
+                                    padding: '14px 16px',
+                                    transition: 'all 0.15s ease',
+                                    transform: isHovered ? 'translateX(6px)' : 'none',
+                                    cursor: 'default',
+                                }}
+                                onMouseEnter={() => setHoveredIndex(index)}
+                                onMouseLeave={() => setHoveredIndex(null)}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                                    {/* Icon box */}
+                                    <div style={{
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        width: 40, height: 40, flexShrink: 0,
+                                        border: `1px solid ${match.accent}`,
+                                        background: isRed ? 'rgba(232,0,61,0.2)' : 'rgba(192,192,192,0.1)',
+                                        color: match.accent,
+                                    }}>
+                                        <Swords size={18} />
                                     </div>
-
                                     <div>
-                                        <h3 className="font-bold text-white">
-                                            {match.title}
-                                        </h3>
-
-                                        <p className="mt-2 text-sm text-gray-400">
-                                            {match.teams}
-                                        </p>
-
-                                        <div className="mt-3 flex items-center gap-2 text-violet-300">
-                                            <Clock3 size={15} />
-                                            <span className="text-sm font-medium">
-                                                {match.time}
-                                            </span>
+                                        <h3 style={{ fontSize: 12, fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.04em' }}>{match.title}</h3>
+                                        <p style={{ marginTop: 3, fontSize: 10, color: '#C0C0C0', opacity: 0.6, letterSpacing: '0.04em' }}>{match.teams}</p>
+                                        <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                                            <Clock3 size={11} style={{ color: match.accent }} />
+                                            <span style={{ fontSize: 10, fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.04em' }}>{match.time}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <ArrowRight
-                                    size={18}
-                                    className="
-                                        text-violet-400
-                                        transition-transform
-                                        duration-300
-                                        group-hover:translate-x-1
-                                    "
-                                />
-                            </div>
-                        </motion.div>
-                    ))}
+                                {/* Pulsing status dot + arrow */}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+                                    <motion.div
+                                        animate={{ opacity: [1, 0.3, 1], scale: [1, 1.2, 1] }}
+                                        transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
+                                        style={{ width: 6, height: 6, borderRadius: '50%', background: match.accent }}
+                                    />
+                                    <div style={{
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        width: 28, height: 28,
+                                        border: `1px solid ${match.accent}`,
+                                        background: isHovered ? match.accent : 'transparent',
+                                        color: isHovered ? '#fff' : match.accent,
+                                        transition: 'all 0.15s ease',
+                                    }}>
+                                        <ArrowRight size={13} />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
-        </motion.div>
+        </motion.section>
     );
 }

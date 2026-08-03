@@ -1,276 +1,78 @@
-import useAuthStore from "../../store/authStore";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 export default function ProfileAvatar({ player }) {
+  const profile = player;
+  const banner = profile?.riotCard
+    ? `https://media.valorant-api.com/playercards/${profile.riotCard}/largeart.png`
+    : null;
 
-    const profile = player;
+  return (
+    <div style={{ position: 'relative', height: 280, borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+      {/* Banner */}
+      {banner ? (
+        <img src={banner} alt="Player Card"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+      ) : (
+        <div style={{ position: 'absolute', inset: 0,
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
+          backgroundSize: '32px 32px', background: '#080808' }} />
+      )}
 
-    const banner =
-        profile?.riotCard
-            ? `https://media.valorant-api.com/playercards/${profile.riotCard}/largeart.png`
-            : null;
+      {/* Dark overlay */}
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%)' }} />
 
-    return (
+      {/* Avatar */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        style={{
+          position: 'absolute', left: '50%', bottom: 24,
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+        }}
+      >
+        {/* Avatar ring */}
+        <div style={{
+          width: 112, height: 112, borderRadius: '50%',
+          border: '2px solid rgba(255,255,255,0.25)',
+          padding: 3, background: '#000',
+          position: 'relative',
+          boxShadow: '0 0 32px rgba(255,255,255,0.08)',
+        }}>
+          <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', background: '#111' }}>
+            {profile?.avatar ? (
+              <img src={profile.avatar} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : profile?.riotCard ? (
+              <img src={`https://media.valorant-api.com/playercards/${profile.riotCard}/displayicon.png`} alt="Player Card"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40, fontWeight: 700, color: '#fff', fontFamily: '"Space Mono", monospace' }}>
+                {profile?.displayName?.charAt(0)?.toUpperCase()}
+              </div>
+            )}
+          </div>
 
-        <div
-            className="
-                relative
-                h-80
-                rounded-3xl
-                overflow-hidden
-                border
-                border-white/10
-            "
-        >
-
-            {/* Banner */}
-
-            {
-                banner ? (
-
-                    <img
-                        src={banner}
-                        alt="Player Card"
-                        className="
-                            absolute
-                            inset-0
-                            w-full
-                            h-full
-                            object-cover object-top
-                        "
-                    />
-
-                ) : (
-
-                    <div
-                        className="
-                            absolute
-                            inset-0
-                            bg-gradient-to-br
-                            from-slate-900
-                            via-purple-900
-                            to-cyan-900
-                        "
-                    />
-
-                )
-            }
-
-            {/* Dark Overlay */}
-
-            <div
-                className="
-                    absolute
-                    inset-0
-                    bg-gradient-to-b
-                    from-black/20
-                    via-slate-900/35
-                    to-slate-950
-                "
-            />
-
-            {/* Blur Glow */}
-
-            <div
-                className="
-                    absolute
-                    -top-20
-                    -left-20
-                    w-72
-                    h-56
-                    rounded-full
-                    bg-cyan-500/20
-                    blur-3xl
-                    animate-pulse
-                "
-            />
-
-            <div
-                className="
-                    absolute
-                    -bottom-20
-                    -right-20
-                    w-72
-                    h-56
-                    bg-purple-600/20
-                    rounded-full
-                    blur-3xl
-                "
-            />
-
-            {/* Avatar */}
-
-            <motion.div
-
-                initial={{
-                    scale: 0.8,
-                    opacity: 0
-                }}
-
-                animate={{
-                    scale: 1,
-                    opacity: 1,
-                    y:[0,-8,0]
-                }}
-
-                transition={{
-                    delay: 0.2,
-                    duration: 0.5,
-                    y:{
-
-                        duration:5,
-
-                        repeat:Infinity,
-
-                        ease:"easeInOut"
-
-                    }
-                }}
-
-                className="
-                    absolute
-                    left-1/2
-                    bottom-6
-                    -translate-x-1/2
-                    z-30
-                "
-            >
-
-                <div
-
-                    className="
-                        absolute
-                        inset-0
-                        rounded-full
-                        animate-[spin_12s_linear_infinite]
-                        opacity-40
-                        blur-sm
-                        bg-gradient-to-r
-                        from-cyan-400
-                        via-purple-500
-                        to-cyan-400
-                    "
-
-                />
-
-                <div
-                    className="
-                        w-48
-                        h-48
-                        rounded-full
-                        bg-gradient-to-r
-                        from-cyan-500
-                        via-blue-500
-                        to-purple-600
-                        p-1.5
-                        shadow-[0_0_45px_rgba(6,182,212,0.45)]
-                    "
-                >
-
-                    <div
-                        className="
-                            w-full
-                            h-full
-                            rounded-full
-                            overflow-hidden
-                            bg-slate-900
-                        "
-                    >
-
-                        {
-                            profile?.avatar ? (
-
-                                <motion.img
-                                    src={profile.avatar}
-                                    alt="Avatar"
-                                    className="
-                                        w-full
-                                        h-full
-                                        object-cover
-                                    "
-                                />
-
-                            ) : profile?.riotCard ? (
-
-                                <motion.img
-                                    src={`https://media.valorant-api.com/playercards/${profile.riotCard}/displayicon.png`}
-                                    alt="Player Card"
-                                    className="
-                                        w-full
-                                        h-full
-                                        object-cover
-                                    "
-                                />
-
-                            ) : (
-
-                                <div
-                                    className="
-                                        w-full
-                                        h-full
-                                        flex
-                                        items-center
-                                        justify-center
-                                        text-5xl
-                                        font-black
-                                    "
-                                >
-                                    {profile?.displayName?.charAt(0)?.toUpperCase()}
-                                </div>
-
-                            )
-                        }
-
-                        <div
-                            className="
-                                absolute
-                                -bottom-4
-                                left-1/2
-                                -translate-x-1/2
-                                px-4
-                                py-1.5
-                                rounded-full
-                                bg-gradient-to-r
-                                from-yellow-500
-                                to-amber-400
-                                text-slate-900
-                                text-sm
-                                font-black
-                                shadow-lg
-                                border
-                                border-yellow-300
-                            "
-                        >
-
-                            LV {profile?.accountLevel ?? 1}
-
-                        </div>
-
-                        <div
-                            className="
-                                absolute
-                                bottom-2
-                                right-2
-                                w-6
-                                h-6
-                                rounded-full
-                                bg-emerald-400
-                                border-[5px]
-                                border-slate-900
-                                shadow-[0_0_18px_rgba(16,185,129,0.8)]
-                            "
-                        />
-
-                    </div>
-
-                </div>
-
-                
-
-            </motion.div>
-
+          {/* Online dot */}
+          <div style={{
+            position: 'absolute', bottom: 4, right: 4,
+            width: 14, height: 14, borderRadius: '50%',
+            background: '#22c55e', border: '3px solid #000',
+          }} />
         </div>
 
-    );
-
+        {/* Level badge */}
+        <div style={{
+          marginTop: 8, padding: '3px 12px', borderRadius: 20,
+          border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.8)',
+          fontSize: 11, fontWeight: 700, fontFamily: '"Space Mono", monospace',
+          color: 'rgba(255,255,255,0.8)', letterSpacing: '0.08em',
+          backdropFilter: 'blur(8px)',
+        }}>
+          LV {profile?.accountLevel ?? 1}
+        </div>
+      </motion.div>
+    </div>
+  );
 }

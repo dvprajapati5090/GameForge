@@ -12,9 +12,9 @@ function Card({
 
     return (
 
-        <div className="rounded-2xl bg-slate-900 p-6">
+        <div className="rounded-2xl bg-black border border-white/10 p-6">
 
-            <div className="text-cyan-400">
+            <div className="text-white">
                 {icon}
             </div>
 
@@ -22,7 +22,7 @@ function Card({
                 {title}
             </p>
 
-            <h2 className="mt-2 text-2xl font-bold">
+            <h2 className="mt-2 text-2xl font-bold font-mono">
                 {value}
             </h2>
 

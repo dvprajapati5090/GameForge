@@ -163,7 +163,7 @@ export default function DeleteAccountModal({
                         w-full
                         max-w-lg
                         rounded-3xl
-                        bg-slate-900
+                        bg-black border border-white/10
                         border
                         border-red-500/30
                         p-8
@@ -207,7 +207,7 @@ export default function DeleteAccountModal({
                                     w-12
                                     h-12
                                     rounded-2xl
-                                    bg-red-500/10
+                                    bg-white/20
                                     flex
                                     items-center
                                     justify-center
@@ -221,7 +221,7 @@ export default function DeleteAccountModal({
 
                             <div>
 
-                                <h2 className="text-3xl font-bold">
+                                <h2 className="text-3xl font-bold font-mono">
 
                                     Delete Account
 
@@ -278,7 +278,7 @@ export default function DeleteAccountModal({
                             rounded-2xl
                             border
                             border-red-500/20
-                            bg-red-500/5
+                            bg-white/20
                             p-5
                             mb-8
                         "

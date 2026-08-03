@@ -51,7 +51,7 @@ export default function TransferCaptainModal({
 
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
 
-            <div className="bg-slate-900 rounded-3xl border border-white/10 w-full max-w-lg p-8">
+            <div className="bg-black border border-white/10 rounded-3xl border border-white/10 w-full max-w-lg p-8">
 
                 <h2 className="text-3xl font-black">
 

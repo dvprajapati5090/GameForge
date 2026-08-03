@@ -23,9 +23,20 @@ import errorHandler from "./middleware/error.middleware.js";
 const app = express();
 
 // Middleware
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    "http://localhost:5173",
+    "http://localhost:5174",
+].filter(Boolean);
+
 app.use(
     cors({
-        origin: process.env.CLIENT_URL,
+        origin: (origin, callback) => {
+            // Allow requests with no origin (e.g. mobile apps, curl)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.includes(origin)) return callback(null, true);
+            callback(new Error(`CORS: Origin ${origin} not allowed`));
+        },
         credentials: true,
     })
 );
@@ -49,6 +60,11 @@ app.use("/api/team-chat",chatRoutes);
 app.use("/api/auth/google",googleRoutes);
 
 app.use("/api/payments",paymentRoutes);
+
+// 404 catch-all — must be before global error handler
+app.use((_req, res) => {
+    res.status(404).json({ success: false, message: "Route not found" });
+});
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);

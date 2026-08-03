@@ -22,7 +22,7 @@ export default function TournamentSettings({
 
         <div className="space-y-6">
 
-            <div className="rounded-3xl bg-slate-900 p-8">
+            <div className="rounded-3xl bg-black border border-white/10 p-8">
 
                 <h2 className="text-3xl font-black">
 

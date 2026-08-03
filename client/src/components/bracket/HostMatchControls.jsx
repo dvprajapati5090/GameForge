@@ -34,7 +34,7 @@ export default function HostMatchControls({ match }) {
                     placeholder="Team A Score"
                     value={scoreA}
                     onChange={(e) => setScoreA(e.target.value)}
-                    className="bg-[#1f2937] rounded-lg p-2"
+                    className="bg-black border border-white/10 rounded-lg p-2"
                 />
 
                 <input
@@ -42,7 +42,7 @@ export default function HostMatchControls({ match }) {
                     placeholder="Team B Score"
                     value={scoreB}
                     onChange={(e) => setScoreB(e.target.value)}
-                    className="bg-[#1f2937] rounded-lg p-2"
+                    className="bg-black border border-white/10 rounded-lg p-2"
                 />
 
             </div>

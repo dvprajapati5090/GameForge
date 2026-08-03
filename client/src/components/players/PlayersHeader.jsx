@@ -14,7 +14,7 @@ export default function PlayersHeader() {
                     h-56
                     w-56
                     rounded-full
-                    bg-violet-600/10
+                    bg-white
                     blur-[110px]
                 "
             />
@@ -30,16 +30,16 @@ export default function PlayersHeader() {
                         rounded-full
 
                         border
-                        border-violet-500/20
+                        border-white/20
 
-                        bg-violet-500/10
+                        bg-black
 
                         px-5
                         py-2
 
                         text-sm
                         font-semibold
-                        text-violet-200
+                        text-white
                     "
                 >
 

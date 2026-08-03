@@ -85,8 +85,7 @@ export default function EmailSentModal({
                 <h2
                     className="
                         mt-5
-                        text-2xl
-                        font-bold
+                        text-2xl font-bold font-mono
                         text-white
                     "
                 >
@@ -114,7 +113,7 @@ export default function EmailSentModal({
                 <div
                     className="
                         mt-6
-                        text-cyan-400
+                        text-white
                         font-semibold
                     "
                 >

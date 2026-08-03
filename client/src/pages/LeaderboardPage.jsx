@@ -1,557 +1,285 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import clsx from "clsx";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Trophy, Search, ChevronUp, ChevronDown, Minus, Crown, Flame, Zap } from 'lucide-react';
+import useLeaderboard from '../hooks/useLeaderboard';
+import useDebounce from '../hooks/useDebounce';
+import FloatingParticles from '../components/ui/FloatingParticles';
+import { ShimmerGrid } from '../components/ui/ShimmerCard';
+import Sparkline from '../components/ui/Sparkline';
 
-import useDebounce from "../hooks/useDebounce";
+const F = '"Space Mono", monospace';
 
-import useLeaderboard from "../hooks/useLeaderboard";
+const SORT_OPTIONS = [
+  { value: 'stats.wins',          label: 'Wins',          icon: Trophy },
+  { value: 'stats.losses',        label: 'Losses',        icon: Flame },
+  { value: 'stats.matchesPlayed', label: 'Matches',       icon: Zap },
+  { value: 'stats.championships', label: 'Championships', icon: Crown },
+  { value: 'winRate',             label: 'Win Rate',      icon: Zap },
+];
+
+/* Rank badge with medal icons for top 3 */
+function RankBadge({ rank }) {
+  if (rank === 1) return (
+    <motion.div
+      animate={{ scale: [1, 1.12, 1], rotate: [0, 5, -5, 0] }}
+      transition={{ duration: 3, repeat: Infinity }}
+      style={{ fontSize: 22, filter: 'drop-shadow(0 0 8px rgba(255,193,7,0.8))' }}
+    >🥇</motion.div>
+  );
+  if (rank === 2) return (
+    <motion.div
+      animate={{ scale: [1, 1.08, 1] }}
+      transition={{ duration: 3.5, repeat: Infinity }}
+      style={{ fontSize: 22, filter: 'drop-shadow(0 0 6px rgba(192,192,192,0.7))' }}
+    >🥈</motion.div>
+  );
+  if (rank === 3) return (
+    <motion.div
+      animate={{ scale: [1, 1.06, 1] }}
+      transition={{ duration: 4, repeat: Infinity }}
+      style={{ fontSize: 22, filter: 'drop-shadow(0 0 5px rgba(205,127,50,0.6))' }}
+    >🥉</motion.div>
+  );
+  return (
+    <div style={{
+      width: 32, height: 32, borderRadius: 8,
+      border: '1px solid rgba(255,255,255,0.1)',
+      background: 'rgba(255,255,255,0.04)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontSize: 11, color: 'rgba(255,255,255,0.45)', fontWeight: 700,
+      fontFamily: F,
+    }}>
+      {rank}
+    </div>
+  );
+}
+
+/* Win rate indicator bar */
+function WinRateBar({ rate }) {
+  const pct = Math.min(parseFloat(rate) || 0, 100);
+  const color = pct >= 70 ? '#22c55e' : pct >= 50 ? '#ffc107' : pct >= 30 ? '#ff9020' : '#e8003d';
+  return (
+    <div style={{ width: '100%' }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color, marginBottom: 4, textAlign: 'center' }}>{rate}%</div>
+      <div style={{ height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 99, overflow: 'hidden' }}>
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${pct}%` }}
+          transition={{ duration: 1.1, ease: 'easeOut' }}
+          style={{ height: '100%', borderRadius: 99, background: `linear-gradient(to right, ${color}, ${color}88)`, boxShadow: `0 0 6px ${color}` }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function LeaderboardPage() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
+  const [sort, setSort]     = useState('stats.wins');
+  const [searchFocus, setSearchFocus] = useState(false);
+  const debouncedSearch     = useDebounce(search, 400);
+  const { data, isLoading } = useLeaderboard({ search: debouncedSearch, sort });
 
-  const debouncedSearch = useDebounce(search, 400);
-
-  const [sort, setSort] = useState("stats.wins");
-
-  const { data, isLoading } = useLeaderboard({
-    search: debouncedSearch,
-    sort,
-  });
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-[70vh] text-xl">
-        Loading...
+  if (isLoading) return (
+    <div style={{ fontFamily: F, maxWidth: 1200, margin: '0 auto', padding: '32px 0' }}>
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ height: 44, width: 240, borderRadius: 12, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }} />
       </div>
-    );
-  }
+      <ShimmerGrid count={8} columns={1} />
+    </div>
+  );
 
-  const players = data.data.players;
+  const players = data?.data?.players || [];
 
   return (
-    <div className="max-w-7xl mx-auto p-8">
+    <div style={{ fontFamily: F, maxWidth: 1200, margin: '0 auto', padding: '8px 0 48px', position: 'relative' }}>
+
       {/* Header */}
-
-      <div className="mb-10">
-        <h1 className="text-5xl font-bold flex items-center gap-3">
-          🏆 Leaderboard
-        </h1>
-
-        <p className="text-gray-400 mt-2 text-lg">
-          Top players across all GameForge tournaments
-        </p>
-      </div>
-
-      {/* Search & Sort */}
-
-      <div
-        className="
-        mb-8
-        rounded-3xl
-        border
-        border-white/10
-        bg-white/[0.03]
-        backdrop-blur-xl
-        p-6
-    "
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{ marginBottom: 32, position: 'relative', overflow: 'hidden',
+          border: '1px solid rgba(232,0,61,0.2)', borderTop: '2px solid #e8003d',
+          background: 'rgba(7,0,10,0.72)', backdropFilter: 'blur(24px)',
+          borderRadius: 22, padding: '36px 40px',
+          boxShadow: '0 0 48px rgba(232,0,61,0.1), 0 20px 60px rgba(0,0,0,0.5)',
+        }}
       >
-        <div className="flex flex-col lg:flex-row gap-6 lg:items-end">
-          {/* Search */}
+        <FloatingParticles count={20} color="#e8003d" opacity={0.35} speed={0.6} />
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: 'radial-gradient(rgba(192,192,192,0.08) 1px, transparent 1px)',
+          backgroundSize: '26px 26px',
+        }} />
 
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-400 mb-3">
-              Search Player
-            </label>
-
-            <div className="relative">
-              <span
-                className="
-                        absolute
-                        left-5
-                        top-1/2
-                        -translate-y-1/2
-                        text-xl
-                        text-violet-300
-                    "
-              >
-                🔍
-              </span>
-
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by username or display name..."
-                className="
-                        w-full
-                        h-16
-                        rounded-2xl
-                        pl-14
-                        pr-5
-
-                        bg-[#1a2233]
-
-                        border
-                        border-white/10
-
-                        text-white
-                        placeholder:text-gray-500
-
-                        outline-none
-
-                        transition-all
-                        duration-300
-
-                        focus:border-violet-500
-                        focus:ring-4
-                        focus:ring-violet-500/15
-                        hover:border-violet-400/30
-                    "
-              />
-            </div>
-          </div>
-
-          {/* Sort */}
-
-          <div className="w-full lg:w-72">
-            <label className="block text-sm font-medium text-gray-400 mb-3">
-              Sort Leaderboard
-            </label>
-
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="
-                    w-full
-                    h-16
-
-                    rounded-2xl
-
-                    bg-[#1a2233]
-
-                    border
-                    border-white/10
-
-                    px-5
-
-                    text-white
-
-                    outline-none
-
-                    transition-all
-                    duration-300
-
-                    focus:border-violet-500
-                    focus:ring-4
-                    focus:ring-violet-500/15
-                    hover:border-violet-400/30
-                "
+        <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+          <div>
+            <motion.div
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(232,0,61,0.15)', border: '1px solid rgba(232,0,61,0.4)', padding: '5px 14px', marginBottom: 14, borderRadius: 999 }}
+              animate={{ boxShadow: ['0 0 12px rgba(232,0,61,0.2)', '0 0 24px rgba(232,0,61,0.4)', '0 0 12px rgba(232,0,61,0.2)'] }}
+              transition={{ duration: 2.5, repeat: Infinity }}
             >
-              <option value="stats.wins">🏆 Wins</option>
-
-              <option value="stats.losses">❌ Losses</option>
-
-              <option value="stats.matchesPlayed">🎮 Matches Played</option>
-
-              <option value="stats.championships">👑 Championships</option>
-
-              <option value="winRate">📈 Win Rate</option>
-            </select>
+              <motion.div animate={{ scale: [1, 1.4, 1], opacity: [1, 0.4, 1] }} transition={{ duration: 1.4, repeat: Infinity }} style={{ width: 6, height: 6, borderRadius: '50%', background: '#e8003d' }} />
+              <span style={{ fontSize: 9, fontWeight: 700, color: '#e8003d', letterSpacing: '0.22em', textTransform: 'uppercase' }}>Live Rankings</span>
+            </motion.div>
+            <h1 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.03em', lineHeight: 1, marginBottom: 8 }}>
+              Leaderboard
+            </h1>
+            <p style={{ fontSize: 11, color: 'rgba(192,192,192,0.5)', letterSpacing: '0.06em' }}>
+              Top players across all GameForge tournaments
+            </p>
           </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Trophy size={20} color="#ffc107" />
+            <span style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{players.length}</span>
+            <span style={{ fontSize: 11, color: 'rgba(192,192,192,0.5)', letterSpacing: '0.08em' }}>RANKED PLAYERS</span>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Controls */}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+        {/* Search */}
+        <div style={{ position: 'relative', flex: '1 1 240px' }}>
+          <Search size={14} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: searchFocus ? '#e8003d' : 'rgba(255,255,255,0.3)', transition: 'color 0.2s', pointerEvents: 'none' }} />
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            onFocus={() => setSearchFocus(true)}
+            onBlur={() => setSearchFocus(false)}
+            placeholder="Search players..."
+            style={{
+              width: '100%', padding: '11px 16px 11px 40px',
+              background: 'rgba(255,255,255,0.04)',
+              border: `1px solid ${searchFocus ? 'rgba(232,0,61,0.5)' : 'rgba(255,255,255,0.09)'}`,
+              boxShadow: searchFocus ? '0 0 12px rgba(232,0,61,0.15)' : 'none',
+              borderRadius: 12, color: '#fff', fontSize: 12, fontFamily: F, outline: 'none',
+              transition: 'border-color 0.2s, box-shadow 0.2s',
+            }}
+          />
+        </div>
+        {/* Sort tabs */}
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {SORT_OPTIONS.map(opt => (
+            <button
+              key={opt.value}
+              onClick={() => setSort(opt.value)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 5,
+                padding: '9px 14px', borderRadius: 10,
+                border: `1px solid ${sort === opt.value ? 'rgba(232,0,61,0.5)' : 'rgba(255,255,255,0.09)'}`,
+                background: sort === opt.value ? 'rgba(232,0,61,0.12)' : 'rgba(255,255,255,0.03)',
+                color: sort === opt.value ? '#e8003d' : 'rgba(255,255,255,0.4)',
+                fontSize: 10, fontWeight: 700, letterSpacing: '0.08em',
+                cursor: 'pointer', fontFamily: F,
+                transition: 'all 0.18s ease',
+                boxShadow: sort === opt.value ? '0 0 12px rgba(232,0,61,0.15)' : 'none',
+              }}
+            >
+              <opt.icon size={11} />
+              {opt.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Empty State */}
-
-      {players.length === 0 && (
-        <div
-          className="
-                rounded-3xl
-                border
-                border-dashed
-                border-white/10
-                bg-white/[0.03]
-                py-20
-                text-center
-            "
+      {/* Table */}
+      {players.length === 0 ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{ textAlign: 'center', padding: '80px 24px',
+            border: '1px dashed rgba(232,0,61,0.2)', borderRadius: 22,
+            background: 'rgba(232,0,61,0.03)',
+          }}
         >
-          <div className="text-6xl mb-5">🔍</div>
-
-          <h2 className="text-2xl font-bold text-white">No Players Found</h2>
-
-          <p className="mt-3 text-gray-400">
-            Try changing your search or sorting criteria.
-          </p>
-        </div>
-      )}
-
-      {players.length === 0 && (
-        <div className="text-center py-20 text-gray-400 text-xl">
-          No players found.
-        </div>
-      )}
-
-      {players.length > 0 && (
-        <div
-          className="
-                overflow-hidden
-                rounded-3xl
-
-                border
-                border-white/10
-
-                bg-gradient-to-br
-                from-[#12182a]
-                via-[#101629]
-                to-[#0d1323]
-
-                shadow-[0_20px_60px_rgba(0,0,0,.35)]
-            "
+          <Trophy size={40} color="rgba(232,0,61,0.3)" style={{ margin: '0 auto 16px' }} />
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>No players found</p>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          style={{
+            border: '1px solid rgba(255,255,255,0.07)', borderRadius: 20,
+            overflow: 'hidden',
+            background: 'rgba(7,0,10,0.65)', backdropFilter: 'blur(20px)',
+            boxShadow: '0 16px 48px rgba(0,0,0,0.45)',
+          }}
         >
-          <table className="w-full">
-            <thead
-              className="
-                        bg-white/[0.04]
-                        backdrop-blur-xl
-                        border-b
-                        border-white/10
-                    "
-            >
-              <tr
-                className="
-                            uppercase
-                            text-xs
-                            tracking-[0.18em]
-                            text-gray-400
-                        "
+          {/* Table header */}
+          <div style={{
+            display: 'grid', gridTemplateColumns: '56px 1fr 110px 80px 80px 140px 90px',
+            padding: '14px 24px', alignItems: 'center',
+            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            background: 'rgba(255,255,255,0.025)',
+          }}>
+            {['#', 'PLAYER', 'RANK', 'WINS', 'LOSS', 'WIN RATE', 'TITLES'].map(h => (
+              <span key={h} style={{ fontSize: 9, letterSpacing: '0.18em', color: 'rgba(255,255,255,0.28)', textAlign: h === '#' || h === 'PLAYER' ? 'left' : 'center', fontWeight: 700 }}>
+                {h}
+              </span>
+            ))}
+          </div>
+
+          {players.map((player, i) => {
+            const isTop3 = i < 3;
+            const highlight = i === 0 ? 'rgba(255,193,7,0.04)' : i === 1 ? 'rgba(192,192,192,0.025)' : i === 2 ? 'rgba(205,127,50,0.03)' : 'transparent';
+
+            return (
+              <motion.div
+                key={player._id}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.03 }}
+                whileHover={{ background: 'rgba(232,0,61,0.04)', x: 2, transition: { duration: 0.15 } }}
+                style={{
+                  display: 'grid', gridTemplateColumns: '56px 1fr 110px 80px 80px 140px 90px',
+                  padding: '14px 24px', alignItems: 'center',
+                  borderBottom: i < players.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                  background: highlight,
+                  cursor: 'pointer',
+                  borderLeft: isTop3 ? `2px solid ${i === 0 ? '#ffc107' : i === 1 ? '#C0C0C0' : '#cd7f32'}` : '2px solid transparent',
+                }}
               >
-                <th className="py-6 w-24">Rank</th>
+                <div style={{ display: 'flex' }}><RankBadge rank={player.rank} /></div>
 
-                <th className="text-left">Player</th>
-
-                <th className="text-center">Highest Rank</th>
-
-                <th className="text-center">Wins</th>
-
-                <th className="text-center">Losses</th>
-
-                <th className="text-center">Win Rate</th>
-
-                <th className="text-center">Championships</th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-white/5">
-              {players.map((player) => (
-                <tr
-                  key={player._id}
-                  className="
-                                                group
-
-                                                h-28
-
-                                                transition-all
-                                                duration-300
-
-                                                hover:bg-gradient-to-r
-                                                hover:from-violet-500/5
-                                                hover:to-cyan-500/5
-
-                                                hover:shadow-[inset_0_0_0_1px_rgba(139,92,246,.25)]
-                                            "
-                >
-                  <td className="text-center">
-                    <div className="flex justify-center">
-                      {player.rank === 1 ? (
-                        <div className="text-4xl drop-shadow-[0_0_12px_rgba(250,204,21,.8)]">
-                          🥇
-                        </div>
-                      ) : player.rank === 2 ? (
-                        <div className="text-4xl drop-shadow-[0_0_10px_rgba(229,231,235,.7)]">
-                          🥈
-                        </div>
-                      ) : player.rank === 3 ? (
-                        <div className="text-4xl drop-shadow-[0_0_10px_rgba(251,146,60,.7)]">
-                          🥉
-                        </div>
-                      ) : (
-                        <div
-                          className="
-                        h-10
-                        w-10
-
-                        rounded-full
-
-                        border
-                        border-white/10
-
-                        bg-white/5
-
-                        flex
-                        items-center
-                        justify-center
-
-                        font-bold
-                    "
-                        >
-                          {player.rank}
-                        </div>
-                      )}
+                <Link to={`/players/${player.username}`} style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+                  {player.avatar ? (
+                    <img src={player.avatar} alt={player.displayName}
+                      style={{ width: 38, height: 38, borderRadius: 10, objectFit: 'cover', border: `1.5px solid ${isTop3 ? (i===0?'#ffc107':i===1?'#C0C0C0':'#cd7f32') : 'rgba(255,255,255,0.1)'}` }} />
+                  ) : (
+                    <div style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(232,0,61,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, color: '#e8003d', border: '1.5px solid rgba(232,0,61,0.35)', flexShrink: 0 }}>
+                      {player.displayName?.charAt(0)?.toUpperCase()}
                     </div>
-                  </td>
+                  )}
+                  <div>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: '-0.01em' }}>{player.displayName}</p>
+                    <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 2 }}>@{player.username}</p>
+                  </div>
+                </Link>
 
-                  <td className="py-6 px-5">
-                    <Link
-                      to={`/players/${player.username}`}
-                      className="flex items-center gap-5"
-                    >
-                      {player.avatar ? (
-                        <img
-                          src={player.avatar}
-                          alt={player.displayName}
-                          className="
-                        h-14
-                        w-14
+                <div style={{ textAlign: 'center' }}>
+                  <span style={{ fontSize: 9, padding: '4px 10px', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 999, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.06em' }}>
+                    {player.highestRank || 'UNRANKED'}
+                  </span>
+                </div>
 
-                        rounded-full
+                <div style={{ textAlign: 'center', fontSize: 14, fontWeight: 700, color: '#22c55e' }}>{player.stats?.wins ?? 0}</div>
+                <div style={{ textAlign: 'center', fontSize: 14, fontWeight: 700, color: '#e8003d' }}>{player.stats?.losses ?? 0}</div>
 
-                        object-cover
+                <div style={{ padding: '0 8px' }}>
+                  <WinRateBar rate={player.winRate} />
+                </div>
 
-                        border-2
-                        border-violet-500/30
-
-                        transition-all
-                        duration-300
-
-                        group-hover:scale-110
-                        group-hover:border-violet-400
-                    "
-                        />
-                      ) : (
-                        <div
-                          className="
-                        h-14
-                        w-14
-
-                        rounded-full
-
-                        bg-gradient-to-br
-                        from-cyan-400
-                        via-violet-500
-                        to-purple-700
-
-                        flex
-                        items-center
-                        justify-center
-
-                        font-bold
-                        text-lg
-
-                        transition-all
-                        duration-300
-
-                        group-hover:scale-110
-                    "
-                        >
-                          {player.displayName
-
-                            .charAt(0)
-
-                            .toUpperCase()}
-                        </div>
-                      )}
-
-                      <div>
-                        <h3
-                          className="
-                    text-lg
-                    font-bold
-                    text-white
-
-                    transition-colors
-
-                    group-hover:text-violet-300
-                "
-                        >
-                          {player.displayName}
-                        </h3>
-
-                        <p className="text-gray-400">@{player.username}</p>
-                      </div>
-                    </Link>
-                  </td>
-
-                  <td className="text-center">
-                    <span
-                      className="
-            inline-flex
-            items-center
-            gap-2
-
-            rounded-full
-
-            border
-            border-violet-500/20
-
-            bg-violet-500/10
-
-            px-4
-            py-2
-
-            text-sm
-            font-semibold
-
-            transition-all
-            duration-300
-
-            group-hover:border-violet-400/40
-            group-hover:bg-violet-500/20
-        "
-                    >
-                      🛡️
-                      {player.highestRank || "Unranked"}
-                    </span>
-                  </td>
-
-                  <td className="text-center">
-                    <span
-                      className="
-            inline-flex
-            items-center
-            justify-center
-
-            min-w-[56px]
-
-            rounded-xl
-
-            bg-emerald-500/15
-
-            px-3
-            py-2
-
-            font-bold
-            text-emerald-300
-
-            transition-all
-            duration-300
-
-            group-hover:scale-110
-        "
-                    >
-                      {player.stats.wins}
-                    </span>
-                  </td>
-
-                  <td className="text-center">
-                    <span
-                      className="
-            inline-flex
-            items-center
-            justify-center
-
-            min-w-[56px]
-
-            rounded-xl
-
-            bg-red-500/15
-
-            px-3
-            py-2
-
-            font-bold
-            text-red-300
-
-            transition-all
-            duration-300
-
-            group-hover:scale-110
-        "
-                    >
-                      {player.stats.losses}
-                    </span>
-                  </td>
-
-                  <td className="text-center">
-                    <span
-                      className={clsx(
-                        "inline-flex items-center justify-center rounded-xl px-4 py-2 font-bold transition-all duration-300 group-hover:scale-110 border",
-
-                        Number(player.winRate) >= 70 &&
-                          "bg-emerald-500/10 border-emerald-500/20 text-emerald-300",
-
-                        Number(player.winRate) >= 40 &&
-                          Number(player.winRate) < 70 &&
-                          "bg-violet-500/10 border-violet-500/20 text-violet-300",
-
-                        Number(player.winRate) < 40 &&
-                          "bg-violet-500/10 border-violet-500/20 text-red-300",
-                      )}
-                    >
-                      {player.winRate}%
-                    </span>
-                  </td>
-
-                  <td className="text-center">
-                    <div className="flex items-center justify-center gap-3">
-                      <span
-                        className="
-                inline-flex
-                items-center
-                justify-center
-
-                rounded-xl
-
-                bg-amber-500/15
-
-                px-4
-                py-2
-
-                font-bold
-                text-amber-300
-
-                transition-all
-                duration-300
-
-                group-hover:scale-110
-            "
-                      >
-                        🏆 {player.stats.championships}
-                      </span>
-
-                      <svg
-                        className="
-                h-5
-                w-5
-
-                text-violet-300
-
-                opacity-0
-
-                -translate-x-3
-
-                transition-all
-                duration-300
-
-                group-hover:translate-x-0
-                group-hover:opacity-100
-            "
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                <div style={{ textAlign: 'center', fontSize: 13, color: '#ffc107', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                  🏆 {player.stats?.championships ?? 0}
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       )}
     </div>
   );

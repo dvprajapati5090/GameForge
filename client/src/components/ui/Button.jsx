@@ -24,16 +24,20 @@ export default function Button({
 
         primary:
         `
-        bg-gradient-to-r
-        from-cyan-500
-        to-purple-600
+        group
+        relative
+        overflow-hidden
+        border
+        border-[#0a9396]/50
+        bg-[#0a9396]/10
         text-white
-
-        shadow-lg
-        shadow-purple-500/30
-
-        hover:shadow-purple-500/70
-        hover:brightness-110
+        
+        shadow-[0_0_15px_rgba(10,147,150,0.15)]
+        
+        hover:border-[#0a9396]
+        hover:bg-[#0a9396]
+        hover:text-[#001219]
+        hover:shadow-[0_0_30px_rgba(10,147,150,0.4)]
         `,
 
 
@@ -50,7 +54,7 @@ export default function Button({
 
         danger:
         `
-        bg-red-500
+        bg-white/20
         text-white
         hover:bg-red-400
         `

@@ -39,7 +39,7 @@ export default function TournamentToolbar({
                     className="
                         w-full
                         rounded-xl
-                        bg-slate-900
+                        bg-black border border-white/10
                         border
                         border-white/10
                         py-3

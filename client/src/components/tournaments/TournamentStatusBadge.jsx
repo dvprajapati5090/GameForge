@@ -16,10 +16,10 @@ export default function TournamentStatusBadge({
             "bg-yellow-500/20 text-yellow-400",
 
         LIVE:
-            "bg-red-500/20 text-red-400",
+            "bg-white/20 text-red-400",
 
         COMPLETED:
-            "bg-cyan-500/20 text-cyan-400",
+            "bg-cyan-500/20 text-white",
 
         CANCELLED:
             "bg-gray-500/20 text-gray-400"

@@ -31,9 +31,9 @@ export default function GlowCard({
                 rounded-2xl
 
                 border
-                border-white/10
+                border-white/20
 
-                bg-[#121826]/65
+                bg-black/50
 
                 backdrop-blur-2xl
 
@@ -42,8 +42,8 @@ export default function GlowCard({
                 transition-all
                 duration-300
 
-                hover:border-violet-500/40
-                hover:shadow-[0_20px_60px_rgba(139,92,246,.12)]
+                hover:border-white/30
+                hover:shadow-[0_20px_60px_rgba(255,255,255,.05)]
 
                 ${className}
             `}
@@ -63,7 +63,7 @@ export default function GlowCard({
                     transition-opacity
                     duration-500
 
-                    bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,.12),transparent_55%)]
+                    bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,.05),transparent_55%)]
                 "
             />
 
@@ -81,7 +81,7 @@ export default function GlowCard({
 
                     rounded-full
 
-                    bg-violet-500/10
+                    bg-white/5
 
                     blur-3xl
                 "
@@ -101,7 +101,7 @@ export default function GlowCard({
 
                     rounded-full
 
-                    bg-violet-500/5
+                    bg-white/5
 
                     blur-3xl
                 "

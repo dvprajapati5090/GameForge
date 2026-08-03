@@ -12,7 +12,7 @@ export default function TournamentBanner({
                 overflow-hidden
                 border
                 border-cyan-500/20
-                bg-[#111827]
+                bg-black border border-white/10
             "
         >
 
@@ -33,7 +33,7 @@ export default function TournamentBanner({
 
                     <div>
 
-                        <h1 className="text-4xl font-bold">
+                        <h1 className="text-4xl font-bold font-mono">
 
                             {tournament.name}
 

@@ -23,7 +23,7 @@ export default function TournamentOverview({
 
         <div className="flex gap-4 items-start">
 
-            <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400">
+            <div className="p-3 rounded-xl bg-cyan-500/10 text-white">
 
                 {icon}
 
@@ -56,7 +56,7 @@ export default function TournamentOverview({
                 rounded-3xl
                 border
                 border-white/10
-                bg-slate-900
+                bg-black border border-white/10
                 p-8
             "
         >

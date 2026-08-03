@@ -18,7 +18,7 @@ export default function Loader() {
                     w-10
                     h-10
                     animate-spin
-                    text-cyan-400
+                    text-white
                 "
             />
 

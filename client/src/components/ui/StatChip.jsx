@@ -15,7 +15,7 @@ export default function StatChip({
                 rounded-xl
                 border
                 border-white/10
-                bg-slate-900
+                bg-black border border-white/10
             "
         >
 

@@ -83,7 +83,7 @@ export default function ChangePasswordModal({
                             w-full
                             max-w-lg
                             rounded-3xl
-                            bg-slate-900
+                            bg-black border border-white/10
                             border
                             border-white/10
                             p-8
@@ -91,7 +91,7 @@ export default function ChangePasswordModal({
 
                     >
 
-                        <h2 className="text-3xl font-bold">
+                        <h2 className="text-3xl font-bold font-mono">
 
                             Password Managed by Google
 
@@ -307,7 +307,7 @@ export default function ChangePasswordModal({
                         rounded-3xl
                         border
                         border-white/10
-                        bg-slate-900
+                        bg-black border border-white/10
                         p-8
                     "
 
@@ -315,7 +315,7 @@ export default function ChangePasswordModal({
 
                     <div className="flex justify-between items-center mb-8">
 
-                        <h2 className="text-3xl font-bold">
+                        <h2 className="text-3xl font-bold font-mono">
 
                             Change Password
 

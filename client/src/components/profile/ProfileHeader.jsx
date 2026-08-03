@@ -40,8 +40,7 @@ export default function ProfileHeader() {
                                 flex
                                 items-center
                                 justify-center
-                                text-4xl
-                                font-bold
+                                text-4xl font-bold font-mono
                             "
                         >
                             {user?.displayName?.charAt(0)?.toUpperCase()}
@@ -61,7 +60,7 @@ export default function ProfileHeader() {
 
                             </p>
 
-                            <p className="text-cyan-400 mt-3">
+                            <p className="text-white mt-3">
 
                                 Member since 2026
 

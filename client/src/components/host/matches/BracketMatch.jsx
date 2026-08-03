@@ -90,7 +90,7 @@ export default function BracketMatch({
             className="
                 w-64
                 rounded-2xl
-                bg-slate-900
+                bg-black border border-white/10
                 border
                 border-white/10
                 overflow-hidden

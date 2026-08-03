@@ -54,7 +54,7 @@ export default function TournamentTabs({
 
                                 :
 
-                                "bg-slate-800"
+                                "bg-black border border-white/10"
 
                             }
 

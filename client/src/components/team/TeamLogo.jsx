@@ -28,7 +28,7 @@ export default function TeamLogo({
                 bg-gradient-to-br
                 from-cyan-500
                 via-purple-500
-                to-indigo-600
+                to-black
                 flex
                 items-center
                 justify-center

@@ -35,8 +35,8 @@ export default function StepDates({
         outline-none
         transition-all
         duration-300
-        hover:border-purple-400/40
-        focus:border-purple-500
+        hover:border-white/10
+        focus:border-white/10
         focus:ring-2
         focus:ring-purple-500/20
         [color-scheme:dark]
@@ -103,8 +103,7 @@ export default function StepDates({
             <div>
 
                 <h2 className="
-                    text-2xl
-                    font-bold
+                    text-2xl font-bold font-mono
                     text-white
                 ">
                     Tournament Schedule

@@ -59,7 +59,7 @@ export default function LeaveTeamModal({
                     rounded-3xl
                     border
                     border-red-500/20
-                    bg-slate-900
+                    bg-black border border-white/10
                     p-8
                 "
             >
@@ -111,7 +111,7 @@ export default function LeaveTeamModal({
                             px-5
                             py-3
                             rounded-xl
-                            bg-red-600
+                            bg-white/20
                             font-bold
                         "
 

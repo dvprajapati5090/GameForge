@@ -32,8 +32,8 @@ export default function StepBasicInfo({
         backdrop-blur-xl
         transition-all
         duration-300
-        hover:border-purple-400/40
-        focus:border-purple-500
+        hover:border-white/10
+        focus:border-white/10
         focus:ring-2
         focus:ring-purple-500/20
     `;
@@ -58,8 +58,7 @@ export default function StepBasicInfo({
             <div>
 
                 <h2 className="
-                    text-2xl
-                    font-bold
+                    text-2xl font-bold font-mono
                     text-white
                 ">
                     Tournament Information
@@ -157,17 +156,17 @@ export default function StepBasicInfo({
 
                     >
 
-                        <option className="bg-[#111827]">
+                        <option className="bg-black border border-white/10">
                             VALORANT
                         </option>
 
 
-                        <option className="bg-[#111827]">
+                        <option className="bg-black border border-white/10">
                             BGMI
                         </option>
 
 
-                        <option className="bg-[#111827]">
+                        <option className="bg-black border border-white/10">
                             FREE_FIRE
                         </option>
 
@@ -214,22 +213,22 @@ export default function StepBasicInfo({
 
                     >
 
-                        <option className="bg-[#111827]">
+                        <option className="bg-black border border-white/10">
                             SOLO
                         </option>
 
 
-                        <option className="bg-[#111827]">
+                        <option className="bg-black border border-white/10">
                             DUO
                         </option>
 
 
-                        <option className="bg-[#111827]">
+                        <option className="bg-black border border-white/10">
                             SQUAD
                         </option>
 
 
-                        <option className="bg-[#111827]">
+                        <option className="bg-black border border-white/10">
                             5V5
                         </option>
 
@@ -283,7 +282,7 @@ export default function StepBasicInfo({
 
                 >
 
-                    <option className="bg-[#111827]">
+                    <option className="bg-black border border-white/10">
                         SINGLE_ELIMINATION
                     </option>
 
@@ -343,7 +342,7 @@ export default function StepBasicInfo({
 
                                 value={team}
 
-                                className="bg-[#111827]"
+                                className="bg-black border border-white/10"
 
                             >
 

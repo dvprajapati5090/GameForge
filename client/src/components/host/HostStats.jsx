@@ -1,212 +1,167 @@
+/**
+ * HostStats — Rounded ElectricCard stat tiles with count-up, sparkline trend, and tilt effect
+ */
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import {
-    Trophy,
-    Users,
-    PlayCircle,
-    Calendar,
-    TrendingUp,
-} from "lucide-react";
+import { Trophy, Users, Flame, Calendar } from "lucide-react";
+import ElectricCard from "../ui/ElectricCard";
+import Sparkline from "../ui/Sparkline";
+import TiltCard from "../ui/TiltCard";
 
-const cards = [
+const CARDS = [
     {
-        title: "Total Tournaments",
-        value: 0,
-        icon: Trophy,
+        title: "Total Tournaments", icon: Trophy,   accent: '#e8003d', accent2: '#ff5530', label: "HOSTED",
+        trend: [1, 2, 2, 3, 4, 3, 5, 6, 5, 7],
     },
     {
-        title: "Live Events",
-        value: 0,
-        icon: PlayCircle,
+        title: "Live Events",       icon: Flame,    accent: '#ff6030', accent2: '#ff9020', label: "RUNNING",
+        trend: [0, 1, 0, 2, 1, 3, 2, 4, 3, 5],
     },
     {
-        title: "Teams Registered",
-        value: 0,
-        icon: Users,
+        title: "Teams Registered",  icon: Users,    accent: '#e8003d', accent2: '#9b6dff', label: "SIGNED UP",
+        trend: [2, 4, 6, 5, 8, 10, 9, 12, 14, 16],
     },
     {
-        title: "Upcoming Matches",
-        value: 0,
-        icon: Calendar,
+        title: "Upcoming Matches",  icon: Calendar, accent: '#7c3aed', accent2: '#c084fc', label: "SCHEDULED",
+        trend: [1, 3, 2, 5, 4, 6, 8, 7, 9, 11],
     },
 ];
 
-export default function HostStats() {
+/* Count-up number animation */
+function AnimatedNumber({ value }) {
+    const ref = useRef(null);
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const end = Number(value) || 0;
+        if (end === 0) { el.textContent = "0"; return; }
+        const dur = 900, step = 16;
+        const inc = end / (dur / step);
+        let cur = 0;
+        const timer = setInterval(() => {
+            cur = Math.min(cur + inc, end);
+            el.textContent = Math.floor(cur).toString();
+            if (cur >= end) clearInterval(timer);
+        }, step);
+        return () => clearInterval(timer);
+    }, [value]);
+    return <span ref={ref}>0</span>;
+}
+
+export default function HostStats({ stats = {} }) {
+    const values = [
+        stats.totalTournaments ?? 0,
+        stats.liveEvents       ?? 0,
+        stats.teamsRegistered  ?? 0,
+        stats.upcomingMatches  ?? 0,
+    ];
+
     return (
-        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {cards.map((card, index) => (
+        <div style={{
+            display: 'grid', gap: 14,
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            fontFamily: '"Space Mono", monospace',
+        }}>
+            {CARDS.map((card, index) => (
                 <motion.div
                     key={card.title}
-                    initial={{ opacity: 0, y: 25 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                        duration: 0.45,
-                        delay: index * 0.08,
-                    }}
-                    whileHover={{
-                        y: -6,
-                        transition: {
-                            duration: 0.2,
-                        },
-                    }}
-                    className="
-                        group
-                        relative
-                        overflow-hidden
-                        rounded-[28px]
-                        border
-                        border-violet-500/20
-                        bg-white/5
-                        backdrop-blur-2xl
-                        p-7
-                        transition-all
-                        duration-300
-                        hover:border-violet-400/40
-                        hover:shadow-[0_0_35px_rgba(124,58,237,0.22)]
-                    "
+                    initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.45, delay: index * 0.09, ease: [0.22, 1, 0.36, 1] }}
                 >
-                    <div
-                        className="
-                            absolute
-                            inset-0
-                            bg-gradient-to-br
-                            from-violet-600/10
-                            via-transparent
-                            to-fuchsia-600/10
-                            opacity-0
-                            transition-opacity
-                            duration-300
-                            group-hover:opacity-100
-                        "
-                    />
-
-                    <div
-                        className="
-                            absolute
-                            -right-10
-                            -top-10
-                            h-32
-                            w-32
-                            rounded-full
-                            bg-violet-600/15
-                            blur-3xl
-                        "
-                    />
-
-                    <div className="relative z-10">
-                        <div className="flex items-start justify-between">
-                            <div
-                                className="
-                                    flex
-                                    h-14
-                                    w-14
-                                    items-center
-                                    justify-center
-                                    rounded-2xl
-                                    border
-                                    border-violet-500/25
-                                    bg-violet-500/10
-                                    transition-all
-                                    duration-300
-                                    group-hover:bg-violet-500/20
-                                    group-hover:shadow-[0_0_25px_rgba(124,58,237,0.35)]
-                                "
-                            >
-                                <card.icon
-                                    size={28}
-                                    className="text-violet-300"
-                                />
-                            </div>
-
-                            <div
-                                className="
-                                    flex
-                                    items-center
-                                    gap-1
-                                    rounded-full
-                                    border
-                                    border-emerald-500/20
-                                    bg-emerald-500/10
-                                    px-3
-                                    py-1.5
-                                "
-                            >
-                                <TrendingUp
-                                    size={14}
-                                    className="text-emerald-400"
-                                />
-
-                                <span className="text-xs font-medium text-emerald-300">
-                                    Active
-                                </span>
-                            </div>
-                        </div>
-
-                        <p
-                            className="
-                                mt-8
-                                text-sm
-                                font-medium
-                                tracking-wide
-                                text-gray-400
-                            "
+                    <TiltCard maxTilt={6} scale={1.03} glare={true}>
+                        <ElectricCard
+                            color={card.accent}
+                            color2={card.accent2}
+                            speed={9}
+                            rounded={22}
+                            gap={1.5}
+                            glow={0.18}
                         >
-                            {card.title}
-                        </p>
+                            <div style={{ padding: '22px 20px', position: 'relative', overflow: 'hidden' }}>
+                                {/* Dot grid texture */}
+                                <div style={{
+                                    position: 'absolute', inset: 0, pointerEvents: 'none',
+                                    backgroundImage: 'radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)',
+                                    backgroundSize: '18px 18px',
+                                }} />
+                                {/* Corner glow blob */}
+                                <div style={{
+                                    position: 'absolute', top: -20, right: -20,
+                                    width: 80, height: 80, borderRadius: '50%',
+                                    background: `${card.accent}18`, filter: 'blur(24px)',
+                                    pointerEvents: 'none',
+                                }} />
 
-                        <h2
-                            className="
-                                mt-3
-                                text-5xl
-                                font-black
-                                tracking-tight
-                                text-white
-                            "
-                        >
-                            {card.value}
-                        </h2>
+                                <div style={{ position: 'relative', zIndex: 1 }}>
+                                    {/* Top row: icon + badge */}
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 18 }}>
+                                        <div style={{
+                                            width: 42, height: 42, borderRadius: 14,
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            background: `${card.accent}22`,
+                                            border: `1px solid ${card.accent}55`,
+                                            color: card.accent,
+                                            boxShadow: `0 0 14px ${card.accent}30`,
+                                        }}>
+                                            <card.icon size={20} />
+                                        </div>
+                                        {/* Live pulse badge */}
+                                        <div style={{
+                                            display: 'flex', alignItems: 'center', gap: 5,
+                                            padding: '4px 9px', borderRadius: 999,
+                                            background: `${card.accent}15`,
+                                            border: `1px solid ${card.accent}45`,
+                                        }}>
+                                            <motion.div
+                                                animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+                                                transition={{ duration: 1.6, repeat: Infinity, delay: index * 0.3 }}
+                                                style={{ width: 5, height: 5, borderRadius: '50%', background: card.accent, flexShrink: 0 }}
+                                            />
+                                            <span style={{ fontSize: 8, fontWeight: 700, color: card.accent, letterSpacing: '0.12em' }}>
+                                                {card.label}
+                                            </span>
+                                        </div>
+                                    </div>
 
-                        <div
-    className="
-        mt-6
-        h-1.5
-        w-full
-        overflow-hidden
-        rounded-full
-        bg-white/5
-    "
->
-    {card.value > 0 && (
-        <div
-            style={{
-                width: `${Math.min(card.value * 10, 100)}%`,
-            }}
-            className="
-                h-full
-                rounded-full
-                bg-gradient-to-r
-                from-violet-500
-                to-fuchsia-500
-            "
-        />
-    )}
-</div>
-                    </div>
+                                    {/* Title */}
+                                    <p style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)', marginBottom: 8 }}>
+                                        {card.title}
+                                    </p>
+                                    {/* Animated value */}
+                                    <h2 style={{ fontSize: 38, fontWeight: 700, color: '#fff', letterSpacing: '-0.04em', lineHeight: 1 }}>
+                                        <AnimatedNumber value={values[index]} />
+                                    </h2>
 
-                    <div
-                        className="
-                            absolute
-                            left-0
-                            bottom-0
-                            h-1
-                            w-0
-                            bg-gradient-to-r
-                            from-violet-500
-                            to-fuchsia-500
-                            transition-all
-                            duration-300
-                            group-hover:w-full
-                        "
-                    />
+                                    {/* Sparkline + bar row */}
+                                    <div style={{ marginTop: 16, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 8 }}>
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ height: 2, background: 'rgba(255,255,255,0.05)', borderRadius: 99, overflow: 'hidden' }}>
+                                                <motion.div
+                                                    initial={{ width: 0 }}
+                                                    animate={{ width: values[index] > 0 ? `${Math.min(values[index] * 10, 100)}%` : '12%' }}
+                                                    transition={{ duration: 1.2, delay: 0.4 + index * 0.1, ease: "easeOut" }}
+                                                    style={{
+                                                        height: '100%', borderRadius: 99,
+                                                        background: `linear-gradient(to right, ${card.accent}, ${card.accent2})`,
+                                                        boxShadow: `0 0 8px ${card.accent}`,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                        {/* Sparkline trend */}
+                                        <Sparkline
+                                            data={card.trend}
+                                            color={card.accent}
+                                            width={60}
+                                            height={28}
+                                            filled={true}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </ElectricCard>
+                    </TiltCard>
                 </motion.div>
             ))}
         </div>

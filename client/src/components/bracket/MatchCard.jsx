@@ -4,9 +4,9 @@ export default function MatchCard({ match }) {
 
     return (
 
-        <div className="bg-[#111827] rounded-2xl border border-white/10 p-5 mb-8">
+        <div className="bg-black border border-white/10 rounded-2xl border border-white/10 p-5 mb-8">
 
-            <div className="text-xs text-cyan-400 mb-4 font-semibold">
+            <div className="text-xs text-white mb-4 font-semibold">
 
                 Match #{match.matchNumber}
 
