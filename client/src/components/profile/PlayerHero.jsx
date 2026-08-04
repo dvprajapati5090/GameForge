@@ -14,7 +14,9 @@ export default function PlayerHero({ player }) {
     >
       <ProfileAvatar player={player} />
 
-      <div style={{
+      <div
+        className="player-hero-card"
+        style={{
         position: 'relative', overflow: 'hidden',
         marginTop: 20, padding: '36px 40px',
         border: '1px solid rgba(232,0,61,0.18)',
@@ -29,7 +31,8 @@ export default function PlayerHero({ player }) {
         <FloatingParticles count={18} color="#e8003d" opacity={0.3} speed={0.5} />
 
         {/* Dot grid */}
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1,
+        <div
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1,
           backgroundImage: 'radial-gradient(rgba(192,192,192,0.08) 1px, transparent 1px)',
           backgroundSize: '26px 26px',
         }} />

@@ -2,9 +2,9 @@ import CareerStatCard from "./CareerStatCard";
 
 export default function CareerStats({ stats = {} }) {
     return (
-        <div style={{
+        <div className="career-stats-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+            gridTemplateColumns: 'repeat(6, minmax(0, 1fr))',
             gap: 14,
         }}>
             <CareerStatCard icon="🎮" title="Matches"       value={stats?.matchesPlayed ?? 0}       index={0} />

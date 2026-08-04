@@ -87,7 +87,7 @@ export default function TournamentDetailsPage() {
             {
                 tab === "overview" && (
 
-                    <div className="grid lg:grid-cols-3 gap-8">
+                    <div className="tournament-overview-grid grid lg:grid-cols-3 gap-8">
 
                         <div className="lg:col-span-2 space-y-8">
 
@@ -147,27 +147,25 @@ export default function TournamentDetailsPage() {
             }
 
             {
-
                 tab==="rules" && (
-
-                    <div className="rounded-3xl bg-black border border-white/10 p-8">
-
-                        <h2 className="text-2xl font-bold font-mono">
-
+                    <div style={{
+                        borderRadius: 22, padding: '32px 36px',
+                        background: 'rgba(7,0,10,0.72)',
+                        backdropFilter: 'blur(24px)',
+                        border: '1px solid rgba(192,192,192,0.12)',
+                        borderTop: '2px solid #e8003d',
+                        fontFamily: '"Space Mono", monospace',
+                        boxShadow: '0 0 32px rgba(232,0,61,0.06), 0 16px 48px rgba(0,0,0,0.45)',
+                    }}>
+                        <h2 style={{ fontSize: 20, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 20 }}>
                             Rules
-
                         </h2>
-
-                        <p className="mt-6 whitespace-pre-wrap">
-
+                        <div style={{ height: 1, background: 'linear-gradient(to right, #e8003d, rgba(192,192,192,0.2), transparent)', marginBottom: 20 }} />
+                        <p style={{ fontSize: 12, color: 'rgba(192,192,192,0.6)', lineHeight: 2, whiteSpace: 'pre-wrap' }}>
                             {tournament.rules || "No rules added."}
-
                         </p>
-
                     </div>
-
                 )
-
             }
 
         </div>

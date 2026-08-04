@@ -198,10 +198,12 @@ export default function LeaderboardPage() {
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>No players found</p>
         </motion.div>
       ) : (
+        <div className="leaderboard-table-wrap">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
+          className="leaderboard-table-inner"
           style={{
             border: '1px solid rgba(255,255,255,0.07)', borderRadius: 20,
             overflow: 'hidden',
@@ -280,6 +282,7 @@ export default function LeaderboardPage() {
             );
           })}
         </motion.div>
+        </div>
       )}
     </div>
   );

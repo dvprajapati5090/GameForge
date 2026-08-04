@@ -1,349 +1,186 @@
+/**
+ * TeamChat — Red/Silver gaming glass theme
+ */
 import { useEffect, useRef, useState } from "react";
-
 import useTeamChat from "../../hooks/useTeamChat";
 import useSendMessage from "../../hooks/useSendMessage";
 import useMyTeam from "../../hooks/useMyTeam";
-
 import MessageBubble from "./MessageBubble";
-
 import socket from "../../socket/socket";
+import { Send, MessageSquare } from "lucide-react";
+
+const F = '"Space Mono", monospace';
 
 export default function TeamChat() {
-
     const { data: teamData } = useMyTeam();
-
     const team = teamData?.data;
-
-    const {
-        data,
-        isLoading
-    } = useTeamChat();
-
+    const { data, isLoading } = useTeamChat();
     const sendMutation = useSendMessage();
-
     const [message, setMessage] = useState("");
-
     const [messages, setMessages] = useState([]);
-
+    const [inputFocused, setInputFocused] = useState(false);
     const bottomRef = useRef(null);
 
-    // Load messages from API
     useEffect(() => {
-
-        if (data?.data) {
-
-            setMessages(data.data);
-
-        }
-
+        if (data?.data) setMessages(data.data);
     }, [data]);
 
-    // Join socket room
     useEffect(() => {
-
         if (!team?._id) return;
-
-        if (!socket.connected) {
-
-            socket.connect();
-
-        }
-
-        socket.emit(
-            "join-team",
-            team._id
-        );
-
-        return () => {
-
-            socket.emit(
-                "leave-team",
-                team._id
-            );
-
-        };
-
+        if (!socket.connected) socket.connect();
+        socket.emit("join-team", team._id);
+        return () => { socket.emit("leave-team", team._id); };
     }, [team?._id]);
 
-    // Receive live messages
     useEffect(() => {
-
         const handleMessage = (newMessage) => {
-
             setMessages((prev) => {
-
-                if (
-                    prev.some(
-                        m => m._id === newMessage._id
-                    )
-                ) {
-                    return prev;
-                }
-
-                return [
-                    ...prev,
-                    newMessage
-                ];
-
+                if (prev.some(m => m._id === newMessage._id)) return prev;
+                return [...prev, newMessage];
             });
-
         };
-
-        socket.on(
-            "team-message",
-            handleMessage
-        );
-
-        return () => {
-
-            socket.off(
-                "team-message",
-                handleMessage
-            );
-
-        };
-
+        socket.on("team-message", handleMessage);
+        return () => { socket.off("team-message", handleMessage); };
     }, []);
 
-    // Auto scroll
     useEffect(() => {
-
-        bottomRef.current?.scrollIntoView({
-
-            behavior: "smooth"
-
-        });
-
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
     const handleSend = () => {
-
         if (!message.trim()) return;
-
-        sendMutation.mutate(
-
-            message,
-
-            {
-
-                onSuccess: () => {
-
-                    setMessage("");
-
-                }
-
-            }
-
-        );
-
+        sendMutation.mutate(message, { onSuccess: () => { setMessage(""); } });
     };
 
     if (isLoading) {
-
         return (
-
-            <div
-                className="
-                    rounded-3xl
-                    border
-                    border-white/10
-                    bg-black border border-white/10
-                    p-6
-                "
-            >
-                Loading chat...
+            <div style={{
+                marginTop: 24,
+                border: '1px solid rgba(255,255,255,0.08)', borderRadius: 22,
+                background: 'rgba(7,0,10,0.65)', backdropFilter: 'blur(20px)',
+                padding: 24, fontFamily: F, fontSize: 12, color: 'rgba(255,255,255,0.35)',
+                textAlign: 'center', letterSpacing: '0.1em',
+            }}>
+                LOADING CHAT...
             </div>
-
         );
-
     }
 
     return (
+        <section style={{
+            marginTop: 24,
+            position: 'relative', overflow: 'hidden',
+            border: '1px solid rgba(192,192,192,0.12)',
+            borderTop: '2px solid #e8003d',
+            borderRadius: 22,
+            background: 'rgba(7,0,10,0.72)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            fontFamily: F,
+            boxShadow: '0 0 32px rgba(232,0,61,0.06), 0 16px 48px rgba(0,0,0,0.45)',
+        }}>
+            {/* Dot grid */}
+            <div style={{
+                position: 'absolute', inset: 0, pointerEvents: 'none',
+                backgroundImage: 'radial-gradient(rgba(192,192,192,0.06) 1px, transparent 1px)',
+                backgroundSize: '22px 22px',
+            }} />
 
-        <section
-            className="
-                mt-10
-                rounded-3xl
-                border
-                border-white/10
-                bg-gradient-to-b
-                from-slate-900
-                to-slate-950
-                overflow-hidden
-            "
-        >
-
-            <div
-                className="
-                    px-6
-                    py-4
-                    border-b
-                    border-white/10
-                "
-            >
-
-                <h2 className="text-2xl font-black">
-
-                    Team Chat
-
-                </h2>
-
+            {/* Header */}
+            <div style={{
+                position: 'relative', zIndex: 2,
+                padding: '18px 24px',
+                borderBottom: '1px solid rgba(255,255,255,0.06)',
+                display: 'flex', alignItems: 'center', gap: 10,
+            }}>
+                <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    background: '#e8003d', padding: '4px 12px', borderRadius: 999,
+                }}>
+                    <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#fff', animation: 'ra-dot-pulse 1.6s ease-in-out infinite' }} />
+                    <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', letterSpacing: '0.2em', textTransform: 'uppercase' }}>Team Chat</span>
+                </div>
+                <MessageSquare size={14} color="rgba(192,192,192,0.4)" />
             </div>
 
-            <div
-                className="
-                    h-[450px]
-                    overflow-y-auto
-                    p-6
-                    space-y-4
-                "
-            >
+            {/* Messages area */}
+            <div style={{
+                position: 'relative', zIndex: 1,
+                height: 420, overflowY: 'auto',
+                padding: '20px 24px',
+                display: 'flex', flexDirection: 'column', gap: 2,
+            }}>
+                {messages.length === 0 && (
+                    <div style={{
+                        display: 'flex', flexDirection: 'column', alignItems: 'center',
+                        justifyContent: 'center', height: '100%', textAlign: 'center',
+                    }}>
+                        <div style={{ fontSize: 44, marginBottom: 16 }}>🎮</div>
+                        <h3 style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginBottom: 8 }}>Team Chat</h3>
+                        <p style={{ fontSize: 11, color: 'rgba(192,192,192,0.4)', letterSpacing: '0.04em' }}>
+                            This is your private team room.<br />
+                            Only your teammates can see messages.
+                        </p>
+                        <p style={{ fontSize: 11, color: 'rgba(232,0,61,0.6)', marginTop: 12, letterSpacing: '0.08em' }}>Say hello 👋</p>
+                    </div>
+                )}
 
-                {
-                    messages.length === 0 && (
-
-                        <div
-                            className="
-                                flex
-                                flex-col
-                                items-center
-                                justify-center
-                                h-full
-                                text-center
-                                text-gray-400
-                            "
-                        >
-
-                            <div className="text-5xl mb-4">
-
-                                🎮
-
-                            </div>
-
-                            <h3 className="text-xl font-bold text-white">
-
-                                Team Chat
-
-                            </h3>
-
-                            <p className="mt-3">
-
-                                This is your private team room.
-
-                            </p>
-
-                            <p>
-
-                                Only your teammates can see these messages.
-
-                            </p>
-
-                            <p className="mt-4">
-
-                                Say hello 👋
-
-                            </p>
-
-                        </div>
-
-                    )
-                }
-
-                {
-                    messages.map((msg) => (
-
-                        <MessageBubble
-
-                            key={msg._id}
-
-                            message={msg}
-
-                        />
-
-                    ))
-                }
+                {messages.map((msg) => (
+                    <MessageBubble key={msg._id} message={msg} />
+                ))}
 
                 <div ref={bottomRef} />
-
             </div>
 
-            <div
-                className="
-                    border-t
-                    border-white/10
-                    p-4
-                    flex
-                    gap-3
-                "
-            >
-
+            {/* Input area */}
+            <div style={{
+                position: 'relative', zIndex: 2,
+                borderTop: '1px solid rgba(255,255,255,0.06)',
+                padding: '14px 18px',
+                display: 'flex', gap: 10, alignItems: 'center',
+            }}>
                 <input
-
                     value={message}
-
-                    onChange={(e) =>
-                        setMessage(e.target.value)
-                    }
-
+                    onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={(e) => {
-
-                        if (
-                            e.key === "Enter" &&
-                            !e.shiftKey
-                        ) {
-
-                            e.preventDefault();
-
-                            handleSend();
-
-                        }
-
+                        if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
                     }}
-
+                    onFocus={() => setInputFocused(true)}
+                    onBlur={() => setInputFocused(false)}
                     placeholder="Message your teammates..."
-
-                    className="
-                        flex-1
-                        rounded-xl
-                        bg-black border border-white/10
-                        border
-                        border-white/10
-                        px-4
-                        py-3
-                        outline-none
-                    "
-
+                    style={{
+                        flex: 1,
+                        padding: '11px 16px',
+                        background: 'rgba(255,255,255,0.04)',
+                        border: `1px solid ${inputFocused ? 'rgba(232,0,61,0.5)' : 'rgba(255,255,255,0.09)'}`,
+                        borderRadius: 12,
+                        color: '#fff', fontSize: 12, fontFamily: F, outline: 'none',
+                        transition: 'border-color 0.2s',
+                        boxShadow: inputFocused ? '0 0 10px rgba(232,0,61,0.12)' : 'none',
+                    }}
                 />
-
                 <button
-
                     onClick={handleSend}
-
-                    disabled={
-                        !message.trim() ||
-                        sendMutation.isPending
-                    }
-
-                    className="
-                        px-6
-                        rounded-xl
-                        bg-cyan-500
-                        text-black
-                        font-bold
-                        hover:bg-cyan-400
-                        transition
-                    "
-
+                    disabled={!message.trim() || sendMutation.isPending}
+                    style={{
+                        display: 'flex', alignItems: 'center', gap: 7,
+                        padding: '11px 20px', borderRadius: 12,
+                        background: (!message.trim() || sendMutation.isPending)
+                            ? 'rgba(232,0,61,0.3)'
+                            : 'linear-gradient(135deg, #e8003d, #b5002e)',
+                        border: '1px solid rgba(232,0,61,0.4)',
+                        color: '#fff', fontSize: 11, fontFamily: F,
+                        fontWeight: 700, letterSpacing: '0.06em',
+                        cursor: (!message.trim() || sendMutation.isPending) ? 'not-allowed' : 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: (!message.trim() || sendMutation.isPending) ? 'none' : '0 0 16px rgba(232,0,61,0.3)',
+                        flexShrink: 0,
+                    }}
                 >
-
+                    <Send size={13} />
                     Send
-
                 </button>
-
             </div>
-
         </section>
-
     );
-
 }

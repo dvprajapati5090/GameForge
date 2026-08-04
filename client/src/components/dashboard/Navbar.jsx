@@ -21,7 +21,7 @@ export default function Navbar() {
       borderBottom: '1px solid rgba(255,255,255,0.06)',
       fontFamily: '"Space Mono", monospace',
       boxShadow: '0 4px 24px rgba(0,0,0,0.35)',
-    }}>
+    }} className="gf-navbar">
       {/* Animated red left accent */}
       <motion.div
         animate={{ boxShadow: ['0 0 10px rgba(232,0,61,0.6)', '0 0 20px rgba(232,0,61,1)', '0 0 10px rgba(232,0,61,0.6)'] }}
@@ -39,7 +39,7 @@ export default function Navbar() {
       }} />
 
       {/* Left: Greeting */}
-      <div style={{ paddingLeft: 16 }}>
+      <div style={{ paddingLeft: 16 }} className="gf-navbar-greeting">
         <h2 style={{ fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: '0.02em', lineHeight: 1 }}>
           Welcome back,{' '}
           <span style={{ color: '#C0C0C0', fontWeight: 400 }}>{user?.displayName}</span>
@@ -107,7 +107,7 @@ export default function Navbar() {
         </motion.div>
 
         {/* Name + role */}
-        <div>
+        <div className="gf-navbar-name-label">
           <div style={{ fontSize: 11, fontWeight: 700, color: '#fff', letterSpacing: '0.04em' }}>
             {user?.displayName}
           </div>

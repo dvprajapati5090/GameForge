@@ -40,7 +40,7 @@ export default function TournamentPage() {
       {tournaments.length === 0 ? (
         <EmptyTournament />
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16, marginTop: 24 }}>
+        <div className="tournament-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16, marginTop: 24 }}>
           {tournaments.map((t, i) => (
             <motion.div
               key={t._id}

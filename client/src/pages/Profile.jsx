@@ -32,7 +32,7 @@ export default function Profile() {
           data && <CareerStats stats={data.stats} />
         )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+        <div className="profile-cards-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           <AccountCard player={user} />
           <AboutCard player={user} />
         </div>

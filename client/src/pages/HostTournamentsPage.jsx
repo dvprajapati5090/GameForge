@@ -85,7 +85,7 @@ export default function HostTournamentsPage() {
             </div>
 
             {/* ── Stats strip ── */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 32 }}>
+            <div className="host-stats-strip" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 32 }}>
                 {[
                     { label: "Total", value: tournaments.length, icon: <Trophy size={14} />, color: "#e8003d" },
                     { label: "Live",  value: tournaments.filter(t => t.status === "ONGOING").length, icon: <Zap size={14} />, color: "#ff6030" },

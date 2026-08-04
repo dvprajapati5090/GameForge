@@ -1,0 +1,244 @@
+/**
+ * mobile.css — Full mobile responsiveness for GameForge
+ * Breakpoints:
+ *   Mobile : max-width 768px (sidebar hidden, bottom nav shown)
+ *   Tablet : max-width 1024px (sidebar collapsed)
+ * Desktop/Laptop view is UNCHANGED.
+ */
+
+/* ──────────────────────────────────────────────────────────
+   1. SIDEBAR — Hide on mobile, show bottom nav instead
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .player-sidebar,
+  .host-sidebar {
+    display: none !important;
+  }
+
+  /* Remove sidebar offset — content fills full width */
+  .main-content-offset {
+    margin-left: 0 !important;
+  }
+
+  /* Add bottom spacing so content doesn't hide behind bottom nav */
+  .main-scroll-area {
+    padding-bottom: 88px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* Bottom nav — visible only on mobile */
+  .mobile-bottom-nav {
+    display: flex !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   2. BOTTOM NAV — Hidden on desktop
+   ────────────────────────────────────────────────────────── */
+.mobile-bottom-nav {
+  display: none; /* hidden by default, shown on mobile via above rule */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 350;
+  height: 72px;
+  background: rgba(7, 0, 10, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top-width: 2px;
+  border-image: linear-gradient(to right, #e8003d, rgba(192, 192, 192, 0.2), transparent) 1;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 8px;
+}
+
+/* ──────────────────────────────────────────────────────────
+   3. NAVBAR — Compact on mobile
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .gf-navbar {
+    padding: 0 12px !important;
+  }
+
+  .gf-navbar-greeting {
+    display: none !important;
+  }
+
+  .gf-navbar-name-label {
+    display: none !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   4. GRIDS — All grids collapse to 1-column on mobile
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Profile career stats — 6-col → 2-col on mobile */
+  .career-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  /* 4-col hero stats (HeroStats) */
+  .hero-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* AccountCard / AboutCard 2-col → 1-col */
+  .profile-cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tournament cards — keep 1 column */
+  .tournament-cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Leaderboard table — becomes scrollable */
+  .leaderboard-table-wrap {
+    overflow-x: auto !important;
+  }
+
+  /* Dashboard grid (DashboardGrid) */
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Host stats strip */
+  .host-stats-strip {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 540px) {
+  /* Career stats → 2-col on very small screens */
+  .career-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   5. HERO / CARD SECTIONS — Stack vertically on mobile
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* PlayerHero inner card padding */
+  .player-hero-card {
+    padding: 22px 18px !important;
+  }
+
+  /* HeroInfo display name */
+  .hero-display-name {
+    font-size: clamp(24px, 8vw, 36px) !important;
+  }
+
+  /* TeamHero — stack horizontally items */
+  .team-hero-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+  }
+
+  /* TeamHero logo smaller */
+  .team-hero-logo {
+    width: 72px !important;
+    height: 72px !important;
+  }
+
+  /* InfoChips row wrap */
+  .team-hero-chips {
+    justify-content: flex-start !important;
+  }
+
+  /* TournamentHero */
+  .tournament-hero-flex {
+    flex-direction: column !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   6. MODALS — Full width on mobile
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .gf-modal-panel {
+    max-width: 100% !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    margin: 8px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   7. TOURNAMENT DETAIL PAGE
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Overview tab 3-col grid → 1-col */
+  .tournament-overview-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* FeaturedTournament height */
+  .featured-tournament-wrap {
+    height: auto !important;
+    min-height: 260px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   8. LEADERBOARD — Make table horizontally scrollable
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .leaderboard-table-inner {
+    min-width: 700px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   9. SETTINGS PAGE
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .settings-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   10. GENERAL UTILITIES
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Reduce padding on page wrappers */
+  .page-padding {
+    padding: 8px 0 !important;
+  }
+
+  /* Reduce font sizes for very small headings */
+  .section-heading-large {
+    font-size: clamp(20px, 6vw, 32px) !important;
+  }
+
+  /* Make flex rows wrap */
+  .flex-nowrap-lg {
+    flex-wrap: wrap !important;
+  }
+
+  /* Full width buttons on mobile */
+  .mobile-full-width {
+    width: 100% !important;
+  }
+
+  /* Reduce HeroBanner padding */
+  .herobanner-card {
+    padding: 20px 16px !important;
+  }
+
+  /* DashboardGrid column gap */
+  .dashboard-cols {
+    flex-direction: column !important;
+  }
+
+  /* Navbar host-mode label */
+  .navbar-role-chip span {
+    display: none !important;
+  }
+}

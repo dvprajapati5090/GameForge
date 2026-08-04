@@ -1,10 +1,13 @@
 import { Outlet } from "react-router-dom";
 import PlayerSidebar from "../dashboard/PlayerSidebar";
 import Navbar from "../dashboard/Navbar";
+import MobileBottomNav from "./MobileBottomNav";
+import "../../styles/mobile.css";
 
 // ── Same black hole video as landing page hero ─────────────────────────────
 const BG_VIDEO =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_092455_089c54f8-3b03-4966-9df1-e9746063d0ef.mp4";
+
 export default function MainLayout() {
   return (
     <div
@@ -17,9 +20,15 @@ export default function MainLayout() {
         loop
         muted
         playsInline
+        preload="none"
         src={BG_VIDEO}
         className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: 0, opacity: 0.55 }}
+        style={{
+          zIndex: 0,
+          opacity: 0.55,
+          transform: 'translateZ(0)',    // promote to own GPU compositor layer
+          willChange: 'transform',       // hint browser to keep it on GPU
+        }}
       />
       {/* Cinematic tint — lighter so video breathes */}
       <div
@@ -50,20 +59,30 @@ export default function MainLayout() {
         }}
       />
 
-      <PlayerSidebar />
-      {/* Main — always offset by collapsed sidebar width (64px) */}
+      {/* Sidebar — hidden on mobile via .player-sidebar class in mobile.css */}
+      <div className="player-sidebar">
+        <PlayerSidebar />
+      </div>
+
+      {/* Main — always offset by collapsed sidebar width (64px) on desktop */}
       <div
-        className="relative flex h-screen flex-col"
+        className="relative flex h-screen flex-col main-content-offset"
         style={{ marginLeft: 64, zIndex: 10 }}
       >
         <Navbar />
         <main
-          className="flex-1 overflow-y-auto p-6"
-          style={{ background: "transparent" }}
+          className="flex-1 overflow-y-auto p-6 main-scroll-area"
+          style={{
+            background: "transparent",
+            contain: "layout style paint",  /* isolate dashboard repaints from video layer */
+          }}
         >
           <Outlet />
         </main>
       </div>
+
+      {/* Mobile bottom navigation — only visible on screens ≤ 768px */}
+      <MobileBottomNav isHost={false} />
     </div>
   );
 }

@@ -53,7 +53,7 @@ export default function HeroStats({ player }) {
     const stats = STAT_META(player);
 
     return (
-        <div style={{
+        <div className="hero-stats-grid" style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
             gap: 14,

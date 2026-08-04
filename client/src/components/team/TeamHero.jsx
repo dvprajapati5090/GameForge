@@ -1,271 +1,118 @@
+/**
+ * TeamHero — Red/Silver gaming glass theme
+ */
 import { Shield, Crown, Users, CalendarDays } from "lucide-react";
 import { motion } from "framer-motion";
+import FloatingParticles from "../ui/FloatingParticles";
 
-export default function TeamHero({ team }) {
+const F = '"Space Mono", monospace';
 
-    const createdDate = new Date(team.createdAt).toLocaleDateString(
-        "en-IN",
-        {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-        }
-    );
-
+function InfoChip({ icon, label, value }) {
     return (
-
-        <motion.div
-
-            initial={{
-                opacity: 0,
-                y: 20
-            }}
-
-            animate={{
-                opacity: 1,
-                y: 0
-            }}
-
-            transition={{
-                duration: 0.45
-            }}
-
-            className="
-                relative
-                overflow-hidden
-                rounded-3xl
-                border
-                border-white/10
-                bg-gradient-to-br
-                from-slate-900
-                via-slate-900
-                to-[#132238]
-                p-10
-            "
-
-        >
-
-            <div
-                className="
-                    absolute
-                    -top-24
-                    -right-24
-                    w-72
-                    h-72
-                    rounded-full
-                    bg-cyan-500/10
-                    blur-3xl
-                "
-            />
-
-            <div
-                className="
-                    absolute
-                    -bottom-20
-                    -left-20
-                    w-72
-                    h-72
-                    rounded-full
-                    bg-black
-                    blur-3xl
-                "
-            />
-
-            <div
-                className="
-                    relative
-                    z-10
-                    flex
-                    flex-col
-                    lg:flex-row
-                    items-center
-                    justify-between
-                    gap-10
-                "
-            >
-
-                <div className="flex items-center gap-8">
-
-                    {
-                        team.logo ? (
-
-                            <img
-                                src={team.logo}
-                                alt={team.name}
-                                className="
-                                    w-28
-                                    h-28
-                                    rounded-3xl
-                                    object-cover
-                                "
-                            />
-
-                        ) : (
-
-                            <div
-                                className="
-                                    w-28
-                                    h-28
-                                    rounded-3xl
-                                    bg-gradient-to-br
-                                    from-cyan-500
-                                    to-purple-600
-                                    flex
-                                    items-center
-                                    justify-center
-                                "
-                            >
-
-                                <Shield size={50}/>
-
-                            </div>
-
-                        )
-                    }
-
-                    <div>
-
-                        <p
-                            className="
-                                uppercase
-                                tracking-[0.35em]
-                                text-white
-                                text-xs
-                                font-bold
-                            "
-                        >
-
-                            Esports Team
-
-                        </p>
-
-                        <h1
-                            className="
-                                mt-2
-                                text-5xl
-                                font-black
-                            "
-                        >
-
-                            {team.name}
-
-                        </h1>
-
-                        <p
-                            className="
-                                mt-3
-                                text-gray-400
-                                text-lg
-                                max-w-xl
-                            "
-                        >
-
-                            {
-                                team.description ||
-
-                                "No description added."
-                            }
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div
-                    className="
-                        flex
-                        flex-wrap
-                        justify-center
-                        gap-4
-                    "
-                >
-
-                    <InfoChip
-                        icon={<Crown size={18} />}
-                        label="Captain"
-                        value={team.captain.displayName}
-                    />
-
-                    <InfoChip
-                        icon={<Users size={18} />}
-                        label="Members"
-                        value={`${team.members.length}/${team.maxMembers}`}
-                    />
-
-                    <InfoChip
-                        icon={<CalendarDays size={18} />}
-                        label="Created"
-                        value={createdDate}
-                    />
-
-                </div>
-
+        <div style={{
+            minWidth: 140, padding: '14px 18px',
+            border: '1px solid rgba(192,192,192,0.15)',
+            borderRadius: 16,
+            background: 'rgba(255,255,255,0.04)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            fontFamily: F,
+        }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: 'rgba(192,192,192,0.6)', marginBottom: 10 }}>
+                {icon}
+                <span style={{ fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>{label}</span>
             </div>
-
-        </motion.div>
-
+            <h3 style={{ fontSize: 15, fontWeight: 700, color: '#fff', letterSpacing: '-0.01em' }}>{value}</h3>
+        </div>
     );
-
 }
 
-function InfoChip({
-
-    icon,
-
-    label,
-
-    value
-
-}) {
+export default function TeamHero({ team }) {
+    const createdDate = new Date(team.createdAt).toLocaleDateString("en-IN", {
+        day: "numeric", month: "short", year: "numeric",
+    });
 
     return (
-
-        <div
-            className="
-                min-w-[170px]
-                rounded-2xl
-                border
-                border-white/10
-                bg-white/5
-                backdrop-blur-xl
-                p-5
-            "
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            style={{
+                position: 'relative', overflow: 'hidden',
+                border: '1px solid rgba(232,0,61,0.2)',
+                borderTop: '2px solid #e8003d',
+                borderRadius: 22,
+                background: 'rgba(7,0,10,0.78)',
+                backdropFilter: 'blur(28px)',
+                WebkitBackdropFilter: 'blur(28px)',
+                padding: '36px 40px',
+                fontFamily: F,
+                boxShadow: '0 0 48px rgba(232,0,61,0.08), 0 20px 60px rgba(0,0,0,0.5)',
+            }}
         >
+            {/* Floating particles */}
+            <FloatingParticles count={14} color="#e8003d" opacity={0.25} speed={0.5} />
 
-            <div
-                className="
-                    flex
-                    items-center
-                    gap-2
-                    text-white
-                "
-            >
+            {/* Dot grid */}
+            <div style={{
+                position: 'absolute', inset: 0, pointerEvents: 'none',
+                backgroundImage: 'radial-gradient(rgba(192,192,192,0.07) 1px, transparent 1px)',
+                backgroundSize: '26px 26px',
+            }} />
 
-                {icon}
+            {/* Corner accents */}
+            <div style={{ position: 'absolute', left: 16, top: 16, width: 22, height: 22, borderLeft: '2px solid #e8003d', borderTop: '2px solid #e8003d', borderRadius: '4px 0 0 0', zIndex: 2 }} />
+            <div style={{ position: 'absolute', right: 16, bottom: 16, width: 22, height: 22, borderRight: '2px solid rgba(192,192,192,0.2)', borderBottom: '2px solid rgba(192,192,192,0.2)', borderRadius: '0 0 4px 0', zIndex: 2 }} />
 
-                <span className="text-sm">
+            {/* Ambient glow */}
+            <div style={{ position: 'absolute', top: -40, left: -40, width: 160, height: 160, borderRadius: '50%', background: 'rgba(232,0,61,0.08)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: -40, right: -40, width: 160, height: 160, borderRadius: '50%', background: 'rgba(192,192,192,0.04)', filter: 'blur(60px)', pointerEvents: 'none' }} />
 
-                    {label}
+            <div style={{
+                position: 'relative', zIndex: 10,
+                display: 'flex', flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between',
+                gap: 32, flexWrap: 'wrap',
+            }}>
+                {/* Left: Logo + Info */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 24, flex: 1, minWidth: 0 }}>
+                    {team.logo ? (
+                        <img
+                            src={team.logo}
+                            alt={team.name}
+                            style={{ width: 96, height: 96, borderRadius: 22, objectFit: 'cover', flexShrink: 0, border: '2px solid rgba(232,0,61,0.3)', boxShadow: '0 0 24px rgba(232,0,61,0.2)' }}
+                        />
+                    ) : (
+                        <div style={{
+                            width: 96, height: 96, borderRadius: 22, flexShrink: 0,
+                            background: 'linear-gradient(135deg, rgba(232,0,61,0.3) 0%, rgba(124,58,237,0.3) 100%)',
+                            border: '2px solid rgba(232,0,61,0.4)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 0 24px rgba(232,0,61,0.2)',
+                        }}>
+                            <Shield size={42} color="#e8003d" />
+                        </div>
+                    )}
+                    <div style={{ minWidth: 0 }}>
+                        <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.32em', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', marginBottom: 8 }}>
+                            Esports Team
+                        </p>
+                        <h1 style={{ fontSize: 'clamp(22px,4vw,40px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: 8 }}>
+                            {team.name}
+                        </h1>
+                        <p style={{ fontSize: 12, color: 'rgba(192,192,192,0.5)', lineHeight: 1.6, letterSpacing: '0.02em' }}>
+                            {team.description || "No description added."}
+                        </p>
+                    </div>
+                </div>
 
-                </span>
-
+                {/* Right: chips */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                    <InfoChip icon={<Crown size={14} color="rgba(192,192,192,0.6)" />} label="Captain" value={team.captain.displayName} />
+                    <InfoChip icon={<Users size={14} color="rgba(192,192,192,0.6)" />} label="Members" value={`${team.members.length}/${team.maxMembers}`} />
+                    <InfoChip icon={<CalendarDays size={14} color="rgba(192,192,192,0.6)" />} label="Created" value={createdDate} />
+                </div>
             </div>
-
-            <h3
-                className="
-                    mt-3
-                    text-lg
-                    font-bold
-                "
-            >
-
-                {value}
-
-            </h3>
-
-        </div>
-
+        </motion.div>
     );
-
 }
