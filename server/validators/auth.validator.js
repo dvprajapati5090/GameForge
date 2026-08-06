@@ -21,7 +21,7 @@ export const registerSchema = z.object({
     email: z
         .string()
         .email("Invalid email address")
-        .transform((email) => email.toLowerCase()),
+        .transform(email => email.toLowerCase()),
 
     password: z
         .string()
@@ -39,59 +39,55 @@ export const registerSchema = z.object({
         "HOST"
     ]),
 
-    gameName: z
+    gameName: z.string().trim().optional(),
+
+    tagLine: z.string().trim().optional(),
+
+    region: z.enum([
+        "ap",
+        "na",
+        "eu",
+        "kr",
+        "latam",
+        "br"
+    ]).optional(),
+
+    securityQuestion: z
         .string()
         .trim()
-        .optional(),
+        .min(1, "Security question is required"),
 
-    tagLine: z
+    securityAnswer: z
         .string()
         .trim()
-        .optional(),
-
-    region: z
-        .enum([
-            "ap",
-            "na",
-            "eu",
-            "kr",
-            "latam",
-            "br"
-        ])
-        .optional()
+        .min(1, "Security answer is required")
 
 }).superRefine((data, ctx) => {
 
     if (data.role === "PLAYER") {
 
         if (!data.gameName) {
-
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ["gameName"],
                 message: "Game Name is required"
             });
-
         }
 
         if (!data.tagLine) {
-
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ["tagLine"],
                 message: "Tagline is required"
             });
-
         }
 
         if (!data.region) {
-
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ["region"],
                 message: "Region is required"
             });
-
         }
 
     }

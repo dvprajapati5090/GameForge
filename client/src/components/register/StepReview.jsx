@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 
 import {
@@ -7,7 +7,8 @@ import {
     ShieldCheck,
     User,
     Mail,
-    Trophy
+    Trophy,
+    Inbox
 } from "lucide-react";
 
 import Button from "../ui/Button";
@@ -41,6 +42,8 @@ export default function StepReview({
     const register = useRegister();
 
     const [loading, setLoading] = useState(false);
+    const [showVerification, setShowVerification] = useState(false);
+    const [countdown, setCountdown] = useState(7);
 
     async function handleRegister() {
 
@@ -76,6 +79,9 @@ export default function StepReview({
 
                 setAccessToken(response.data.accessToken);
 
+                const destination = form.role === "HOST" ? "/host" : "/dashboard";
+                navigate(destination);
+
             } else {
 
                 await register.mutateAsync({
@@ -90,6 +96,11 @@ export default function StepReview({
 
                     role: form.role,
 
+                    // Security question — always included
+                    securityQuestion: form.securityQuestion,
+
+                    securityAnswer: form.securityAnswer,
+
                     ...(form.role === "PLAYER" && {
 
                         gameName: form.riotGameName,
@@ -102,11 +113,19 @@ export default function StepReview({
 
                 });
 
-            }
+                // LOCAL: show email verification overlay, then redirect to login
+                setShowVerification(true);
+                let remaining = 7;
+                const interval = setInterval(() => {
+                    remaining -= 1;
+                    setCountdown(remaining);
+                    if (remaining <= 0) {
+                        clearInterval(interval);
+                        navigate('/login', { state: { success: 'Account created! Please verify your email before logging in.' } });
+                    }
+                }, 1000);
 
-            // Route HOST to /host panel, PLAYER to /dashboard
-            const destination = form.role === "HOST" ? "/host" : "/dashboard";
-            navigate(destination);
+            }
 
         }
 
@@ -129,6 +148,129 @@ export default function StepReview({
     }
 
     return (
+        <>
+        {/* ─── Email Verification Sent Overlay ─── */}
+        <AnimatePresence>
+            {showVerification && (
+                <motion.div
+                    key="email-verify-overlay"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    style={{
+                        position: 'fixed', inset: 0, zIndex: 9999,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        background: 'rgba(0,0,0,0.92)',
+                        backdropFilter: 'blur(16px)',
+                        WebkitBackdropFilter: 'blur(16px)',
+                        fontFamily: '"Space Mono", monospace',
+                    }}
+                >
+                    {/* Animated background glow */}
+                    <div style={{
+                        position: 'absolute', inset: 0,
+                        backgroundImage: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(232,0,61,0.12) 0%, transparent 70%)',
+                        pointerEvents: 'none',
+                    }} />
+
+                    <motion.div
+                        initial={{ scale: 0.85, opacity: 0, y: 40 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, ease: [0.215, 0.61, 0.355, 1] }}
+                        style={{
+                            position: 'relative',
+                            width: '100%', maxWidth: 480,
+                            margin: '0 16px',
+                            background: 'rgba(8,2,14,0.97)',
+                            border: '1px solid rgba(232,0,61,0.25)',
+                            borderTop: '3px solid #e8003d',
+                            borderRadius: 24,
+                            padding: 48,
+                            textAlign: 'center',
+                            boxShadow: '0 0 80px rgba(232,0,61,0.15), 0 32px 80px rgba(0,0,0,0.8)',
+                        }}
+                    >
+                        {/* Mail icon with pulse ring */}
+                        <div style={{ position: 'relative', display: 'inline-block', marginBottom: 28 }}>
+                            <motion.div
+                                animate={{ scale: [1, 1.15, 1] }}
+                                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                style={{
+                                    position: 'absolute', inset: -12, borderRadius: '50%',
+                                    border: '2px solid rgba(232,0,61,0.25)',
+                                    pointerEvents: 'none',
+                                }}
+                            />
+                            <motion.div
+                                animate={{ scale: [1, 1.08, 1] }}
+                                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                                style={{
+                                    position: 'absolute', inset: -24, borderRadius: '50%',
+                                    border: '1px solid rgba(232,0,61,0.1)',
+                                    pointerEvents: 'none',
+                                }}
+                            />
+                            <div style={{
+                                width: 80, height: 80, borderRadius: '50%',
+                                background: 'rgba(232,0,61,0.12)',
+                                border: '1px solid rgba(232,0,61,0.4)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                boxShadow: '0 0 32px rgba(232,0,61,0.3)',
+                            }}>
+                                <Inbox size={36} color="#e8003d" />
+                            </div>
+                        </div>
+
+                        <p style={{ fontSize: 9, letterSpacing: '0.35em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', marginBottom: 14 }}>
+                            // EMAIL VERIFICATION
+                        </p>
+
+                        <h2 style={{ fontSize: 26, fontWeight: 700, color: '#fff', letterSpacing: '-0.03em', marginBottom: 12 }}>
+                            Check Your Inbox!
+                        </h2>
+
+                        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.8, marginBottom: 32, maxWidth: 360, margin: '0 auto 32px' }}>
+                            A verification link has been sent to your email address.
+                            Click the link in the email to activate your account before logging in.
+                        </p>
+
+                        {/* Countdown bar */}
+                        <div style={{ marginBottom: 24 }}>
+                            <div style={{
+                                height: 4, borderRadius: 4,
+                                background: 'rgba(255,255,255,0.06)',
+                                overflow: 'hidden', marginBottom: 10,
+                            }}>
+                                <motion.div
+                                    initial={{ width: '100%' }}
+                                    animate={{ width: `${(countdown / 7) * 100}%` }}
+                                    transition={{ duration: 0.9, ease: 'linear' }}
+                                    style={{ height: '100%', background: 'linear-gradient(to right, #e8003d, #b5002e)', borderRadius: 4 }}
+                                />
+                            </div>
+                            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>
+                                Redirecting to login in <span style={{ color: '#e8003d', fontWeight: 700 }}>{countdown}s</span>...
+                            </p>
+                        </div>
+
+                        <button
+                            onClick={() => navigate('/login', { state: { success: 'Account created! Please verify your email before logging in.' } })}
+                            style={{
+                                padding: '12px 32px', borderRadius: 12,
+                                background: 'linear-gradient(135deg, #e8003d, #b5002e)',
+                                border: '1px solid rgba(255,255,255,0.15)',
+                                color: '#fff', fontSize: 12, fontFamily: '"Space Mono", monospace',
+                                fontWeight: 700, letterSpacing: '0.08em',
+                                cursor: 'pointer',
+                                boxShadow: '0 0 20px rgba(232,0,61,0.3)',
+                            }}
+                        >
+                            Go to Login Now
+                        </button>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
 
         <motion.div
 
@@ -408,7 +550,7 @@ export default function StepReview({
             </div>
 
         </motion.div>
-
+        </>
     );
 
 }

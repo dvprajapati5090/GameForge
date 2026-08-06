@@ -5,7 +5,7 @@ export default function StepIndicator({ step }) {
 
     const steps = [
         "Basic",
-        "Role",
+        "Security",
         "Riot",
         "Review"
     ];

@@ -7,6 +7,7 @@ import Tournament from "../models/tournament.model.js";
 import Match from "../models/match.model.js";
 
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 import {
     getAccountDetails,
@@ -16,7 +17,8 @@ import {
 import crypto from "crypto";
 
 import {
-    sendVerificationEmail
+    sendVerificationEmail,
+    sendPasswordResetEmail
 } from "./email.service.js";
 
 export const verifyRiotAccountService = async ({
@@ -95,7 +97,9 @@ export const registerUserService = async (userData) => {
         region,
         googleId,
         avatar,
-        authProvider
+        authProvider,
+        securityQuestion,
+        securityAnswer
 
     } = userData;
 
@@ -174,7 +178,15 @@ export const registerUserService = async (userData) => {
 
             password,
 
-            emailVerified: false
+            emailVerified: false,
+
+            ...(securityQuestion && securityAnswer && {
+
+                securityQuestion,
+
+                securityAnswer: await bcrypt.hash(securityAnswer.toLowerCase().trim(), 10)
+
+            })
 
         }),
 
@@ -812,4 +824,113 @@ export const verifyEmailService = async (token) => {
     });
 
     return;
+};
+
+export const forgotPasswordService = async ({ email, securityAnswer }) => {
+    if (!email) throw new ApiError(400, 'Email is required');
+
+    const user = await User.findOne({ email: email.toLowerCase() }).select('+securityAnswer');
+
+    if (!user) {
+        // Return success even if user not found (security: don't reveal if email exists)
+        return { message: 'If that email is registered, a reset link has been sent.' };
+    }
+
+    if (!user.authProviders.includes('LOCAL')) {
+        throw new ApiError(400, 'This account uses Google Sign-In. Please reset your password through Google.');
+    }
+
+    // Security question must exist
+    if (!user.securityQuestion || !user.securityAnswer) {
+
+        throw new ApiError(
+            400,
+            "Security question has not been set for this account."
+        );
+
+    }
+
+    // Security answer is required
+    if (!securityAnswer) {
+
+        throw new ApiError(
+            400,
+            "Security answer is required."
+        );
+
+    }
+
+    const isCorrect = await bcrypt.compare(
+
+        securityAnswer.toLowerCase().trim(),
+
+        user.securityAnswer
+
+    );
+
+    if (!isCorrect) {
+
+        throw new ApiError(
+
+            400,
+
+            "Incorrect security answer."
+
+        );
+
+    }
+
+    const resetToken = user.generatePasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    await sendPasswordResetEmail(user, resetUrl);
+
+    return { message: 'If that email is registered, a reset link has been sent.' };
+};
+
+export const getSecurityQuestionService = async (email) => {
+    if (!email) throw new ApiError(400, 'Email is required');
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    if (!user || !user.authProviders.includes('LOCAL')) {
+        // Don't reveal if user exists
+        return { question: null, found: false };
+    }
+
+    return { question: user.securityQuestion || null, found: true };
+};
+
+export const resetPasswordService = async ({ token, newPassword }) => {
+    if (!token) throw new ApiError(400, 'Reset token is missing');
+    if (!newPassword || newPassword.length < 8) throw new ApiError(400, 'Password must be at least 8 characters');
+
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+        passwordResetToken: hashedToken,
+        passwordResetExpires: { $gt: Date.now() }
+    });
+
+    if (!user) throw new ApiError(400, 'Reset link is invalid or has expired. Please request a new one.');
+
+    user.password = newPassword;
+    user.passwordResetToken = '';
+    user.passwordResetExpires = null;
+    user.refreshToken = '';
+    await user.save();
+
+    return { message: 'Password reset successfully. Please login with your new password.' };
+};
+
+export const saveSecurityQuestionService = async (userId, { securityQuestion, securityAnswer }) => {
+    const user = await User.findById(userId);
+    if (!user) throw new ApiError(404, 'User not found');
+
+    user.securityQuestion = securityQuestion;
+    user.securityAnswer = await bcrypt.hash(securityAnswer.toLowerCase().trim(), 10);
+    await user.save({ validateBeforeSave: false });
+
+    return { message: 'Security question saved.' };
 };

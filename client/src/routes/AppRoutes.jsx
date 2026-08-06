@@ -29,6 +29,7 @@ import HostRoute from "./HostRoute";
 
 import VerifyEmail from "../pages/VerifyEmail";
 import LandingPage from "../pages/LandingPage";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
 
 import useAuthStore from "../store/authStore";
 
@@ -63,6 +64,11 @@ export default function AppRoutes() {
             <Route
                 path="/verify-email/:token"
                 element={<VerifyEmail />}
+            />
+
+            <Route
+                path="/reset-password/:token"
+                element={<ResetPasswordPage />}
             />
 
             {/* ══════════════════════════════════════

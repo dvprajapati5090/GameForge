@@ -4,54 +4,44 @@ import { useLocation } from "react-router-dom";
 
 import StepIndicator from "./StepIndicator";
 import StepBasicInfo from "./StepBasicInfo";
-import StepRoleSelection from "./StepRoleSelection";
+import StepSecurityQuestion from "./StepSecurityQuestion";
 import StepRiotVerification from "./StepRiotVerification";
 import StepReview from "./StepReview";
 
-
+/**
+ * RegisterWizard — 4-step flow:
+ *   Step 1: Basic Info (username, email, password, role selection)
+ *   Step 2: Security Question  ← NEW (was role selection)
+ *   Step 3: Riot Verification (PLAYER only) — skipped for HOST
+ *   Step 4: Review & Submit
+ */
 export default function RegisterWizard() {
 
     const location = useLocation();
 
-
-    const googleData =
-        location.state?.googleData || null;
+    const googleData = location.state?.googleData || null;
 
     const isGoogleUser = !!googleData;
 
-
     const [step, setStep] = useState(1);
 
+    const [form, setForm] = useState({
+        username: "",
+        displayName: googleData?.displayName || "",
+        email: googleData?.email || "",
+        password: "",
+        confirmPassword: "",
+        role: "",
 
+        // Security question (Step 2)
+        securityQuestion: "",
+        securityAnswer: "",
 
-    const [form,setForm]=useState({
-
-        username:"",
-
-        displayName:
-            googleData?.displayName || "",
-
-
-        email:
-            googleData?.email || "",
-
-
-        password:"",
-
-        confirmPassword:"",
-
-        role:"",
-
-
-        riotGameName:"",
-
-        riotTagLine:"",
-
-        region:"ap"
-
-
+        // Riot (Step 3 — PLAYER only)
+        riotGameName: "",
+        riotTagLine: "",
+        region: "ap",
     });
-
 
     const [riotProfile, setRiotProfile] = useState(null);
 
@@ -59,43 +49,24 @@ export default function RegisterWizard() {
 
         <motion.section
 
-            initial={{
-                opacity: 0,
-                y: 40,
-                scale: 0.98
-            }}
+            initial={{ opacity: 0, y: 40, scale: 0.98 }}
 
-            animate={{
-                opacity: 1,
-                y: 0,
-                scale: 1
-            }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
 
-            transition={{
-                duration: 0.55
-            }}
+            transition={{ duration: 0.55 }}
 
-            whileHover={{
-                y: -4
-            }}
+            whileHover={{ y: -4 }}
 
             className="
                 relative
-
                 overflow-hidden
-
                 w-full
                 max-w-5xl
-
                 rounded-[30px]
-
                 border
                 border-white/30
-
                 bg-black/60
-
                 backdrop-blur-[24px]
-
                 shadow-2xl
                 shadow-black/50
             "
@@ -103,41 +74,29 @@ export default function RegisterWizard() {
         >
 
             {/* Top Glow */}
-
             <div
                 className="
                     absolute
-
                     left-1/2
                     top-0
-
                     -translate-x-1/2
-
                     h-40
                     w-[26rem]
-
                     rounded-full
-
                     bg-white/5
-
                     blur-3xl
-
                     pointer-events-none
                 "
             />
 
             {/* Bottom Accent */}
-
             <div
                 className="
                     absolute
-
                     bottom-0
                     left-0
-
                     h-[2px]
                     w-full
-
                     bg-gradient-to-r
                     from-transparent
                     via-white/5
@@ -146,301 +105,117 @@ export default function RegisterWizard() {
             />
 
             {/* Corner Borders */}
-
-            <div
-                className="
-                    absolute
-                    left-6
-                    top-6
-
-                    h-8
-                    w-8
-
-                    border-l
-                    border-t
-
-                    border-white/20
-                "
-            />
-
-            <div
-                className="
-                    absolute
-                    right-6
-                    bottom-6
-
-                    h-8
-                    w-8
-
-                    border-r
-                    border-b
-
-                    border-white/20
-                "
-            />
+            <div className="absolute left-6 top-6 h-8 w-8 border-l border-t border-white/20" />
+            <div className="absolute right-6 bottom-6 h-8 w-8 border-r border-b border-white/20" />
 
             {/* HEADER */}
-
             <div
                 className="
                     relative
                     z-10
-
                     px-10
                     py-8
-
                     border-b
                     border-white/10
                 "
             >
 
-                <div
-                    className="
-                        flex
-                        items-center
-                        justify-between
-                    "
-                >
+                <div className="flex items-center justify-between">
 
                     <div>
-
-                        <p
-                            className="
-                                text-xs
-
-                                uppercase
-
-                                tracking-[0.35rem]
-
-                                text-slate-500
-                            "
-                        >
-                            Esports Platform
-                        </p>
-
-                        <h1
-                            className="
-                                mt-2
-
-                                text-2xl
-
-                                font-black
-
-                                tracking-tight
-
-                                text-white
-                            "
-                        >
-                            Create
-                            <span className="text-white">
-                                {" "}GameForge
-                            </span>
+                        <p className="text-xs uppercase tracking-[0.35rem] text-slate-500">Esports Platform</p>
+                        <h1 className="mt-2 text-2xl font-black tracking-tight text-white">
+                            Create{" "}
+                            <span className="text-white">GameForge</span>
                             {" "}Account
                         </h1>
-
-                        <p
-                            className="
-                                mt-3
-
-                                max-w-xl
-
-                                text-xs
-
-                                leading-6
-
-                                text-slate-400
-                            "
-                        >
-                            Join tournaments, create teams, compete with
-                            players across regions and build your esports
-                            profile.
+                        <p className="mt-3 max-w-xl text-xs leading-6 text-slate-400">
+                            Join tournaments, create teams, compete with players across regions and build your esports profile.
                         </p>
-
                     </div>
 
-                    <div
-                        className="
-                            flex
-                            items-center
-                            gap-2
-
-                            rounded-full
-
-                            border
-                            border-emerald-500/30
-
-                            bg-emerald-500/10
-
-                            px-4
-                            py-2
-
-                            text-[11px]
-
-                            font-semibold
-
-                            uppercase
-
-                            tracking-[0.18rem]
-
-                            text-emerald-300
-                        "
-                    >
-
+                    <div className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18rem] text-emerald-300">
                         <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-
                         Online
-
                     </div>
 
                 </div>
 
             </div>
 
-            <div
-                className="
-                    relative
-                    z-10
-
-                    px-10
-                    py-8
-                "
-            >
+            <div className="relative z-10 px-10 py-8">
 
                 <StepIndicator step={step} />
 
-                                <div className="mt-12">
+                <div className="mt-12">
 
+                    {/* ── Step 1: Basic Info + Role ── */}
                     {step === 1 && (
-
                         <StepBasicInfo
                             form={form}
                             setForm={setForm}
                             next={() => setStep(2)}
                             googleMode={isGoogleUser}
                         />
-
                     )}
 
+                    {/* ── Step 2: Security Question ── */}
                     {step === 2 && (
-
-                        <StepRoleSelection
-                            form={form}
-                            setForm={setForm}
-                            next={() => setStep(3)}
-                            back={() => setStep(1)}
-                        />
-
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.35 }}
+                        >
+                            <StepSecurityQuestion
+                                form={form}
+                                setForm={setForm}
+                                next={() => {
+                                    // PLAYER goes to Riot verification (step 3),
+                                    // HOST skips straight to review (step 4)
+                                    setStep(form.role === "PLAYER" ? 3 : 4);
+                                }}
+                                back={() => setStep(1)}
+                            />
+                        </motion.div>
                     )}
 
-                    {step === 3 && (
-
-                        form.role === "PLAYER"
-
-                            ? (
-
-                                <motion.div
-
-                                    initial={{
-                                        opacity: 0,
-                                        x: 30
-                                    }}
-
-                                    animate={{
-                                        opacity: 1,
-                                        x: 0
-                                    }}
-
-                                    transition={{
-                                        duration: 0.35
-                                    }}
-
-                                >
-
-                                    <StepRiotVerification
-
-                                        form={form}
-                                        setForm={setForm}
-
-                                        riotProfile={riotProfile}
-                                        setRiotProfile={setRiotProfile}
-
-                                        next={() => setStep(4)}
-                                        back={() => setStep(2)}
-
-                                    />
-
-                                </motion.div>
-
-                            )
-
-                            : (
-
-                                <motion.div
-
-                                    initial={{
-                                        opacity: 0,
-                                        x: 30
-                                    }}
-
-                                    animate={{
-                                        opacity: 1,
-                                        x: 0
-                                    }}
-
-                                    transition={{
-                                        duration: 0.35
-                                    }}
-
-                                >
-
-                                    <StepReview
-                                        form={form}
-                                        riotProfile={null}
-                                        googleData={googleData}
-                                        back={() => setStep(2)}
-                                    />
-
-                                </motion.div>
-
-                            )
-
+                    {/* ── Step 3: Riot Verification (PLAYER only) ── */}
+                    {step === 3 && form.role === "PLAYER" && (
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.35 }}
+                        >
+                            <StepRiotVerification
+                                form={form}
+                                setForm={setForm}
+                                riotProfile={riotProfile}
+                                setRiotProfile={setRiotProfile}
+                                next={() => setStep(4)}
+                                back={() => setStep(2)}
+                            />
+                        </motion.div>
                     )}
 
-                    {
-
-                        step === 4 &&
-                        form.role === "PLAYER" && (
-
-                            <motion.div
-
-                                initial={{
-                                    opacity: 0,
-                                    x: 30
+                    {/* ── Step 4: Review & Submit ── */}
+                    {step === 4 && (
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.35 }}
+                        >
+                            <StepReview
+                                form={form}
+                                riotProfile={form.role === "PLAYER" ? riotProfile : null}
+                                googleData={googleData}
+                                back={() => {
+                                    // HOST goes back to security question (step 2),
+                                    // PLAYER goes back to Riot verification (step 3)
+                                    setStep(form.role === "PLAYER" ? 3 : 2);
                                 }}
-
-                                animate={{
-                                    opacity: 1,
-                                    x: 0
-                                }}
-
-                                transition={{
-                                    duration: 0.35
-                                }}
-
-                            >
-
-                                <StepReview
-                                    form={form}
-                                    riotProfile={riotProfile}
-                                    googleData={googleData}
-                                    back={() => setStep(3)}
-                                />
-
-                            </motion.div>
-
-                        )
-
-                    }
+                            />
+                        </motion.div>
+                    )}
 
                 </div>
 

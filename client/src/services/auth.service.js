@@ -101,3 +101,24 @@ export const deleteAccount = async ({ password }) => {
     return data;
 
 };
+
+// ─── Forgot Password Flow ─────────────────────────────────────
+export const getSecurityQuestion = async (email) => {
+    const res = await api.get(`/auth/security-question?email=${encodeURIComponent(email)}`);
+    return res.data;
+};
+
+export const forgotPassword = async (data) => {
+    const res = await api.post("/auth/forgot-password", data);
+    return res.data;
+};
+
+export const resetPassword = async ({ token, newPassword }) => {
+    const res = await api.post(`/auth/reset-password/${token}`, { newPassword });
+    return res.data;
+};
+
+export const saveSecurityQuestion = async (data) => {
+    const res = await api.patch("/auth/security-question", data);
+    return res.data;
+};

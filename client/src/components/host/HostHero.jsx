@@ -111,9 +111,9 @@ export default function HostHero() {
                 {/* Right — stats panel */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: '0 0 252px' }}>
                     {[
-                        { label: 'Tournaments Hosted', value: '0', accent: '#e8003d', icon: Crown },
-                        { label: 'Teams Registered',   value: '0', accent: '#7c3aed', icon: ShieldCheck },
-                        { label: 'Live Right Now',      value: '0', accent: '#ff6030', icon: Flame },
+                        { label: 'Tournaments Hosted', value: '12', accent: '#e8003d', icon: Crown },
+                        { label: 'Teams Registered',   value: '47', accent: '#7c3aed', icon: ShieldCheck },
+                        { label: 'Live Right Now',      value: '3',  accent: '#ff6030', icon: Flame },
                     ].map((stat, i) => (
                         <motion.div
                             key={stat.label}

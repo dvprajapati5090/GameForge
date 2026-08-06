@@ -53,12 +53,18 @@ export default function HeroStats({ player }) {
     const stats = STAT_META(player);
 
     return (
-        <div className="hero-stats-grid" style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-            gap: 14,
+        <div style={{
+            display: "flex",
+            justifyContent: "center",
             marginTop: 24,
         }}>
+            <div className="hero-stats-grid" style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(4, minmax(0, 240px))",
+                gap: 14,
+                width: "100%",
+                maxWidth: 1000,
+            }}>
             {stats.map((card, i) => {
                 const Icon = card.icon;
                 return (
@@ -138,6 +144,7 @@ export default function HeroStats({ player }) {
                     </motion.div>
                 );
             })}
+        </div>
         </div>
     );
 }

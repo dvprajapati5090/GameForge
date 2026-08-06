@@ -48,7 +48,7 @@ export default function HostLayout() {
             <div className="relative flex h-screen flex-col main-content-offset" style={{ marginLeft: 64, zIndex: 10 }}>
                 <Navbar />
                 <main className="relative flex-1 overflow-y-auto p-6 main-scroll-area"
-                    style={{ fontFamily: '"Space Mono", monospace', contain: 'layout style paint' }}>
+                    style={{ fontFamily: '"Space Mono", monospace' }}>
                     <div className="relative z-10">
                         <Outlet />
                     </div>

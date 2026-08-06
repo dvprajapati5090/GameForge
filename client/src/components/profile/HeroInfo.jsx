@@ -56,6 +56,27 @@ export default function HeroInfo({ player }) {
                 </motion.span>
             </motion.h1>
 
+            {/* Username chip */}
+            {profile?.username && (
+                <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    style={{
+                        display: "inline-flex", alignItems: "center", gap: 6,
+                        padding: "5px 14px", borderRadius: 999,
+                        background: "rgba(255,255,255,0.05)",
+                        border: "1px solid rgba(255,255,255,0.12)",
+                        marginBottom: 4,
+                    }}
+                >
+                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", letterSpacing: "0.04em" }}>@</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
+                        {profile.username}
+                    </span>
+                </motion.div>
+            )}
+
             {/* Riot identity card */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}>
                 <RiotIdentityCard player={profile} />

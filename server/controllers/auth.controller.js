@@ -8,7 +8,11 @@ import {
     checkUsernameAvailabilityService,
     changePasswordService,
     deleteAccountService,
-    verifyEmailService
+    verifyEmailService,
+    forgotPasswordService,
+    getSecurityQuestionService,
+    resetPasswordService,
+    saveSecurityQuestionService
 } from "../services/auth.service.js";
 
 import ApiResponse from "../utils/apiResponse.js";
@@ -343,4 +347,27 @@ export const verifyEmail = asyncHandler(async (req, res) => {
 
     );
 
+});
+
+export const getSecurityQuestion = asyncHandler(async (req, res) => {
+    const { email } = req.query;
+    const result = await getSecurityQuestionService(email);
+    return res.status(200).json(new ApiResponse(200, result, 'Security question fetched'));
+});
+
+export const forgotPassword = asyncHandler(async (req, res) => {
+    const result = await forgotPasswordService(req.body);
+    return res.status(200).json(new ApiResponse(200, null, result.message));
+});
+
+export const resetPassword = asyncHandler(async (req, res) => {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+    const result = await resetPasswordService({ token, newPassword });
+    return res.status(200).json(new ApiResponse(200, null, result.message));
+});
+
+export const saveSecurityQuestion = asyncHandler(async (req, res) => {
+    const result = await saveSecurityQuestionService(req.user._id, req.body);
+    return res.status(200).json(new ApiResponse(200, null, result.message));
 });

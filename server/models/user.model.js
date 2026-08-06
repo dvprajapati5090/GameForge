@@ -291,6 +291,27 @@ const userSchema = new mongoose.Schema(
                 type: Number,
                 default: 0
             }
+        },
+
+        passwordResetToken: {
+            type: String,
+            default: ""
+        },
+
+        passwordResetExpires: {
+            type: Date,
+            default: null
+        },
+
+        securityQuestion: {
+            type: String,
+            default: ""
+        },
+
+        securityAnswer: {
+            type: String,
+            default: "",
+            select: false
         }
     },
     {
@@ -357,6 +378,14 @@ userSchema.methods.generateRefreshToken = function () {
             expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
         }
     );
+};
+
+// Generate Password Reset Token
+userSchema.methods.generatePasswordResetToken = function () {
+    const token = crypto.randomBytes(32).toString('hex');
+    this.passwordResetToken = crypto.createHash('sha256').update(token).digest('hex');
+    this.passwordResetExpires = new Date(Date.now() + 1000 * 60 * 30); // 30 minutes
+    return token;
 };
 
 // 5. Create Model

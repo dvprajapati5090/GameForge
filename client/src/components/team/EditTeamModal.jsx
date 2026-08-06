@@ -34,6 +34,13 @@ export default function EditTeamModal({
 
         }
 
+        // Lock body scroll when modal is open
+        if (open) {
+            const prev = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            return () => { document.body.style.overflow = prev; };
+        }
+
     },[team,open]);
 
     if (!open) return null;

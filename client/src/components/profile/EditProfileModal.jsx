@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Camera, Gamepad2 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 import useAuthStore from "../../store/authStore";
 import useUpdateProfile from "../../hooks/useUpdateProfile";
@@ -25,6 +25,10 @@ export default function EditProfileModal({ open, onClose }) {
             setBio(user?.bio || "");
             setSelectedGames(user?.favoriteGames || []);
             setAvatarFile(null);
+            // Lock body scroll — prevents page from jumping to top
+            const prev = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            return () => { document.body.style.overflow = prev; };
         }
     }, [open, user]);
 

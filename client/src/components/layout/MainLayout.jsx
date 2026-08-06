@@ -74,7 +74,6 @@ export default function MainLayout() {
           className="flex-1 overflow-y-auto p-6 main-scroll-area"
           style={{
             background: "transparent",
-            contain: "layout style paint",  /* isolate dashboard repaints from video layer */
           }}
         >
           <Outlet />

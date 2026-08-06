@@ -1,17 +1,19 @@
 import { motion } from "framer-motion";
 import { Plus, Trophy, Users, Shield, Sparkles, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SpecularButton from "../ui/SpecularButton";
 
 const actions = [
-    { icon: Plus,   title: "Create Team",     desc: "Build your squad", accent: '#e8003d' },
-    { icon: Users,  title: "Find Players",    desc: "Scout talent",     accent: '#C0C0C0' },
-    { icon: Trophy, title: "Join Tournament", desc: "Compete now",      accent: '#e8003d' },
-    { icon: Shield, title: "Manage Team",     desc: "Team settings",    accent: '#C0C0C0' },
+    { icon: Plus,   title: "Create Team",     desc: "Build your squad", accent: '#e8003d', route: '/team/create' },
+    { icon: Users,  title: "Find Players",    desc: "Scout talent",     accent: '#C0C0C0', route: '/players'     },
+    { icon: Trophy, title: "Join Tournament", desc: "Compete now",      accent: '#e8003d', route: '/tournaments' },
+    { icon: Shield, title: "Manage Team",     desc: "Team settings",    accent: '#C0C0C0', route: '/team'        },
 ];
 
 export default function QuickActions() {
     const [hoveredIndex, setHoveredIndex] = useState(null);
+    const navigate = useNavigate();
 
     return (
         <motion.section
@@ -65,6 +67,7 @@ export default function QuickActions() {
                         return (
                             <motion.button
                                 key={action.title}
+                                onClick={() => navigate(action.route)}
                                 initial={{ opacity: 0, x: 12 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.35, delay: 0.05 * index }}

@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Crosshair } from 'lucide-react';
+import { Eye, EyeOff, Crosshair, ArrowLeft } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { loginSchema } from '../validators/auth.validator';
 import useLogin from '../hooks/useLogin';
 import GoogleLoginButton from '../components/auth/GoogleLoginButton';
+import ForgotPasswordModal from '../components/auth/ForgotPasswordModal';
 
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 function GlitchText({ text }) {
@@ -34,6 +35,7 @@ export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(loginSchema) });
   const loginMutation = useLogin();
   const [showPw, setShowPw] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -48,6 +50,27 @@ export default function Login() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#000', display: 'flex', fontFamily: '"Space Mono", monospace', overflow: 'hidden', position: 'relative' }}>
+
+      {/* Back to Landing button — always top-left */}
+      <Link
+        to="/"
+        style={{
+          position: 'absolute', top: 20, left: 20, zIndex: 50,
+          display: 'flex', alignItems: 'center', gap: 8,
+          padding: '8px 16px', borderRadius: 10,
+          background: 'rgba(255,255,255,0.06)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          color: 'rgba(255,255,255,0.6)',
+          fontSize: 11, fontFamily: '"Space Mono", monospace',
+          textDecoration: 'none', letterSpacing: '0.06em',
+          backdropFilter: 'blur(8px)',
+          transition: 'all 0.2s ease',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = '#fff'; }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
+      >
+        <ArrowLeft size={12} /> Back to Home
+      </Link>
       {/* Left: Cinematic video panel */}
       <div className="hidden lg:block" style={{ flex: '0 0 55%', position: 'relative', overflow: 'hidden' }}>
         <video autoPlay muted loop playsInline src={VALORANT_VIDEO}
@@ -106,7 +129,28 @@ export default function Login() {
 
             {/* Password */}
             <div>
-              <label style={{ display: 'block', fontSize: 11, letterSpacing: '0.15em', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: 8 }}>Password</label>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                <label style={{ fontSize: 11, letterSpacing: '0.15em', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase' }}>Password</label>
+                {/* Forgot Password link */}
+                <button
+                  type="button"
+                  onClick={() => setForgotOpen(true)}
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontSize: 11, color: 'rgba(232,0,61,0.8)',
+                    fontFamily: '"Space Mono", monospace',
+                    letterSpacing: '0.06em',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: 3,
+                    transition: 'color 0.15s',
+                    padding: 0,
+                  }}
+                  onMouseEnter={e => e.target.style.color = '#e8003d'}
+                  onMouseLeave={e => e.target.style.color = 'rgba(232,0,61,0.8)'}
+                >
+                  Forgot Password?
+                </button>
+              </div>
               <div style={{ position: 'relative' }}>
                 <input {...register('password')} type={showPw ? 'text' : 'password'} placeholder="••••••••"
                   style={{ width: '100%', padding: '12px 44px 12px 16px', background: 'rgba(255,255,255,0.04)', border: errors.password ? '1px solid rgba(255,80,80,0.6)' : '1px solid rgba(255,255,255,0.1)', borderRadius: 10, color: '#fff', fontSize: 14, fontFamily: '"Space Mono", monospace', outline: 'none', boxSizing: 'border-box' }}
@@ -147,6 +191,9 @@ export default function Login() {
           </p>
         </motion.div>
       </div>
+
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal open={forgotOpen} onClose={() => setForgotOpen(false)} />
     </div>
   );
 }

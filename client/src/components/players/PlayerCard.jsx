@@ -81,6 +81,18 @@ export default function PlayerCard({ player }) {
                         <h2 style={{ fontSize: 18, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
                             {player.displayName}
                         </h2>
+                        {/* Username badge */}
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 6 }}>
+                            <span style={{
+                                display: 'inline-flex', alignItems: 'center', gap: 4,
+                                padding: '2px 10px', borderRadius: 999,
+                                background: 'rgba(255,255,255,0.04)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                fontSize: 11, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.04em',
+                            }}>
+                                <span style={{ color: 'rgba(232,0,61,0.7)' }}>@</span>{player.username}
+                            </span>
+                        </div>
                         {player.riotGameName && (
                             <p style={{ marginTop: 6, fontSize: 12, color: 'rgba(255,255,255,0.38)' }}>
                                 {player.riotGameName}

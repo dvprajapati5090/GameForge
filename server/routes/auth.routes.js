@@ -22,7 +22,11 @@ import {
     checkUsernameAvailability,
     changePassword,
     deleteAccount,
-    verifyEmail
+    verifyEmail,
+    getSecurityQuestion,
+    forgotPassword,
+    resetPassword,
+    saveSecurityQuestion
 } from "../controllers/auth.controller.js";
 
 import { sendTestEmail } from "../controllers/auth.controller.js";
@@ -111,5 +115,13 @@ router.get(
     "/verify-email/:token",
     verifyEmail
 );
+
+router.get('/security-question', getSecurityQuestion);
+
+router.post('/forgot-password', forgotPassword);
+
+router.post('/reset-password/:token', resetPassword);
+
+router.patch('/security-question', verifyJWT, saveSecurityQuestion);
 
 export default router;

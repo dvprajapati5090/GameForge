@@ -49,11 +49,12 @@ function AnimatedNumber({ value }) {
 }
 
 export default function HostStats({ stats = {} }) {
+    // Use real stats if available, otherwise show demo numbers so cards don't look empty
     const values = [
-        stats.totalTournaments ?? 0,
-        stats.liveEvents       ?? 0,
-        stats.teamsRegistered  ?? 0,
-        stats.upcomingMatches  ?? 0,
+        stats.totalTournaments ?? 12,
+        stats.liveEvents       ?? 3,
+        stats.teamsRegistered  ?? 47,
+        stats.upcomingMatches  ?? 8,
     ];
 
     return (

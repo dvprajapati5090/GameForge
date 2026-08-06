@@ -9,22 +9,14 @@ const useAuthStore = create((set) => ({
 
     authLoading: true,
 
-    setUser: (user) =>
-        set((state) => {
+    setUser: (user) => set({ user }),
 
-            if (state.user?._id === user?._id) {
+    // Merge partial user data (e.g., after avatar/profile update)
+    updateUser: (partial) =>
+        set((state) => ({
+            user: state.user ? { ...state.user, ...partial } : partial
+        })),
 
-                return state;
-
-            }
-
-            return {
-
-                user
-
-            };
-
-        }),
 
     setAccessToken: (token) => {
 

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import {
     User,
     Mail,
@@ -37,6 +37,7 @@ export default function StepBasicInfo({
         form.password === form.confirmPassword;
 
     const canContinue =
+        form.role !== "" &&
         form.username.length >= 3 &&
         form.displayName.length >= 3 &&
         form.email.length > 5 &&
@@ -212,6 +213,12 @@ export default function StepBasicInfo({
                         </motion.button>
 
                     </div>
+
+                    {!form.role && (
+                        <p className="mt-2 text-xs text-red-400/70 tracking-wide">
+                            &#9888; Please select an account type to continue.
+                        </p>
+                    )}
 
                 </motion.div>
 
@@ -506,7 +513,7 @@ export default function StepBasicInfo({
 
                     >
 
-                        Continue →
+                        Continue â†’
 
                     </Button>
 

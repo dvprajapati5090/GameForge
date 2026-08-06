@@ -11,26 +11,26 @@ export default function useUpdateTeam() {
 
         mutationFn: updateTeam,
 
-        onSuccess: () => {
+        onSuccess: (response) => {
 
             toast.success("Team updated successfully");
 
+            // Force refetch with cache-bust so the new logo/banner shows immediately
             queryClient.invalidateQueries({
-
                 queryKey: ["team"]
-
             });
 
+            // Also invalidate any team-related data used in other pages
+            queryClient.invalidateQueries({
+                queryKey: ["players"]
+            });
         },
 
         onError: (error) => {
 
             toast.error(
-
                 error.response?.data?.message ||
-
                 "Unable to update team"
-
             );
 
         }
