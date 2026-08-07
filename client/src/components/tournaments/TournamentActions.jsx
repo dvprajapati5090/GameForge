@@ -1,18 +1,14 @@
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
 
 import useAuthStore from "../../store/authStore";
-
-import {
-    deleteTournament,
-    generateBracket
-} from "../../services/tournament.service";
+import useGenerateBracket from "../../hooks/useGenerateBracket";
+import useDeleteTournament from "../../hooks/useDeleteTournament";
 
 export default function TournamentActions({ tournament }) {
 
-    const navigate = useNavigate();
-
     const user = useAuthStore(state => state.user);
+
+    const generateMutation = useGenerateBracket();
+    const deleteMutation = useDeleteTournament();
 
     if (
         user?.role !== "HOST" ||
@@ -21,7 +17,7 @@ export default function TournamentActions({ tournament }) {
         return null;
     }
 
-    const handleDelete = async () => {
+    const handleDelete = () => {
 
         if (
             !window.confirm(
@@ -29,55 +25,13 @@ export default function TournamentActions({ tournament }) {
             )
         ) return;
 
-        try {
-
-            await deleteTournament(
-                tournament._id
-            );
-
-            toast.success(
-                "Tournament deleted"
-            );
-
-            navigate("/tournaments");
-
-        }
-
-        catch {
-
-            toast.error(
-                "Unable to delete tournament"
-            );
-
-        }
+        deleteMutation.mutate(tournament._id);
 
     };
 
-    const handleBracket = async () => {
+    const handleBracket = () => {
 
-        try {
-
-            await generateBracket(
-                tournament._id
-            );
-
-            toast.success(
-                "Bracket generated!"
-            );
-
-        }
-
-        catch (err) {
-
-            toast.error(
-
-                err.response?.data?.message ||
-
-                "Failed"
-
-            );
-
-        }
+        generateMutation.mutate(tournament._id);
 
     };
 

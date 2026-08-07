@@ -43,9 +43,7 @@ export default function Login() {
   }, [location]);
 
   const onSubmit = (data) => {
-    loginMutation.mutate(data, {
-      onError: (err) => toast.error(err.response?.data?.message || 'Login failed'),
-    });
+    loginMutation.mutate(data);
   };
 
   return (

@@ -40,11 +40,7 @@ function LoginCard() {
   }, [location]);
 
   const onSubmit = (data) => {
-    loginMutation.mutate(data, {
-      onError: (error) => {
-        toast.error(error.response?.data?.message || "Login failed");
-      },
-    });
+    loginMutation.mutate(data);
   };
 
   return (

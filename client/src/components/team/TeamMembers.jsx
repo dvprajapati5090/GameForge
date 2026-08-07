@@ -1,13 +1,11 @@
 import { Crown, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
 
 import InvitePlayerModal from "./InvitePlayerModal";
 
 import useAuthStore from "../../store/authStore";
-
-import { removeMember } from "../../services/team.service";
+import useRemoveMember from "../../hooks/useRemoveMember";
 
 export default function TeamMembers({ team }) {
 
@@ -112,8 +110,9 @@ function MemberCard({
 }) {
 
     const { user } = useAuthStore();
+    const removeMutation = useRemoveMember();
 
-    const handleRemove = async () => {
+    const handleRemove = () => {
 
         if (
 
@@ -129,47 +128,7 @@ function MemberCard({
 
         }
 
-        const loading = toast.loading(
-
-            "Removing player..."
-
-        );
-
-        try {
-
-            await removeMember(member._id);
-
-            toast.success(
-
-                "Player removed successfully.",
-
-                {
-
-                    id: loading
-
-                }
-
-            );
-
-        }
-
-        catch (err) {
-
-            toast.error(
-
-                err.response?.data?.message ||
-
-                "Failed to remove player.",
-
-                {
-
-                    id: loading
-
-                }
-
-            );
-
-        }
+        removeMutation.mutate(member._id);
 
     };
 

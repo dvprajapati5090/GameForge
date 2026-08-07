@@ -18,7 +18,6 @@ import useCreatePaymentOrder from "../../hooks/useCreatePaymentOrder";
 
 import useVerifyPayment from "../../hooks/useVerifyPayment";
 
-import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function TournamentRegistrationCard({
@@ -127,12 +126,6 @@ export default function TournamentRegistrationCard({
                         queryClient.invalidateQueries({
                             queryKey: ["tournament"]
                         });
-
-                        toast.success(
-
-                            "Registration Successful"
-
-                        );
 
                     }
 

@@ -513,7 +513,7 @@ export default function StepBasicInfo({
 
                     >
 
-                        Continue â†’
+                        Continue
 
                     </Button>
 
