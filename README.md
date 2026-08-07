@@ -10,6 +10,12 @@
 </p>
 
 <p align="center">
+  <a href="https://game-forge-two.vercel.app/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀%20Live%20Demo-game--forge--two.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+  </a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
   <img src="https://img.shields.io/badge/Node.js-Express%205-339933?style=for-the-badge&logo=node.js&logoColor=white" />
   <img src="https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
@@ -598,12 +604,16 @@ Register → Email Verification → Login → JWT (Access + Refresh)
 
 ## 🚢 Deployment
 
+### 🌍 Live Demo
+
+> **Frontend (Vercel):** [https://game-forge-two.vercel.app/](https://game-forge-two.vercel.app/)
+
 ### Backend
 1. Set all environment variables in your platform (Railway, Render, Fly.io, etc.)
 2. Set `CLIENT_URL` to your production frontend URL
 3. Start command: `npm start`
 
-### Frontend
+### Frontend (Vercel)
 1. Set `VITE_API_URL` and `VITE_SERVER_URL` to production backend URL
 2. Build command: `npm run build`
 3. Output directory: `dist`
@@ -613,7 +623,7 @@ Register → Email Verification → Login → JWT (Access + Refresh)
 - [ ] MongoDB Atlas cluster configured
 - [ ] Cloudinary production settings
 - [ ] Razorpay live keys (for production)
-- [ ] Google OAuth authorized origins updated
+- [ ] Google OAuth authorized origins updated with production domain
 - [ ] `.env` files NOT committed to Git
 
 ---
