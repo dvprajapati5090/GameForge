@@ -1,20 +1,37 @@
-# Dependencies
-client/node_modules/
-server/node_modules/
+﻿# Dependencies
+node_modules/
+
+# Environment variables — NEVER commit these
+.env
+.env.local
+.env.production
 
 # Build output
-client/dist/
-
-# Environment files
-client/.env
-server/.env
+dist/
+build/
+.vite/
 
 # Logs
+logs/
 *.log
+npm-debug.log*
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# IDE
+# Editor / IDE
 .vscode/
+.idea/
+*.swp
+*.swo
+
+# Uploads (temporary server files)
+server/uploads/*
+!server/uploads/.gitkeep
+
+# Lint output
+lint_output.txt
+
+# Test artifacts
+coverage/
