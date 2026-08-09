@@ -22,10 +22,10 @@ export default function RankBadge({
             return "from-yellow-500 to-yellow-300";
 
         if (rank.includes("PLATINUM"))
-            return "from-cyan-500 to-blue-500";
+            return "from-[#e8003d] to-[#7a0020]";
 
         if (rank.includes("DIAMOND"))
-            return "from-indigo-500 to-purple-500";
+            return "from-[#7a0020] to-[#e8003d]";
 
         if (rank.includes("ASCENDANT"))
             return "from-green-500 to-emerald-400";
@@ -36,7 +36,7 @@ export default function RankBadge({
         if (rank.includes("RADIANT"))
             return "from-red-500 to-yellow-400";
 
-        return "from-cyan-500 to-purple-600";
+        return "from-[#e8003d] to-[#7a0020]";
 
     };
 

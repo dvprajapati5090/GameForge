@@ -68,7 +68,7 @@ export default function Background() {
                     absolute
                     w-[420px]
                     h-[420px]
-                    bg-blue-600/15
+                    bg-[rgba(232,0,61,0.08)]
                     blur-[140px]
                     rounded-full
                     bottom-0
@@ -90,7 +90,7 @@ export default function Background() {
                     absolute
                     w-72
                     h-72
-                    bg-cyan-500/10
+                    bg-[rgba(232,0,61,0.3)]
                     blur-[120px]
                     rounded-full
                     bottom-40

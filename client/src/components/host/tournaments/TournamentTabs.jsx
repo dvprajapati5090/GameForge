@@ -40,7 +40,7 @@ export default function TournamentTabs({
 
                             ${
                                 tab === item
-                                ? "border-b-2 border-cyan-400 text-white"
+                                ? "border-b-2 border-[#e8003d] text-white"
                                 : "text-gray-400"
                             }
                         `}

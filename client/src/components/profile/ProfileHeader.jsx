@@ -35,8 +35,8 @@ export default function ProfileHeader() {
                                 h-28
                                 rounded-full
                                 bg-gradient-to-r
-                                from-purple-500
-                                to-cyan-400
+                                from-[#7a0020]
+                                to-[#e8003d]
                                 flex
                                 items-center
                                 justify-center
@@ -80,8 +80,8 @@ export default function ProfileHeader() {
                             py-3
                             rounded-xl
                             bg-gradient-to-r
-                            from-purple-600
-                            to-cyan-500
+                            from-[#7a0020]
+                            to-[#e8003d]
                             hover:scale-105
                             transition
                         "

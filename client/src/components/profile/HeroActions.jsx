@@ -74,12 +74,12 @@ export default function HeroActions({player}) {
                         py-3
                         rounded-xl
                         border
-                        border-cyan-500/20
+                        border-[#e8003d]/20
                         bg-gradient-to-r
                         from-slate-900
                         to-slate-800
-                        hover:border-cyan-400
-                        hover:shadow-[0_0_25px_rgba(6,182,212,.18)]
+                        hover:border-[#ff1a4f]
+                        hover:shadow-[0_0_25px_rgba(232,0,61,0.3)]
                         transition-all
                         duration-300
                         disabled:opacity-60

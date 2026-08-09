@@ -1,4 +1,4 @@
-﻿import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
     User,
     Mail,
@@ -68,7 +68,7 @@ export default function StepBasicInfo({
 
     return (
 
-        <GlassCard className="relative overflow-hidden p-8 md:p-10">
+        <GlassCard className="relative overflow-hidden p-5 sm:p-8 md:p-10">
 
             {/* Glow */}
             <div className="absolute -top-24 right-0 h-48 w-48 rounded-full bg-white blur-3xl" />
@@ -140,7 +140,7 @@ export default function StepBasicInfo({
 
                     </label>
 
-                    <div className="grid grid-cols-2 gap-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
 
                         <motion.button
                             whileHover={{ y: -3 }}
@@ -149,31 +149,28 @@ export default function StepBasicInfo({
                             onClick={() =>
                                 update("role", "PLAYER")
                             }
-                            className={`group rounded-2xl border p-5 text-left transition-all duration-300 ${
+                            className={`group rounded-2xl border p-4 sm:p-5 text-left transition-all duration-300 ${
                                 form.role === "PLAYER"
-                                    ? "border-[#0a9396] bg-black shadow-lg shadow-[#0a9396]/20"
-                                    : "border-white/20 bg-white/10 hover:border-[#0a9396]/50 hover:bg-white/20"
+                                    ? "border-[#e8003d] bg-black shadow-lg shadow-[#e8003d]/20"
+                                    : "border-white/20 bg-white/10 hover:border-[#e8003d]/50 hover:bg-white/20"
                             }`}
                         >
 
-                            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-black text-white">
+                            <div className="flex items-center gap-3 sm:gap-0 sm:block">
+                                <div className="flex-shrink-0 flex h-9 w-9 sm:h-10 sm:w-10 sm:mb-3 items-center justify-center rounded-lg bg-black text-white">
+                                    <User size={18} />
+                                </div>
 
-                                <User size={20} />
-
+                                <div className="min-w-0">
+                                    <h3 className="text-sm font-bold text-white">
+                                        Player
+                                    </h3>
+                                    <p className="mt-0.5 sm:mt-1.5 text-xs leading-5 text-gray-400 line-clamp-2 sm:line-clamp-none">
+                                        Join tournaments, build teams, improve rankings
+                                        and compete against players worldwide.
+                                    </p>
+                                </div>
                             </div>
-
-                            <h3 className="text-sm font-bold text-white">
-
-                                Player
-
-                            </h3>
-
-                            <p className="mt-1.5 text-xs leading-5 text-gray-400">
-
-                                Join tournaments, build teams, improve rankings
-                                and compete against players worldwide.
-
-                            </p>
 
                         </motion.button>
 
@@ -184,31 +181,28 @@ export default function StepBasicInfo({
                             onClick={() =>
                                 update("role", "HOST")
                             }
-                            className={`group rounded-2xl border p-5 text-left transition-all duration-300 ${
+                            className={`group rounded-2xl border p-4 sm:p-5 text-left transition-all duration-300 ${
                                 form.role === "HOST"
-                                    ? "border-[#0a9396] bg-black shadow-lg shadow-[#0a9396]/20"
-                                    : "border-white/20 bg-white/10 hover:border-[#0a9396]/50 hover:bg-white/20"
+                                    ? "border-[#e8003d] bg-black shadow-lg shadow-[#e8003d]/20"
+                                    : "border-white/20 bg-white/10 hover:border-[#e8003d]/50 hover:bg-white/20"
                             }`}
                         >
 
-                            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-black text-white">
+                            <div className="flex items-center gap-3 sm:gap-0 sm:block">
+                                <div className="flex-shrink-0 flex h-9 w-9 sm:h-10 sm:w-10 sm:mb-3 items-center justify-center rounded-lg bg-black text-white">
+                                    <Trophy size={18} />
+                                </div>
 
-                                <Trophy size={20} />
-
+                                <div className="min-w-0">
+                                    <h3 className="text-sm font-bold text-white">
+                                        Tournament Host
+                                    </h3>
+                                    <p className="mt-0.5 sm:mt-1.5 text-xs leading-5 text-gray-400 line-clamp-2 sm:line-clamp-none">
+                                        Organize tournaments, manage participants,
+                                        create brackets and host professional events.
+                                    </p>
+                                </div>
                             </div>
-
-                            <h3 className="text-sm font-bold text-white">
-
-                                Tournament Host
-
-                            </h3>
-
-                            <p className="mt-1.5 text-xs leading-5 text-gray-400">
-
-                                Organize tournaments, manage participants,
-                                create brackets and host professional events.
-
-                            </p>
 
                         </motion.button>
 
@@ -498,7 +492,7 @@ export default function StepBasicInfo({
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.35 }}
-                    className="flex justify-end pt-4"
+                    className="register-continue-btn-wrap flex justify-end pt-4"
                 >
 
                     <Button
@@ -599,7 +593,7 @@ function PasswordStrength({
 
         Medium: "from-[#ca6702] to-[#ee9b00]",
 
-        Strong: "from-[#005f73] to-[#0a9396]"
+        Strong: "from-[#7a0020] to-[#e8003d]"
 
     };
 
@@ -619,7 +613,7 @@ function PasswordStrength({
 
         Medium: "text-[#ee9b00]",
 
-        Strong: "text-[#0a9396]"
+        Strong: "text-[#e8003d]"
 
     };
 

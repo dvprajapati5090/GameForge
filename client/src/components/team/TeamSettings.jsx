@@ -176,8 +176,8 @@ function SettingCard({
                 bg-white/5
                 p-6
                 text-left
-                hover:border-cyan-500
-                hover:bg-cyan-500/5
+                hover:border-[#ff1a4f]
+                hover:bg-[#e8003d]/10
                 transition-all
             "
 

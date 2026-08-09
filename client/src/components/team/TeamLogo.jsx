@@ -13,7 +13,7 @@ export default function TeamLogo({
                     rounded-full
                     object-cover
                     border
-                    border-cyan-500/30
+                    border-[#e8003d]/30
                     ${className}
                 `}
             />
@@ -26,9 +26,8 @@ export default function TeamLogo({
                 ${size}
                 rounded-full
                 bg-gradient-to-br
-                from-cyan-500
-                via-purple-500
-                to-black
+                from-[#e8003d]
+                to-[#7a0020]
                 flex
                 items-center
                 justify-center

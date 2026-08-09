@@ -85,7 +85,7 @@ function LoginCard() {
 
         hover:border-white/20
 
-        hover:shadow-[0_35px_90px_rgba(139,92,246,.18)]
+        hover:shadow-[0_35px_90px_rgba(232,0,61,0.3)]
 
         px-8
         py-7
@@ -303,7 +303,7 @@ function LoginCard() {
 
                 focus:border-white/20
                 focus:ring-4
-                focus:ring-violet-500/10
+                focus:ring-[#e8003d]/10
 
                 hover:border-white/20
               "
@@ -370,7 +370,7 @@ function LoginCard() {
 
                 focus:border-white/20
                 focus:ring-4
-                focus:ring-violet-500/10
+                focus:ring-[#e8003d]/10
 
                 hover:border-white/20
               "
@@ -417,7 +417,7 @@ function LoginCard() {
               className="
                 h-4
                 w-4
-                accent-violet-500
+                accent-[#e8003d]
               "
             />
 

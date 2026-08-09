@@ -105,45 +105,50 @@ export default function RegisterWizard() {
             />
 
             {/* Corner Borders */}
-            <div className="absolute left-6 top-6 h-8 w-8 border-l border-t border-white/20" />
-            <div className="absolute right-6 bottom-6 h-8 w-8 border-r border-b border-white/20" />
+            <div className="register-corner-deco absolute left-6 top-6 h-8 w-8 border-l border-t border-white/20" />
+            <div className="register-corner-deco absolute right-6 bottom-6 h-8 w-8 border-r border-b border-white/20" />
 
             {/* HEADER */}
             <div
                 className="
                     relative
                     z-10
-                    px-10
-                    py-8
+                    px-4 sm:px-8 md:px-10
+                    py-5 sm:py-8
                     border-b
                     border-white/10
                 "
             >
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
 
-                    <div>
-                        <p className="text-xs uppercase tracking-[0.35rem] text-slate-500">Esports Platform</p>
-                        <h1 className="mt-2 text-2xl font-black tracking-tight text-white">
+                    <div className="min-w-0">
+                        <p className="text-[10px] sm:text-xs uppercase tracking-[0.2rem] sm:tracking-[0.35rem] text-slate-500">Esports Platform</p>
+                        <h1 className="mt-1 sm:mt-2 text-lg sm:text-2xl font-black tracking-tight text-white">
                             Create{" "}
                             <span className="text-white">GameForge</span>
                             {" "}Account
                         </h1>
-                        <p className="mt-3 max-w-xl text-xs leading-6 text-slate-400">
+                        <p className="mt-1.5 sm:mt-3 max-w-xl text-[11px] sm:text-xs leading-5 sm:leading-6 text-slate-400 hidden sm:block">
                             Join tournaments, create teams, compete with players across regions and build your esports profile.
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18rem] text-emerald-300">
+                    <div className="hidden sm:flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18rem] text-emerald-300 flex-shrink-0">
                         <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                         Online
+                    </div>
+                    {/* Mobile-only compact online dot */}
+                    <div className="flex sm:hidden items-center gap-1.5 flex-shrink-0">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="text-[10px] text-emerald-300 font-semibold">Live</span>
                     </div>
 
                 </div>
 
             </div>
 
-            <div className="relative z-10 px-10 py-8">
+            <div className="relative z-10 px-4 sm:px-8 md:px-10 py-6 sm:py-8">
 
                 <StepIndicator step={step} />
 

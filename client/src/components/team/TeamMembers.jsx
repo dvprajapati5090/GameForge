@@ -203,7 +203,7 @@ function MemberCard({
                     w-28
                     h-28
                     rounded-full
-                    bg-cyan-500/10
+                    bg-[#e8003d]/10
                     blur-3xl
                 "
 
@@ -242,11 +242,11 @@ function MemberCard({
                         h-24
                         rounded-full
                         bg-gradient-to-r
-                        from-cyan-500
-                        to-purple-600
+                        from-[#e8003d]
+                        to-[#7a0020]
                         p-1.5
                         mx-auto
-                        shadow-[0_0_25px_rgba(6,182,212,0.35)]
+                        shadow-[0_0_25px_rgba(232,0,61,0.3)]
                     "
 
                 >
@@ -483,7 +483,7 @@ function InviteCard({
                 rounded-3xl
                 border-2
                 border-dashed
-                border-cyan-500/30
+                border-[#e8003d]/30
                 bg-white/5
                 h-full
                 min-h-[270px]
@@ -492,8 +492,8 @@ function InviteCard({
                 items-center
                 justify-center
                 transition
-                hover:border-cyan-400
-                hover:bg-cyan-500/5
+                hover:border-[#ff1a4f]
+                hover:bg-[#e8003d]/10
             "
 
         >

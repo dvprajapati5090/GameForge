@@ -88,8 +88,8 @@ export default function HostBracketPage() {
                         py-3
                         rounded-xl
                         bg-gradient-to-r
-                        from-cyan-500
-                        to-purple-600
+                        from-[#e8003d]
+                        to-[#7a0020]
                         font-bold
                         disabled:opacity-50
                     "

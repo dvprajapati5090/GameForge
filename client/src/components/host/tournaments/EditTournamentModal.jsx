@@ -60,13 +60,13 @@ export default function EditTournamentModal({
                                 "https://placehold.co/1200x500?text=Tournament+Banner"
                             }
                             alt="Banner"
-                            className="h-40 w-full rounded-xl border border-cyan-500 object-cover"
+                            className="h-40 w-full rounded-xl border border-[#e8003d] object-cover"
                         />
 
                         <button
                             type="button"
                             onClick={() => fileInputRef.current.click()}
-                            className="mt-3 rounded-lg bg-cyan-600 px-4 py-2 hover:bg-cyan-500"
+                            className="mt-3 rounded-lg bg-[#e8003d] px-4 py-2 hover:bg-[#ff1a4f]"
                         >
                             Change Banner
                         </button>

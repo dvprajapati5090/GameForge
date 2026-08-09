@@ -127,7 +127,7 @@ export default function CreateTeamForm() {
                             rounded-full
                             object-cover
                             border
-                            border-cyan-500
+                            border-[#e8003d]
                         "
 
                     />
@@ -144,8 +144,8 @@ export default function CreateTeamForm() {
                                 px-5
                                 py-3
                                 rounded-xl
-                                bg-cyan-600
-                                hover:bg-cyan-500
+                                bg-[#7a0020]
+                                hover:bg-[#e8003d]
                             "
 
                         >
@@ -219,7 +219,7 @@ export default function CreateTeamForm() {
                         px-5
                         py-4
                         outline-none
-                        focus:border-cyan-400
+                        focus:border-[#ff1a4f]
                         transition
                     "
 
@@ -296,7 +296,7 @@ export default function CreateTeamForm() {
                         py-4
                         outline-none
                         resize-none
-                        focus:border-cyan-400
+                        focus:border-[#ff1a4f]
                         transition
                     "
 

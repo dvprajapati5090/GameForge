@@ -145,7 +145,7 @@ export default function EditTeamModal({
                                     rounded-full
                                     object-cover
                                     border
-                                    border-cyan-500
+                                    border-[#e8003d]
                                 "
 
                             />
@@ -160,7 +160,7 @@ export default function EditTeamModal({
                                     px-4
                                     py-2
                                     rounded-lg
-                                    bg-cyan-600
+                                    bg-[#7a0020]
                                 "
 
                             >
@@ -270,7 +270,7 @@ export default function EditTeamModal({
                                 px-5
                                 py-3
                                 rounded-xl
-                                bg-cyan-500
+                                bg-[#e8003d]
                                 text-black
                                 font-bold
                             "

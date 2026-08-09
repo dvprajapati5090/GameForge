@@ -28,16 +28,16 @@ export default function Button({
         relative
         overflow-hidden
         border
-        border-[#0a9396]/50
-        bg-[#0a9396]/10
+        border-[#e8003d]/50
+        bg-[#e8003d]/10
         text-white
         
-        shadow-[0_0_15px_rgba(10,147,150,0.15)]
+        shadow-[0_0_15px_rgba(232,0,61,0.15)]
         
-        hover:border-[#0a9396]
-        hover:bg-[#0a9396]
-        hover:text-[#001219]
-        hover:shadow-[0_0_30px_rgba(10,147,150,0.4)]
+        hover:border-[#e8003d]
+        hover:bg-[#e8003d]
+        hover:text-white
+        hover:shadow-[0_0_30px_rgba(232,0,61,0.4)]
         `,
 
 

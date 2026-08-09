@@ -288,9 +288,9 @@ export default function AuthInitializer({ children }) {
 
                     color: "text-white",
 
-                    border: "border-cyan-500/40",
+                    border: "border-[#e8003d]/40",
 
-                    bg: "bg-cyan-500/10"
+                    bg: "bg-[#e8003d]/10"
 
                 },
 

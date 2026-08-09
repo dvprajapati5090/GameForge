@@ -69,7 +69,7 @@ export default function RegisterPage() {
           alignItems: "center",
           justifyContent: "flex-start",
           minHeight: "100vh",
-          padding: "40px 16px",
+          padding: "24px 12px",
         }}
       >
         {/* Top badge */}
@@ -78,7 +78,7 @@ export default function RegisterPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           style={{
-            marginBottom: 32,
+            marginBottom: 20,
             display: "flex",
             alignItems: "center",
             gap: 8,
@@ -86,13 +86,13 @@ export default function RegisterPage() {
         >
           <span
             style={{
-              fontSize: 11,
-              letterSpacing: "0.25em",
+              fontSize: 10,
+              letterSpacing: "0.18em",
               color: "rgba(255,255,255,0.35)",
               textTransform: "uppercase",
             }}
           >
-            GameForge // New Agent Registration
+            GameForge // Registration
           </span>
         </motion.div>
 

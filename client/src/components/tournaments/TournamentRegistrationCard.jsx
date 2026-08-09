@@ -135,7 +135,7 @@ export default function TournamentRegistrationCard({
 
                 theme: {
 
-                    color: "#06b6d4"
+                    color: "#e8003d"
 
                 }
 
@@ -197,7 +197,7 @@ export default function TournamentRegistrationCard({
 
                     <div
 
-                        className="h-full bg-gradient-to-r from-cyan-500 to-purple-600"
+                        className="h-full bg-gradient-to-r from-[#e8003d] to-[#7a0020]"
 
                         style={{
 

@@ -65,7 +65,7 @@ export default function EmailSentModal({
                     w-[420px]
                     rounded-3xl
                     border
-                    border-cyan-500/20
+                    border-[#e8003d]/20
                     bg-white/10
                     backdrop-blur-xl
                     p-8

@@ -214,8 +214,8 @@ export default function StepRiotVerification({
                         className="
                             rounded-3xl
                             border
-                            border-cyan-500/40
-                            bg-cyan-500/5
+                            border-[#e8003d]/30
+                            bg-[#e8003d]/5
                             flex flex-col
                             gap-4
                         "

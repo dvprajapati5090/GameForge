@@ -38,8 +38,8 @@ export default function MiniStat({
                     h-12
                     rounded-xl
                     bg-gradient-to-r
-                    from-cyan-500
-                    to-purple-600
+                    from-[#e8003d]
+                    to-[#7a0020]
                     flex
                     items-center
                     justify-center

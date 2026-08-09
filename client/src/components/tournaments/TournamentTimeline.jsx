@@ -66,7 +66,7 @@ export default function TournamentTimeline({
                                     w-12
                                     h-12
                                     rounded-full
-                                    bg-cyan-500/20
+                                    bg-[#e8003d]/20
                                     text-white
                                     flex
                                     items-center

@@ -39,7 +39,7 @@ export default function StepPrizeRules({
         hover:border-white/10
         focus:border-white/10
         focus:ring-2
-        focus:ring-purple-500/20
+        focus:ring-[#e8003d]/20
     `;
 
 
@@ -151,7 +151,7 @@ export default function StepPrizeRules({
             duration-300
             ${
                 form.isPaid
-                    ? "bg-black shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+                    ? "bg-black shadow-[0_0_20px_rgba(232,0,61,0.5)]"
                     : "bg-white/20"
             }
         `}
@@ -388,7 +388,7 @@ export default function StepPrizeRules({
                         hover:border-white/10
                         focus:border-white/10
                         focus:ring-2
-                        focus:ring-purple-500/20
+                        focus:ring-[#e8003d]/20
                     "
 
                 />
@@ -442,8 +442,8 @@ export default function StepPrizeRules({
                         ?
 
                         `
-                        shadow-[0_0_35px_rgba(168,85,247,0.7)]
-                        hover:shadow-[0_0_50px_rgba(168,85,247,0.9)]
+                        shadow-[0_0_35px_rgba(232,0,61,0.7)]
+                        hover:shadow-[0_0_50px_rgba(232,0,61,0.9)]
                         `
 
                         :

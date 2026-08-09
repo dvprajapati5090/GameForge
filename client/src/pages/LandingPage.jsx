@@ -230,14 +230,14 @@ function HeroSection({ entranceComplete }) {
           <div className="flex flex-col gap-4">
             <h1
               className="text-white font-light leading-[0.95]"
-              style={{ letterSpacing: '-0.03em', fontSize: 'clamp(40px,10vw,100px)', fontFamily: '"Space Mono", monospace' }}
+              style={{ letterSpacing: '-0.03em', fontSize: 'clamp(36px,7.5vw,84px)', fontFamily: '"Space Mono", monospace' }}
             >
               <ScrambleIn text="Sync" delay={200} triggered={entranceComplete} /><br />
               <ScrambleIn text="Your Stats" delay={500} triggered={entranceComplete} />
             </h1>
             <motion.p
-              className="text-white/60 leading-relaxed max-w-sm"
-              style={{ fontSize: 'clamp(13px,1.2vw,15px)', fontFamily: '"Space Mono", monospace' }}
+              className="text-white/55 leading-relaxed max-w-sm"
+              style={{ fontSize: 'clamp(13px,1.1vw,15px)', fontFamily: '"Space Mono", monospace', lineHeight: 1.75 }}
               initial={{ opacity: 0, y: 25 }}
               animate={entranceComplete ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.9, ease: [0.215, 0.61, 0.355, 1], delay: 0.2 }}
@@ -248,7 +248,7 @@ function HeroSection({ entranceComplete }) {
           {/* Right */}
           <h1
             className="text-white font-light leading-[0.95] text-left md:text-right"
-            style={{ letterSpacing: '-0.03em', fontSize: 'clamp(40px,10vw,100px)', fontFamily: '"Space Mono", monospace' }}
+            style={{ letterSpacing: '-0.03em', fontSize: 'clamp(36px,7.5vw,84px)', fontFamily: '"Space Mono", monospace' }}
           >
             <ScrambleIn text="Forge" delay={700} triggered={entranceComplete} /><br />
             <ScrambleIn text="Legacy" delay={1000} triggered={entranceComplete} />
@@ -304,29 +304,29 @@ function MetricsSection() {
       <video autoPlay muted loop playsInline src={VIDEOS.metrics}
         className="absolute inset-0 w-full h-full object-cover" style={{ zIndex: 0, opacity: 0.5 }} />
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1, background: 'rgba(0,0,0,0.5)' }} />
-      <div className="relative flex flex-col items-center justify-center w-full max-w-6xl mx-auto pt-32 pb-32 px-6" style={{ zIndex: 2 }}>
+      <div className="relative flex flex-col items-center justify-center w-full max-w-6xl mx-auto pt-40 pb-40 px-8 sm:px-12" style={{ zIndex: 2 }}>
         <motion.p
-          className="text-white/40 uppercase tracking-[0.2em] mb-20 text-center"
-          style={{ fontSize: 'clamp(13px,1vw,14px)', fontFamily: '"Space Mono", monospace' }}
+          className="text-white/40 uppercase tracking-[0.25em] mb-24 text-center"
+          style={{ fontSize: 'clamp(11px,0.85vw,13px)', fontFamily: '"Space Mono", monospace', letterSpacing: '0.3em' }}
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           transition={{ duration: 1.2 }} viewport={{ once: true, amount: 0.3 }}
         >
           Performance Metrics
         </motion.p>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-8 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-10 w-full">
           {METRICS.map((m, i) => (
             <motion.div
               key={m.label}
-              className="flex flex-col items-center md:items-start"
+              className="flex flex-col items-center md:items-start gap-3"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: i * 0.15 }}
               viewport={{ once: true, amount: 0.3 }}
             >
-              <span className="text-white font-light leading-none" style={{ fontSize: 'clamp(48px,10vw,96px)', letterSpacing: '-0.04em', fontFamily: '"Space Mono", monospace' }}>
+              <span className="text-white font-light leading-none" style={{ fontSize: 'clamp(36px,5.5vw,68px)', letterSpacing: '-0.04em', fontFamily: '"Space Mono", monospace' }}>
                 {m.value}
               </span>
-              <span className="text-white/40 mt-4 tracking-wide" style={{ fontSize: 'clamp(13px,1vw,15px)', fontFamily: '"Space Mono", monospace' }}>
+              <span className="text-white/45 tracking-widest uppercase" style={{ fontSize: 'clamp(10px,0.75vw,12px)', fontFamily: '"Space Mono", monospace', letterSpacing: '0.18em' }}>
                 {m.label}
               </span>
             </motion.div>
@@ -351,11 +351,11 @@ function TechSection() {
       <video autoPlay muted loop playsInline src={VIDEOS.tech}
         className="absolute inset-0 w-full h-full object-cover" style={{ zIndex: 0 }} />
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1, background: 'rgba(0,0,0,0.55)' }} />
-      <div className="relative flex flex-col h-full px-8 sm:px-12 md:px-16 py-12 sm:py-16" style={{ zIndex: 2, fontFamily: '"Space Mono", monospace' }}>
-        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
+      <div className="relative flex flex-col h-full px-8 sm:px-14 md:px-20 py-14 sm:py-20" style={{ zIndex: 2, fontFamily: '"Space Mono", monospace' }}>
+        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-8">
           <motion.h2
             className="text-white font-light leading-[0.95]"
-            style={{ fontSize: 'clamp(36px,8vw,72px)', letterSpacing: '-0.03em' }}
+            style={{ fontSize: 'clamp(32px,6.5vw,64px)', letterSpacing: '-0.03em' }}
             initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.0 }} viewport={{ once: true, amount: 0.3 }}
           >
@@ -363,7 +363,7 @@ function TechSection() {
           </motion.h2>
           <motion.p
             className="text-white/50 leading-relaxed max-w-xs md:text-right md:pt-2"
-            style={{ fontSize: 'clamp(13px,1.2vw,15px)' }}
+            style={{ fontSize: 'clamp(13px,1.1vw,15px)', lineHeight: 1.8 }}
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.0, delay: 0.2 }} viewport={{ once: true, amount: 0.3 }}
           >
@@ -372,18 +372,19 @@ function TechSection() {
         </div>
         <div className="flex-1" />
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6"
+          className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8"
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           transition={{ duration: 1.0, delay: 0.3 }} viewport={{ once: true, amount: 0.2 }}
         >
           {TECH_ITEMS.map((item, i) => (
             <motion.div
               key={item.title}
+              className="flex flex-col gap-2.5"
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: i * 0.1 }} viewport={{ once: true, amount: 0.2 }}
             >
-              <p className="text-white font-normal mb-2" style={{ fontSize: 'clamp(14px,1.2vw,16px)' }}>{item.title}</p>
-              <p className="text-white/40 leading-relaxed" style={{ fontSize: 'clamp(12px,1vw,14px)' }}>{item.desc}</p>
+              <p className="text-white font-normal" style={{ fontSize: 'clamp(13px,1.1vw,15px)', letterSpacing: '-0.01em' }}>{item.title}</p>
+              <p className="text-white/40 leading-relaxed" style={{ fontSize: 'clamp(11px,0.9vw,13px)', lineHeight: 1.75 }}>{item.desc}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -402,33 +403,33 @@ const LAYERS = [
 function ArchSection() {
   return (
     <section className="relative bg-black w-full" style={{ minHeight: '100vh', fontFamily: '"Space Mono", monospace' }}>
-      <div className="flex flex-col items-center max-w-3xl mx-auto px-6 py-32">
+      <div className="flex flex-col items-center max-w-3xl mx-auto px-8 sm:px-12 py-36 sm:py-44">
         <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.0 }} viewport={{ once: true, amount: 0.4 }}
         >
-          <p className="text-white/40 uppercase tracking-[0.2em] mb-8" style={{ fontSize: 'clamp(13px,1vw,14px)' }}>Architecture</p>
-          <h2 className="text-white font-light leading-[1.15] mb-10" style={{ fontSize: 'clamp(28px,6vw,56px)', letterSpacing: '-0.02em' }}>
+          <p className="text-white/40 uppercase tracking-[0.3em] mb-10" style={{ fontSize: 'clamp(10px,0.8vw,12px)', letterSpacing: '0.3em' }}>Architecture</p>
+          <h2 className="text-white font-light leading-[1.15] mb-8" style={{ fontSize: 'clamp(26px,5vw,52px)', letterSpacing: '-0.02em' }}>
             Three layers.<br />Zero friction.
           </h2>
-          <p className="text-white/45 leading-relaxed max-w-xl mx-auto" style={{ fontSize: 'clamp(15px,1.4vw,17px)' }}>
+          <p className="text-white/45 leading-relaxed max-w-xl mx-auto" style={{ fontSize: 'clamp(13px,1.2vw,16px)', lineHeight: 1.85 }}>
             Riot API layer captures raw match data. Processing layer isolates performance patterns. Dashboard layer delivers structured output to players and teams.
           </p>
         </motion.div>
         <motion.div
-          className="mt-20 flex flex-col items-center gap-4 w-full"
+          className="mt-20 flex flex-col items-center gap-3 w-full"
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }} viewport={{ once: true, amount: 0.4 }}
         >
           {LAYERS.map((l) => (
             <div
               key={l.num}
-              className="w-full max-w-md flex items-center justify-between px-6 rounded-lg"
-              style={{ height: 72, border: '1px solid rgba(255,255,255,0.10)' }}
+              className="w-full max-w-lg flex items-center justify-between px-8 rounded-lg"
+              style={{ height: 68, border: '1px solid rgba(255,255,255,0.09)' }}
             >
-              <span className="text-white/30 uppercase tracking-[0.15em]" style={{ fontSize: 12 }}>{l.num}</span>
-              <span className="text-white font-light" style={{ fontSize: 'clamp(16px,1.5vw,18px)' }}>{l.label}</span>
+              <span className="text-white/30 uppercase tracking-[0.18em]" style={{ fontSize: 11 }}>{l.num}</span>
+              <span className="text-white font-light" style={{ fontSize: 'clamp(15px,1.3vw,17px)' }}>{l.label}</span>
             </div>
           ))}
         </motion.div>
@@ -441,26 +442,26 @@ function ArchSection() {
 function Footer({ navigate }) {
   return (
     <footer className="relative bg-black overflow-hidden w-full" style={{ fontFamily: '"Space Mono", monospace' }}>
-      <div className="flex flex-col md:flex-row" style={{ minHeight: 400 }}>
+      <div className="landing-footer-row flex flex-col md:flex-row" style={{ minHeight: 400 }}>
         {/* Left video */}
-        <div className="relative overflow-hidden" style={{ flex: '0 0 50%', height: 300, minHeight: 300 }}>
+        <div className="landing-footer-video relative overflow-hidden" style={{ flex: '0 0 50%', height: 300, minHeight: 300 }}>
           <video autoPlay muted loop playsInline src={VIDEOS.footer}
             className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.3)' }} />
         </div>
         {/* Right content */}
-        <div className="flex flex-col justify-between p-10 sm:p-16 flex-1">
+        <div className="flex flex-col justify-between p-12 sm:p-16 md:p-20 flex-1">
           <div>
-            <div className="flex items-center gap-2.5 mb-8">
+            <div className="flex items-center gap-3 mb-10">
               <ForgeLogo size={18} color="rgba(255,255,255,0.7)" />
               <span style={{ fontSize: 15, fontWeight: 500, color: 'rgba(255,255,255,0.7)', letterSpacing: '-0.01em' }}>GameForge</span>
             </div>
-            <p style={{ color: 'rgba(255,255,255,0.40)', fontSize: 'clamp(14px,1.2vw,15px)', lineHeight: 1.7, maxWidth: 340 }}>
+            <p style={{ color: 'rgba(255,255,255,0.40)', fontSize: 'clamp(13px,1.1vw,15px)', lineHeight: 1.85, maxWidth: 340 }}>
               The competitive edge for Valorant players. Track your stats, build your team, dominate the leaderboard.
             </p>
             <motion.button
-              className="mt-8 flex items-center gap-2 bg-white text-black rounded-full font-medium cursor-pointer"
-              style={{ height: 44, paddingLeft: 20, paddingRight: 20, fontSize: 14 }}
+              className="mt-10 flex items-center gap-2 bg-white text-black rounded-full font-medium cursor-pointer"
+              style={{ height: 46, paddingLeft: 22, paddingRight: 22, fontSize: 14 }}
               whileHover={{ background: '#e2e2e6', scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate('/dashboard')}
@@ -469,7 +470,7 @@ function Footer({ navigate }) {
               Enter the Arena
             </motion.button>
           </div>
-          <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12, marginTop: 48 }}>
+          <p style={{ color: 'rgba(255,255,255,0.22)', fontSize: 11, marginTop: 56, letterSpacing: '0.04em' }}>
             © 2026 GameForge. All rights reserved.
           </p>
         </div>

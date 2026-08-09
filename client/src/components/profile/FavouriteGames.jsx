@@ -32,8 +32,8 @@ export default function FavouriteGames() {
                             py-3
                             rounded-full
                             bg-gradient-to-r
-                            from-purple-600/60
-                            to-cyan-500/60
+                            from-[#e8003d]/60
+                            to-[#7a0020]/60
                         "
                     >
                         {game}

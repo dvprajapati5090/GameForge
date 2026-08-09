@@ -52,8 +52,8 @@ export default function TournamentListPage() {
                             to="/host/create-tournament"
 
                             className="
-                                bg-cyan-500
-                                hover:bg-cyan-400
+                                bg-[#e8003d]
+                                hover:bg-[#ff1a4f]
                                 px-5
                                 py-3
                                 rounded-lg

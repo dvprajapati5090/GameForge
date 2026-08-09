@@ -228,7 +228,7 @@ export default function StepReview({
                 border
                 border-white/10
                 bg-gradient-to-r
-                from-purple-600/20
+                from-[#e8003d]/20
                 to-black
                 p-8
             ">
@@ -417,8 +417,8 @@ export default function StepReview({
                     onClick={createTournament}
 
                     className="
-                        shadow-[0_0_40px_rgba(168,85,247,0.7)]
-                        hover:shadow-[0_0_60px_rgba(168,85,247,0.9)]
+                        shadow-[0_0_40px_rgba(232,0,61,0.7)]
+                        hover:shadow-[0_0_60px_rgba(232,0,61,0.9)]
                     "
 
                 >

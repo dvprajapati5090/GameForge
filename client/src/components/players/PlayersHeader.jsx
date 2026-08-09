@@ -61,7 +61,7 @@ export default function PlayersHeader() {
                         bg-gradient-to-r
                         from-white
                         via-white
-                        to-violet-300
+                        to-[#e8003d]
 
                         bg-clip-text
                         text-transparent

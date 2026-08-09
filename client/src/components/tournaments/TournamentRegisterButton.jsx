@@ -24,8 +24,8 @@ export default function TournamentRegisterButton({
                 }
                 className="
                     w-full
-                    bg-cyan-500
-                    hover:bg-cyan-600
+                    bg-[#e8003d]
+                    hover:bg-[#ff1a4f]
                     rounded-lg
                     py-3
                     font-bold

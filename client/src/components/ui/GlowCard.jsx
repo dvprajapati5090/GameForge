@@ -50,7 +50,7 @@ export default function GlowCard({
 
         >
 
-            {/* Soft Violet Ambient Glow */}
+            {/* Soft Red Ambient Glow */}
 
             <div
                 className="
@@ -63,7 +63,7 @@ export default function GlowCard({
                     transition-opacity
                     duration-500
 
-                    bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,.05),transparent_55%)]
+                    bg-[radial-gradient(circle_at_top_right,rgba(232,0,61,0.3),transparent_55%)]
                 "
             />
 

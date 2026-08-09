@@ -164,7 +164,7 @@ function RoleCard({
                 transition-all
                 duration-300
                 ${selected
-                    ? "border-[#0a9396] ring-2 ring-[#0a9396]/40"
+                    ? "border-[#e8003d] ring-2 ring-[#e8003d]/40"
                     : "border-white/20"
                 }
             `}
@@ -237,7 +237,7 @@ function RoleCard({
                                         w-2
                                         h-2
                                         rounded-full
-                                        bg-[#0a9396]
+                                        bg-[#e8003d]
                                     "
                                 />
 

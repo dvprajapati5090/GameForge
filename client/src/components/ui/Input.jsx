@@ -77,7 +77,7 @@ export default function Input({
 
                         placeholder:!text-slate-400
 
-                        caret-purple-400
+                        caret-[#e8003d]
 
                         outline-none
 
@@ -97,7 +97,7 @@ export default function Input({
                         focus:border-white/40
 
                         focus:ring-2
-                        focus:ring-purple-500/20
+                        focus:ring-[#e8003d]/20
 
                         focus:-translate-y-1
 

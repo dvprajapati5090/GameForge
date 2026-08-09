@@ -11,7 +11,7 @@ export default function TournamentBanner({
                 rounded-xl
                 overflow-hidden
                 border
-                border-cyan-500/20
+                border-[#e8003d]/20
                 bg-black border border-white/10
             "
         >

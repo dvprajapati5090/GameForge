@@ -51,17 +51,17 @@ export default function GradientButton({
                 border-white/20
 
                 bg-gradient-to-r
-                from-[#4F1D95]
-                via-[#6D28D9]
-                to-[#7C3AED]
+                from-[#e8003d]
+                via-[#b5002e]
+                to-[#7a0020]
 
-                shadow-[0_10px_28px_rgba(109,40,217,.28)]
+                shadow-[0_10px_28px_rgba(232,0,61,.3)]
 
                 transition-all
                 duration-300
 
                 hover:border-white/20
-                hover:shadow-[0_18px_45px_rgba(109,40,217,.45)]
+                hover:shadow-[0_18px_45px_rgba(232,0,61,.45)]
                 hover:brightness-105
 
                 active:scale-[0.98]
@@ -106,7 +106,7 @@ export default function GradientButton({
 
                     bg-gradient-to-r
                     from-black
-                    via-purple-300/10
+                    via-[#e8003d]/10
                     to-black
 
                     opacity-0

@@ -12,7 +12,7 @@ export default function StepIndicator({ step }) {
 
     return (
 
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-1 sm:gap-3">
 
             {steps.map((item, index) => {
 
@@ -58,8 +58,8 @@ export default function StepIndicator({ step }) {
                                 className={`
                                     relative
 
-                                    w-10
-                                    h-10
+                                    w-8 h-8
+                                    sm:w-10 sm:h-10
 
                                     rounded-full
 
@@ -67,7 +67,7 @@ export default function StepIndicator({ step }) {
                                     items-center
                                     justify-center
 
-                                    text-sm
+                                    text-xs sm:text-sm
                                     font-bold
 
                                     transition-all
@@ -77,9 +77,9 @@ export default function StepIndicator({ step }) {
 
                                     ${
                                         completed
-                                            ? "bg-black border-white/20 text-white shadow-lg shadow-violet-500/40"
+                                            ? "bg-black border-white/20 text-white shadow-lg shadow-[#e8003d]/40"
                                             : active
-                                            ? "bg-black border-white/20 text-white shadow-lg shadow-violet-500/30"
+                                            ? "bg-black border-white/20 text-white shadow-lg shadow-[#e8003d]/30"
                                             : "bg-white/5 border-white/10 text-slate-500"
                                     }
                                 `}
@@ -108,7 +108,7 @@ export default function StepIndicator({ step }) {
 
                                         completed
 
-                                            ? <Check size={16} />
+                                            ? <Check size={14} />
 
                                             : current
 
@@ -118,16 +118,14 @@ export default function StepIndicator({ step }) {
 
                             </motion.div>
 
+                            {/* Label — hidden on very small screens to avoid cramping */}
                             <p
                                 className={`
-                                    mt-3
-
-                                    text-xs
-
+                                    mt-2
+                                    text-[10px] sm:text-xs
                                     font-medium
-
+                                    hidden xs:block sm:block
                                     transition-colors
-
                                     ${
                                         active || completed
                                             ? "text-white"
@@ -146,19 +144,17 @@ export default function StepIndicator({ step }) {
 
                             index < steps.length - 1 && (
 
+                                // Connector line — hidden on mobile to keep it clean
                                 <div
                                     className="
                                         relative
                                         flex-1
-                                        h-[2px]
-
-                                        mx-2
-
+                                        h-[1px]
+                                        mx-1 sm:mx-2
                                         rounded-full
-
                                         bg-white/10
-
                                         overflow-hidden
+                                        hidden sm:block
                                     "
                                 >
 
@@ -181,10 +177,9 @@ export default function StepIndicator({ step }) {
 
                                         className="
                                             h-full
-
                                             bg-gradient-to-r
-                                            from-black
-                                            to-black
+                                            from-white/30
+                                            to-white/10
                                         "
 
                                     />

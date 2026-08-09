@@ -48,9 +48,9 @@ export default function NotificationItem({
 
             iconColor: "text-white",
 
-            border: "border-cyan-500/40",
+            border: "border-[#e8003d]/40",
 
-            bg: "bg-cyan-500/10"
+            bg: "bg-[#e8003d]/10"
 
         },
 
@@ -244,7 +244,7 @@ export default function NotificationItem({
 
                 "duration-200",
 
-                "hover:bg-cyan-500/5",
+                "hover:bg-[#e8003d]/5",
 
                 "hover:scale-[1.01]"
 
@@ -272,7 +272,7 @@ export default function NotificationItem({
 
                             rounded-full
 
-                            bg-cyan-400
+                            bg-[#e8003d]
 
                         "
 

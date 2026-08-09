@@ -44,8 +44,8 @@ export default function TournamentActions({ tournament }) {
                     px-6
                     py-3
                     rounded-xl
-                    bg-cyan-500
-                    hover:bg-cyan-400
+                    bg-[#e8003d]
+                    hover:bg-[#ff1a4f]
                 "
             >
 

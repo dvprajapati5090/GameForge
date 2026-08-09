@@ -25,7 +25,7 @@ export default function TournamentHeader({
 
                 ) : (
 
-                    <div className="h-full w-full bg-gradient-to-r from-cyan-600 via-blue-700 to-purple-700" />
+                    <div className="h-full w-full bg-gradient-to-r from-[#e8003d] via-[#a0001f] to-[#7a0020]" />
 
                 )}
 

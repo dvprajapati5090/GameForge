@@ -242,3 +242,62 @@
     display: none !important;
   }
 }
+
+/* ──────────────────────────────────────────────────────────
+   11. LANDING PAGE — Mobile overrides
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Metrics section — 2 columns instead of 4 cramped ones */
+  .landing-metrics-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2rem !important;
+  }
+
+  /* Tech section inner padding */
+  .landing-tech-inner {
+    padding: 2.5rem 1.25rem !important;
+  }
+
+  /* Footer — stack video above content */
+  .landing-footer-row {
+    flex-direction: column !important;
+  }
+
+  .landing-footer-video {
+    flex: none !important;
+    width: 100% !important;
+    height: 220px !important;
+    min-height: 220px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   12. REGISTRATION PAGE — Mobile overrides
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Outer wizard card border-radius smaller on tiny screens */
+  .register-wizard-card {
+    border-radius: 20px !important;
+  }
+
+  /* Corner decoration too large on mobile */
+  .register-corner-deco {
+    display: none !important;
+  }
+
+  /* StepBasicInfo FieldTitle subtitle wraps badly — allow it to be smaller */
+  .register-field-subtitle {
+    font-size: 10px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Continue button — full width on mobile */
+  .register-continue-btn-wrap {
+    justify-content: stretch !important;
+  }
+
+  .register-continue-btn-wrap button {
+    width: 100% !important;
+    min-width: unset !important;
+  }
+}

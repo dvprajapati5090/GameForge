@@ -17,7 +17,7 @@ export default function RiotIdentityCard({ player }) {
 
                 {player.riotVerified && (
 
-                    <div className="flex items-center gap-2 text-emerald-400">
+                    <div className="flex items-center gap-2 text-slate-100">
 
                         <BadgeCheck size={16} />
 

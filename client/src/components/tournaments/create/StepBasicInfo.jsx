@@ -35,7 +35,7 @@ export default function StepBasicInfo({
         hover:border-white/10
         focus:border-white/10
         focus:ring-2
-        focus:ring-purple-500/20
+        focus:ring-[#e8003d]/20
     `;
 
 
@@ -94,7 +94,7 @@ export default function StepBasicInfo({
     className="
         !text-white
         placeholder:!text-slate-400
-        caret-purple-400
+        caret-[#e8003d]
     "
     placeholder="Enter tournament name"
     minLength={8}
