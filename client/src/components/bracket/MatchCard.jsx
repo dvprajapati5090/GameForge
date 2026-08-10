@@ -1,6 +1,6 @@
 import HostMatchControls from "./HostMatchControls";
 
-export default function MatchCard({ match }) {
+export default function MatchCard({ match, isHost = false }) {
 
     return (
 
@@ -67,14 +67,13 @@ export default function MatchCard({ match }) {
             }
 
             {
+                isHost &&
                 match.teamA &&
-                match.teamB &&
-                match.status !== "COMPLETED" && (
-
+                match.teamB && (
                     <HostMatchControls
                         match={match}
+                        isHost={isHost}
                     />
-
                 )
             }
 

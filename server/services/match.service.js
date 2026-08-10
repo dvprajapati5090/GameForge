@@ -23,6 +23,8 @@ import {
     emitBracketUpdated
 } from "../socket/socketManager.js";
 
+import { reportChallongeMatchResult } from "./thirdParty/challonge.service.js";
+
 export const updateMatchWinnerService = async (
 
     matchId,
@@ -52,14 +54,7 @@ export const updateMatchWinnerService = async (
 
     }
 
-    if (match.status === "COMPLETED") {
-
-        throw new ApiError(
-            400,
-            "Match already completed"
-        );
-
-    }
+    // Note: hosts CAN update completed matches to correct results (e.g. auto-completed ghost matches)
 
     if (
         winnerId !== match.teamA?.toString() &&
@@ -185,6 +180,42 @@ export const updateMatchWinnerService = async (
     await match.save();
 
     // -----------------------------------
+    // Sync result to Challonge
+    // -----------------------------------
+
+    if (tournament.challongeId && match.challongeMatchId) {
+
+        const isTeamAWinner = winnerId === match.teamA.toString();
+
+        // Determine the Challonge participant ID of the winner
+        const challongeWinnerId = isTeamAWinner
+            ? match.challongePlayer1Id
+            : match.challongePlayer2Id;
+
+        if (challongeWinnerId) {
+
+            try {
+
+                await reportChallongeMatchResult(
+                    tournament.challongeId,
+                    match.challongeMatchId,
+                    challongeWinnerId,
+                    scoreA,
+                    scoreB
+                );
+
+            } catch (err) {
+
+                // Non-fatal: log the error and continue
+                console.error("[Challonge] Failed to sync match result:", err.message);
+
+            }
+
+        }
+
+    }
+
+    // -----------------------------------
     // Advance winner
     // -----------------------------------
 
@@ -208,7 +239,73 @@ export const updateMatchWinnerService = async (
 
         emitBracketUpdated(match.tournament);
         emitTournamentUpdated();
+
+        // ------------------------------------------------------------------
+        // SMART BYE CASCADE
+        // After placing the winner, check if the OTHER slot in nextMatch is
+        // still null. If yes, find the match that feeds that slot. If that
+        // feeder is already COMPLETED with no winner (ghost match), the null
+        // slot will NEVER be filled → auto-advance the winner through.
+        // This ONLY fires for confirmed ghost slots, not "not played yet" slots.
+        // ------------------------------------------------------------------
+
+        let current = nextMatch;
+
+        while (current && current.nextMatch) {
+
+            const teamASet = !!current.teamA;
+            const teamBSet = !!current.teamB;
+
+            // Both real teams → real match, nothing to cascade
+            if (teamASet && teamBSet) break;
+
+            // Both null → can't determine winner, stop
+            if (!teamASet && !teamBSet) break;
+
+            // One slot filled — check if the empty slot's feeder is a dead ghost match
+            const nullSlot    = teamASet ? "teamB" : "teamA";
+            const filledTeam  = current.teamA || current.teamB;
+
+            // Find the match that feeds into current[nullSlot]
+            const feeder = await Match.findOne({
+                tournament: match.tournament,
+                nextMatch:  current._id,
+                nextMatchSlot: nullSlot,
+            });
+
+            // Only cascade if: no feeder exists, OR feeder is COMPLETED with no winner (ghost)
+            const isDeadSlot = !feeder || (feeder.status === "COMPLETED" && !feeder.winner);
+            if (!isDeadSlot) break;
+
+            // Auto-advance: mark current as a BYE walkover
+            current.status      = "COMPLETED";
+            current.winner      = filledTeam;
+            current.scoreA      = 0;
+            current.scoreB      = 0;
+            current.completedAt = new Date();
+            await current.save();
+
+            // Advance into the match after current
+            const afterBye = await Match.findById(current.nextMatch);
+
+            // Stop if no match exists, OR if it's already properly completed (has a real winner)
+            if (!afterBye || (afterBye.status === "COMPLETED" && afterBye.winner)) break;
+
+            afterBye[current.nextMatchSlot] = filledTeam;
+
+            if (afterBye.teamA && afterBye.teamB && afterBye.status === "PENDING") {
+                afterBye.status = "READY";
+            }
+
+            await afterBye.save();
+
+            emitBracketUpdated(match.tournament);
+            emitTournamentUpdated();
+
+            current = afterBye;
+        }
     }
+
 
     if (
         nextMatch &&
@@ -282,6 +379,10 @@ export const updateMatchWinnerService = async (
         tournament.winner = winnerId;
 
         await tournament.save();
+
+        // Push real-time update so the client refetches tournament + shows ChampionCard
+        emitBracketUpdated(match.tournament);
+        emitTournamentUpdated();
 
         await updateChampionStats(winnerId);
 

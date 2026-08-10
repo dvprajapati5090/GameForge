@@ -34,13 +34,9 @@ const tournamentBaseSchema = z.object({
     maxTeams: z
         .coerce
         .number()
-        .refine(
-            value => [4, 8, 16, 32, 64, 128].includes(value),
-            {
-                message:
-                    "Max teams must be one of 4, 8, 16, 32, 64 or 128"
-            }
-        ),
+        .int("Max teams must be a whole number")
+        .min(2, "Max teams must be at least 2")
+        .max(256, "Max teams cannot exceed 256"),
 
     registrationStart: z.string(),
 

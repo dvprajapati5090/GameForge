@@ -80,7 +80,8 @@ const tournamentSchema = new mongoose.Schema(
         maxTeams: {
             type: Number,
             required: true,
-            min: 2
+            min: 2,
+            max: 256
         },
 
         registrationStart: {
@@ -151,6 +152,17 @@ const tournamentSchema = new mongoose.Schema(
         winner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Team",
+            default: null
+        },
+
+        // Challonge integration
+        challongeId: {
+            type: String,
+            default: null
+        },
+
+        challongeUrl: {
+            type: String,
             default: null
         }
     },

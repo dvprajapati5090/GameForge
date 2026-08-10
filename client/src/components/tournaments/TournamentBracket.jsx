@@ -24,11 +24,15 @@ export default function TournamentBracket({
 
         return null;
 
+    const challongeUrl = data?.data?.tournament?.challongeUrl ?? null;
+
     return (
 
         <Bracket
 
             rounds={data.data.rounds}
+
+            challongeUrl={challongeUrl}
 
         />
 

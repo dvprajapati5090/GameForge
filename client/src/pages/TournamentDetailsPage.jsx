@@ -16,15 +16,33 @@ import TournamentOverview from "../components/tournaments/TournamentOverview";
 
 import ChampionCard from "../components/bracket/ChampionCard";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import TournamentTabs from "../components/tournaments/TournamentTabs";
 
 import RegisteredTeams from "../components/tournaments/RegisteredTeams";
 
+import { useQueryClient } from "@tanstack/react-query";
+import socket from "../socket/socket";
+
 export default function TournamentDetailsPage() {
 
     const { id } = useParams();
+    const queryClient = useQueryClient();
+
+    // Invalidate tournament data when any tournament update or bracket update fires
+    // This is what makes ChampionCard appear automatically on tournament completion
+    useEffect(() => {
+        const refresh = () => {
+            queryClient.invalidateQueries({ queryKey: ["tournament", id] });
+        };
+        socket.on("tournamentUpdated", refresh);
+        socket.on("bracketUpdated", refresh);
+        return () => {
+            socket.off("tournamentUpdated", refresh);
+            socket.off("bracketUpdated", refresh);
+        };
+    }, [id, queryClient]);
 
     const [tab, setTab] = useState("overview");
 

@@ -1,8 +1,11 @@
+import { TeamLogoFallback } from "../tournaments/TournamentBanner";
+
 export default function TournamentTeams({
 
     tournament
 
 }) {
+
 
     return (
 
@@ -46,22 +49,17 @@ export default function TournamentTeams({
 
                                 <div className="flex items-center gap-4">
 
-                                    <img
+                                    {team.logo ? (
+                                        <img
+                                            src={team.logo}
+                                            className="w-12 h-12 rounded-full object-cover"
+                                            alt={team.name}
+                                        />
+                                    ) : (
+                                        <TeamLogoFallback name={team.name} size={48} />
+                                    )}
 
-                                        src={
-                                            team.logo ||
-                                            "/team-placeholder.png"
-                                        }
-
-                                        className="w-12 h-12 rounded-full"
-
-                                    />
-
-                                    <h3>
-
-                                        {team.name}
-
-                                    </h3>
+                                    <h3>{team.name}</h3>
 
                                 </div>
 

@@ -1,4 +1,5 @@
 import { Users } from "lucide-react";
+import { TeamLogoFallback } from "../../tournaments/TournamentBanner";
 
 export default function TeamsTab({ tournament }) {
 
@@ -60,18 +61,15 @@ export default function TeamsTab({ tournament }) {
 
                         <div className="flex items-center gap-4">
 
-                            <img
-
-                                src={
-                                    team.logo ||
-                                    "https://placehold.co/60x60"
-                                }
-
-                                alt={team.name}
-
-                                className="w-14 h-14 rounded-xl"
-
-                            />
+                            {team.logo ? (
+                                <img
+                                    src={team.logo}
+                                    alt={team.name}
+                                    className="w-14 h-14 rounded-xl object-cover"
+                                />
+                            ) : (
+                                <TeamLogoFallback name={team.name} size={56} />
+                            )}
 
                             <div>
 

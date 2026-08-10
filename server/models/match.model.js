@@ -105,6 +105,22 @@ const matchSchema = new mongoose.Schema(
             type: String,
             enum: ["teamA", "teamB"],
             default: null
+        },
+
+        // Challonge integration
+        challongeMatchId: {
+            type: Number,
+            default: null
+        },
+
+        challongePlayer1Id: {
+            type: Number,
+            default: null
+        },
+
+        challongePlayer2Id: {
+            type: Number,
+            default: null
         }
 
     },

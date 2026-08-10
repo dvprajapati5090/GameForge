@@ -6,7 +6,7 @@ import {
     generateBracket
 } from "../services/tournament.service";
 
-import BracketRound from "../components/host/matches/BracketRound";
+import Bracket from "../components/bracket/Bracket";
 
 export default function HostBracketPage() {
 
@@ -56,9 +56,12 @@ export default function HostBracketPage() {
 
     }
 
-    const bracket = data?.data || {};
+    const bracketData = data?.data || {};
+    const rounds = bracketData.rounds ?? [];
+    const challongeUrl = bracketData.tournament?.challongeUrl ?? null;
+    const hasBracket = rounds.length > 0;
 
-    if (Object.keys(bracket).length === 0) {
+    if (!hasBracket) {
 
         return (
 
@@ -75,6 +78,12 @@ export default function HostBracketPage() {
                     Register at least two teams, then generate the tournament bracket.
 
                 </p>
+
+                {generateMutation.isError && (
+                    <p className="text-red-400 mt-3 text-sm">
+                        {generateMutation.error?.response?.data?.message ?? "Failed to generate bracket."}
+                    </p>
+                )}
 
                 <button
 
@@ -116,37 +125,17 @@ export default function HostBracketPage() {
 
     return (
 
-        <div
-            className="
-                flex
-                gap-28
-                overflow-x-auto
-                pb-8
-                items-center
-            "
-        >
+        <div className="space-y-6">
 
-            {
+            <Bracket
 
-                Object.entries(bracket).map(
+                rounds={rounds}
 
-                    ([round, matches]) => (
+                isHost={true}
 
-                        <BracketRound
+                challongeUrl={challongeUrl}
 
-                            key={round}
-
-                            round={round}
-
-                            matches={matches}
-
-                        />
-
-                    )
-
-                )
-
-            }
+            />
 
         </div>
 

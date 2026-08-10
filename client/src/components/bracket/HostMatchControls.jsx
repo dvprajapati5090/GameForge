@@ -18,15 +18,17 @@ export default function HostMatchControls({ match }) {
         return null;
     }
 
-    // No controls after match completion
-    if (match.status === "COMPLETED") {
-        return null;
-    }
+    const isCorrection = match.status === "COMPLETED";
 
     return (
 
         <div className="mt-5 border-t border-white/10 pt-4 space-y-4">
 
+            {isCorrection && (
+                <p style={{ fontSize: 11, color: "rgba(232,0,61,0.8)", fontWeight: 700, letterSpacing: "0.08em" }}>
+                    ✏️ CORRECT RESULT
+                </p>
+            )}
             <div className="grid grid-cols-2 gap-3">
 
                 <input

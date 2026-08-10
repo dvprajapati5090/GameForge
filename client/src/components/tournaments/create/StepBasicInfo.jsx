@@ -304,7 +304,6 @@ export default function StepBasicInfo({
 
             <div>
 
-
                 <label className={labelClass}>
 
                     Maximum Teams
@@ -315,9 +314,13 @@ export default function StepBasicInfo({
 
                 </label>
 
+                <input
 
+                    type="number"
 
-                <select
+                    min={2}
+
+                    max={256}
 
                     value={form.maxTeams}
 
@@ -330,32 +333,18 @@ export default function StepBasicInfo({
 
                     className={selectClass}
 
-                >
+                    placeholder="e.g. 8, 12, 16, 24..."
 
+                />
 
-                    {
-                        [4,8,16,32,64,128].map(team => (
-
-                            <option
-
-                                key={team}
-
-                                value={team}
-
-                                className="bg-black border border-white/10"
-
-                            >
-
-                                {team} teams
-
-                            </option>
-
-                        ))
-                    }
-
-
-                </select>
-
+                <p style={{
+                    fontSize: 11,
+                    color: "rgba(255,255,255,0.3)",
+                    marginTop: 6,
+                    letterSpacing: "0.02em"
+                }}>
+                    Any number from 2 – 256. Non-power-of-2 counts (e.g. 6, 12) are handled automatically with byes via Challonge.
+                </p>
 
             </div>
 
